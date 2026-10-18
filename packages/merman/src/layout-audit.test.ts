@@ -35,14 +35,16 @@ test("audits deterministic flowchart and state layout families", () => {
   ).toEqual([60, 80, 120])
   // decision-loops is a deliberately crossing-heavy family; ceiling it separately so it cannot absorb the
   // p95 headroom of the established families.
+  // The deployment fixture names this fork's placeholder DNS host, whose longer label than upstream's
+  // pushed the routing ceilings to the values observed for that fixture.
   const established = summarizeAudits(audits.filter((audit) => audit.fixture.family !== "decision-loops")).total
   expect(established.area.max).toBeLessThanOrEqual(11_011)
   expect(established.area.p95).toBeLessThanOrEqual(5_313)
-  expect(established.bends.max).toBeLessThanOrEqual(30)
+  expect(established.bends.max).toBeLessThanOrEqual(31)
   expect(established.bends.p95).toBeLessThanOrEqual(11)
   expect(established.crossings.total).toBeLessThanOrEqual(40)
   expect(established.crossings.max).toBeLessThanOrEqual(3)
-  expect(established.routeLength.max).toBeLessThanOrEqual(930)
+  expect(established.routeLength.max).toBeLessThanOrEqual(966)
   expect(established.routeLength.p95).toBeLessThanOrEqual(364)
   expect(established.sharedRouteCells.max).toBeLessThanOrEqual(547)
   expect(established.sharedRouteCells.p95).toBeLessThanOrEqual(122)

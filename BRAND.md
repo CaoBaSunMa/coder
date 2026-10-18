@@ -137,16 +137,34 @@ git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
 - 官网/文档站（`services/www`、`packages/web`）仍是上游内容，需下一里程碑整体替换。
 - `.coder/` 下的仓库自用开发配置、`.github/ISSUE_TEMPLATE`、`CHANGELOG.md` 保留上游历史与措辞。
 - `github/`（GitHub Action）仍依赖上游 `@opencode-ai/sdk`，未启用。
+- `packages/ai` 的语音/转写 HTTP 录音夹具（`test/fixtures/recordings/`）保留上游文案 `Hello from OpenCode.`：
+  这些卡带记录的是**真实音频**的识别结果与字符级时间戳，离线无法重录。机械改名会把请求体改成 `Coder`
+  而响应里的分片仍是 `OpenCode`，导致卡带自相矛盾。需在具备厂商 API Key 后用 `RECORD=true` 重新录制。
+- `packages/merman` 的 `DEPLOYMENT - Anomaly` 等流程图标签是渲染布局测试的合成 fixture（框宽随文字变化），
+  属测试数据而非产品品牌，保留不动。
+- 桌面端内部特权协议 `oc://renderer`、`oc://extensions/...` 未改名：它是应用内部协议，用户不可见，
+  且与 `headers.ts`/`scheme.ts`/扩展资源服务耦合；用户可见的深链协议已为 `coder://`。
 - `flake.nix`/`nix/`、`infra/`、`salesforce/` 未适配本分支品牌。
-- 部分 `packages/tui` 测试依赖运行环境的排序规则：`packages/tui/src/mini/footer.command.tsx` 用
-  `localeCompare` 对模型名排序，在中文（zh-CN）系统上中文名会排到英文名之前，导致
-  `test/mini/footer.responsive.test.tsx` 的 “production model menu” 用例在上游 CI（en）通过、在本机（zh-CN）
-  失败。此为环境相关、非品牌改动引入的问题。
-- Windows 上 `test/plugin-keymap.test.tsx`、`test/plugin-source.test.ts` 需要创建符号链接，未开启开发者模式/
-  无权限时以 `EPERM: symlink errno -4048` 失败，属环境限制。
-- 本仓库含 40 余个符号链接（如 `packages/app/public/*` 与
-  `packages/app/src/custom-elements.d.ts` → `packages/ui/src/custom-elements.d.ts`）。在 Windows 上若
-  `core.symlinks=false`（默认），git 会将其导出为含链接目标文本的普通文件，导致
-  `bun run check` 在 `@xcoder/app` 处报 `TS1128`。**属环境限制，非品牌改动引入**：临时把
-  `packages/ui/src/custom-elements.d.ts` 内容复制到 `packages/app/src/custom-elements.d.ts` 即可通过该包
-  类型检查（核对后请还原）。Linux / macOS / 开启 Developer Mode 的 Windows 不受影响。
+
+### 5.1 Windows 环境下已知的测试失败（非品牌改动引入）
+
+在未开启 Developer Mode、缺少 POSIX 工具链的 Windows 上，全量测试存在下列**环境相关**失败。
+它们与改名无关（在上游 `dev` 上同样会失败），已逐项核实：
+
+| 原因 | 失败用例 | 影响包 |
+| --- | --- | --- |
+| 缺少 POSIX 命令 `sleep` / `echo` / `mktemp` | `rejects incompatible daemons…`、`cross-spawn spawner > …`、`command subagents > …`、`mini handler passes resolved CLI keybinds…` | `core`(6)、`cli`(1) |
+| 符号链接创建权限（`EPERM: symlink`） | `FileSystem > canonicalizes local symlinked directories`、`plugin-keymap`、`plugin-source` | `core`(1)、`tui`(5) |
+| solid-js 条件导出解析到生产构建（缺 `jsxDEV`） | 所有 `.tsx` 渲染测试 | `app`(36)、`ui`(3)、`session-ui`(1) |
+| 缺少 `pwsh` | `installer grants sandbox access…` | `desktop`(1) |
+| esbuild 服务 / Electron 下载并发冲突 | `serves browser-loadable picker scripts…` | `desktop`(2) |
+| `readdir` 顺序并列（按 mtime 排序时输入顺序不定） | `legacy store import > copies every namespace…` | `desktop`(1) |
+| 系统区域为 zh-CN，`localeCompare` 排序不同 | `production model menu keeps labels…` | `tui`(2) |
+| 后台服务启动 3s 超时 | `recovers when an unresponsive contender…` | `client`(1) |
+| 超长命令行 git diff 60s 超时 | `Git trees > diffs a path selection longer…` | `core`(1，偶发) |
+| git 未创建符号链接（`core.symlinks=false`） | `@xcoder/app` 类型检查报 `TS1128` | `bun run check` |
+
+> 复现说明：`packages/app`、`packages/ui`、`packages/session-ui`、`packages/core` 的测试必须用各自的
+> `bun run test` 脚本运行（`core` 会注入隔离的 `HOME`/`XDG_*`/`CODER_TEST_HOME`）；直接 `bun test`
+> 会额外触发 `preload.test.ts` 等失败。`@xcoder/app` 类型检查可通过临时把
+> `packages/ui/src/custom-elements.d.ts` 内容复制到 `packages/app/src/custom-elements.d.ts` 通过（核对后还原）。

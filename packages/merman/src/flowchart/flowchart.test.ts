@@ -956,44 +956,44 @@ describe("FlowchartDiagram", () => {
     )
 
     expectDiagram(output).toEqualDiagram(`
-            ╭──────────────╮
-            │ ReceiveInput │
-            ╰───────┬──────╯
-                    │
-                    │
-                    │
-                    ▼
-      ╭───────────────────────────╮
-      │ Persist ActivityRequested │
-      ╰─────────────┬─────────────╯
-                    │
-                    │
-                    │
-                    ▼
-       ╭─────────────────────────╮
-       │ Self RunPendingActivity │
-       ╰────────────┬────────────╯
-                    │
-                    │
-                    │
-                    ▼
-         ╭─────────────────────╮
-         │ Coder async task │
-         ╰──────────┬──────────╯
-                    │
-                    │
-                    │
-                    ▼
-         ╭─────────────────────╮
-         │ Self OutputObserved │
-         ╰──────────┬──────────╯
-                    │
-                    │
-                    │
-                    ▼
-       ╭────────────────────────╮
-       │ Persist OutputObserved │
-       ╰────────────────────────╯
+          ╭──────────────╮
+          │ ReceiveInput │
+          ╰───────┬──────╯
+                  │
+                  │
+                  │
+                  ▼
+    ╭───────────────────────────╮
+    │ Persist ActivityRequested │
+    ╰─────────────┬─────────────╯
+                  │
+                  │
+                  │
+                  ▼
+     ╭─────────────────────────╮
+     │ Self RunPendingActivity │
+     ╰────────────┬────────────╯
+                  │
+                  │
+                  │
+                  ▼
+        ╭──────────────────╮
+        │ Coder async task │
+        ╰─────────┬────────╯
+                  │
+                  │
+                  │
+                  ▼
+       ╭─────────────────────╮
+       │ Self OutputObserved │
+       ╰──────────┬──────────╯
+                  │
+                  │
+                  │
+                  ▼
+     ╭────────────────────────╮
+     │ Persist OutputObserved │
+     ╰────────────────────────╯
     `)
   })
 
@@ -1010,45 +1010,45 @@ describe("FlowchartDiagram", () => {
     )
 
     expectDiagram(output).toEqualDiagram(`
-                                      ╭──────────╮
-                                      │ Commands │
-                                      ╰─────┬────╯
-                                            │
-                                            │
-                                            │
-                                            ▼
-                               ╭────────────────────────╮
-                               │ AgentThread activation │◀───── observed output ─────╮
-                               ╰────────────┬───────────╯                            │
-                                            │                                        │
-                 ╭───── persist facts ──────┴── resume / steer / abort ──╮           │
-                 │                                                       │           │
-                 ▼                                                       │           │
-      ╭─────────────────────╮                                            ▼           │
-      ├─────────────────────┤                                  ╭──────────────────╮  │
-      │ AgentThread journal │                                  │ Coder session ├──╯
-      ├─────────────────────┤                                  ╰──────────────────╯
-      ╰──────────┬──────────╯
-                 │
-                 ╰ visible output requested ╮
-                                            │
-                                            ▼
-                                       ╭─────────╮
-                                       │ Reactor │
-                                       ╰────┬────╯
-                                            │
-                                            │
-                                            │
-                                            ▼
-                                       ╭─────────╮
-                                       │ Discord │
-                                       ╰─────────╯
+                                   ╭──────────╮
+                                   │ Commands │
+                                   ╰─────┬────╯
+                                         │
+                                         │
+                                         │
+                                         ▼
+                            ╭────────────────────────╮
+                            │ AgentThread activation │◀──── observed output ────╮
+                            ╰────────────┬───────────╯                          │
+                                         │                                      │
+               ╭───── persist facts ─────┴─ resume / steer / abort ──╮          │
+               │                                                     │          │
+               ▼                                                     │          │
+    ╭─────────────────────╮                                          ▼          │
+    ├─────────────────────┤                                  ╭───────────────╮  │
+    │ AgentThread journal │                                  │ Coder session ├──╯
+    ├─────────────────────┤                                  ╰───────────────╯
+    ╰──────────┬──────────╯
+               │
+               ╰ visible output requested
+                                        │
+                                        ▼
+                                   ╭─────────╮
+                                   │ Reactor │
+                                   ╰────┬────╯
+                                        │
+                                        │
+                                        │
+                                        ▼
+                                   ╭─────────╮
+                                   │ Discord │
+                                   ╰─────────╯
     `)
   })
 
   test("wraps the real deployment chart responsively without losing content or geometry", () => {
     const expected = new Map([
-      [60, { width: 82, height: 108 }],
+      [60, { width: 83, height: 108 }],
       [80, { width: 97, height: 85 }],
       [120, { width: 143, height: 77 }],
       [160, { width: 163, height: 69 }],

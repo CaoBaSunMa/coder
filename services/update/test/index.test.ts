@@ -42,7 +42,7 @@ function database() {
 }
 
 function lookup(env: Env, pathname: string, headers?: HeadersInit) {
-  return worker.fetch(new Request(`https://releases.coder.example.com/update/api/${pathname}`, { headers }), env, {
+  return worker.fetch(new Request(`https://coder.example.com/update/api/${pathname}`, { headers }), env, {
     waitUntil: () => {},
   })
 }
@@ -60,7 +60,7 @@ test("returns a retryable 503 when D1 rejects a lookup", async () => {
     EVENTS: { send: () => Promise.resolve() },
   } as unknown as Env
   const response = await worker.fetch(
-    new Request("https://releases.coder.example.com/update/api/latest/desktop/coder/coder-desktop-win-x64.exe"),
+    new Request("https://coder.example.com/update/api/latest/desktop/coder/coder-desktop-win-x64.exe"),
     env,
     { waitUntil: () => {} },
   )
