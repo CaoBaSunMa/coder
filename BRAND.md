@@ -34,6 +34,42 @@
 `OPENCODE_ARTIFACT`、`OPENCODE_LIBC`、`OPENCODE_CLI_DIST` → 本分支 `CODER_VERSION`、`CODER_CHANNEL`、
 `CODER_ARTIFACT`、`CODER_LIBC`、`CODER_CLI_DIST`。
 
+### 1.1 品牌图形（C 记号 + Coder 字标）
+
+上游的品牌图形是一个**空心方块**（字母 O 的几何化）以及 "OpenCode" 的方块字标。本分支改为：
+
+| 图形 | 位置 | 设计 |
+| --- | --- | --- |
+| **C 记号** | `packages/ui/src/components/logo.tsx` 的 `Mark` / `Splash`，`packages/app/src/providers/coder-logo.tsx` | 同一个方块，右侧开口，形成块状 **C**；缺口下半部放一枚浅色方块，延续上游的"双层方块"意象 |
+| **SVG 字标** | 同文件的 `Logo`（viewBox `144×42`）、`packages/ui/src/typography/wordmark/wordmark.tsx`（viewBox `442×129`） | **"Coder"** 五个字形，沿用上游网格：字形宽 24、步进 30、笔画 6、大写顶 y=6、基线 y=36 |
+| **终端字标** | `packages/tui/src/logo.ts` | 块字符 "CODER"：`left` = CO（弱色）、`right` = DER（粗体），`go` = 单个 C 记号（窄终端用） |
+
+字形定义（小网格，坐标相对各自字形原点）：
+
+```
+C  M24 6H0V36H24V30H6V12H24V6Z
+o  M36 18H48V30H36V18Z  +  M54 36H30V12H54V36Z      （evenodd）
+d  M84 6H78V12H60V36H84V6Z  +  M78 30H66V18H78V30Z  （evenodd）
+e  M90 12H114V36H90V12Z + 眼 M96 18H108V24H96V18Z + 右下开口 M108 30H114V36H108V30Z（evenodd）
+r  M144 12H120V36H126V18H144V12Z  +  肩 M144 18H138V24H144V18Z
+```
+
+> 环形/带孔字形必须用 `fill-rule="evenodd"`（Solid JSX 中写 kebab-case 的 `fill-rule=`），
+> 与仓库其它 SVG 一致；`packages/app/src/settings/about/animated-wordmark.tsx` 的逐字母
+> `<symbol>` 也遵循同一字形定义。
+> 改动字标时同步检查 `packages/app/component-tests/new-session-wordmark.spec.ts` 里的
+> 弱色路径计数（现为 5）与 `.settings-about-wordmark` 的 `110×32` 尺寸（对应 144:42 比例）。
+
+**位图图标**：
+
+- `packages/ui/src/assets/favicon/` 的 SVG 与全部 PNG / ICO 已按 C 记号重绘（深色底板 #131010、
+  白色 C、缺口下半部的浅色方块 #5A5858）。
+- `packages/desktop/icons/{dev,beta,prod}/icon.png` 与 `icon.ico` 采用「保留原底板与渐变、仅开缺口」
+  的方式重绘：把圆环右侧笔画（内孔右边界到外边界）替换为内孔同色。归一化几何为
+  环 116..394 × 81..425、内孔 181..329 × 146..360（512 画布），三个渠道共用。
+- **待补**：`icon.icns`（macOS）、`icons/*/ios`、`icons/*/android` 与各小尺寸 PNG 仍是上游的 O 记号，
+  需用设计工具按同一几何重新导出。
+
 **刻意保留的上游外部依赖**（不可改名，否则无法安装）：
 
 - `@opencode-ai/pty` / `@opencode-ai/pty-*`：终端 PTY 预编译产物（上游发布，作为第三方依赖使用）。

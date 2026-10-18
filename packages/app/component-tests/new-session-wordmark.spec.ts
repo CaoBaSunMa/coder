@@ -19,7 +19,7 @@ for (const theme of ["light", "dark"]) {
         "fill",
         await base.locator("path").nth(1).evaluate((element) => getComputedStyle(element).fill),
       )
-      await expect(base.locator('path[fill="var(--icon-weak-base)"]')).toHaveCount(8)
+      await expect(base.locator('path[fill="var(--icon-weak-base)"]')).toHaveCount(5)
 
       await logo.evaluate((element) => {
         element.getAnimations({ subtree: true }).forEach((animation) => {

@@ -9,7 +9,7 @@ export function Wordmark(
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 720 129"
+      viewBox="0 0 442 129"
       fill="none"
       classList={{
         [props.class ?? ""]: !!props.class,
@@ -25,45 +25,38 @@ export function Wordmark(
             stroke-width={props.outline ? 1 : undefined}
           >
             <path
+              fill-rule="evenodd"
               pathLength={props.outline ? 1 : undefined}
-              d="M55.3846 36.4286H18.4615V91.7143H55.3846V36.4286ZM73.8462 110.143H0V18H73.8462V110.143Z"
+              d="M73.8462 18H0V110.143H73.8462V91.6815H18.4615V36.4286H73.8462Z"
             />
             <path
+              fill-rule="evenodd"
               pathLength={props.outline ? 1 : undefined}
-              d="M110.462 91.7143H147.385V36.4286H110.462V91.7143ZM165.846 110.143H110.462V128.571H92V18H165.846V110.143Z"
+              d="M110.4615 54.8901H147.3847V91.6815H110.4615V54.8901ZM165.8462 110.143H92V36.4286H165.8462V110.143Z"
             />
             <path
+              fill-rule="evenodd"
               pathLength={props.outline ? 1 : undefined}
-              d="M258.846 73.2857H203.462V91.7143H258.846V110.143H185V18H258.846V73.2857ZM203.462 54.8571H240.385V36.4286H203.462V54.8571Z"
+              d="M257.8462 18H239.3847V36.4286H184V110.143H257.8462V18ZM239.3847 91.6815H202.4615V54.8901H239.3847V91.6815Z"
             />
             <path
+              fill-rule="evenodd"
               pathLength={props.outline ? 1 : undefined}
-              d="M332.385 36.4286H295.462V110.143H277V18H332.385V36.4286ZM350.846 110.143H332.385V36.4286H350.846V110.143Z"
+              d="M276 36.4286H349.8462V110.143H276V36.4286ZM294.4615 54.8901H331.3847V73.3516H294.4615V54.8901ZM331.3847 91.6815H349.8462V110.143H331.3847V91.6815Z"
             />
             <path
+              fill-rule="evenodd"
               pathLength={props.outline ? 1 : undefined}
-              d="M442.846 36.4286H387.462V91.7143H442.846V110.143H369V18H442.846V36.4286Z"
-            />
-            <path
-              pathLength={props.outline ? 1 : undefined}
-              d="M517.385 36.4286H480.462V91.7143H517.385V36.4286ZM535.846 110.143H462V18H535.846V110.143Z"
-            />
-            <path
-              pathLength={props.outline ? 1 : undefined}
-              d="M609.385 36.8571H572.462V92.1429H609.385V36.8571ZM627.846 110.571H554V18.4286H609.385V0H627.846V110.571Z"
-            />
-            <path
-              pathLength={props.outline ? 1 : undefined}
-              d="M664.462 36.4286V54.8571H701.385V36.4286H664.462ZM719.846 73.2857H664.462V91.7143H719.846V110.143H646V18H719.846V73.2857Z"
+              d="M441.8462 36.4286H368V110.143H386.4615V54.8901H441.8462V36.4286ZM441.8462 54.8901H423.3847V73.3516H441.8462V54.8901Z"
             />
           </g>
         </g>
       </g>
       <defs>
-        <mask id={mask} style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="129">
-          <rect width="720" height="129" fill={`url(#${maskGradient})`} />
+        <mask id={mask} style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="442" height="129">
+          <rect width="442" height="129" fill={`url(#${maskGradient})`} />
         </mask>
-        <linearGradient id={maskGradient} x1="360" y1="68" x2="360" y2="129" gradientUnits="userSpaceOnUse">
+        <linearGradient id={maskGradient} x1="221" y1="68" x2="221" y2="129" gradientUnits="userSpaceOnUse">
           <stop stop-color="white" stop-opacity="0.7" />
           <stop offset="1" stop-color="white" stop-opacity="0" />
         </linearGradient>
