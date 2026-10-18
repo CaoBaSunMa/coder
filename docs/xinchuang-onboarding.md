@@ -73,7 +73,11 @@ Coder 读取 `coder.json` / `coder.jsonc`，来源与优先级（从高到低）
 
 ## 4. 国产大模型接入
 
-Coder 内置 models.dev 兼容目录，**下列国产厂商无需手写模型清单**，只要设置对应环境变量即可自动发现模型：
+Coder 内置 models.dev 兼容目录，**下列国产厂商无需手写模型清单**：
+
+- 目录随包离线内置，服务启动后即可在 `/api/provider` 中看到（`activation: "auto"`）；
+- 要真正启用某一家，执行 `coder auth login <provider>` 写入凭据，或在 `coder.jsonc` 的 `providers.<id>` 中声明
+  （见第 5 节）。凭据就绪后 `coder models` 即会列出该厂商的模型。
 
 | Provider ID | 厂商 / 区域 | 环境变量 | 默认端点 |
 | --- | --- | --- | --- |
