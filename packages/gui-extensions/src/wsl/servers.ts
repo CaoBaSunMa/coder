@@ -2,7 +2,7 @@ import type { MainContext } from "../sdk/main"
 import type {
   WslDistroProbe,
   WslJob,
-  WslOpencodeCheck,
+  WslCoderCheck,
   WslServerConfig,
   WslServerItem,
   WslServerRuntime,
@@ -79,10 +79,10 @@ export function createWslServersController(options: WslServersControllerOptions)
     updateServer(id, (item) => ({ ...item, runtime }))
   }
 
-  const setCliCheck = (distro: string, check: WslOpencodeCheck) => {
+  const setCliCheck = (distro: string, check: WslCoderCheck) => {
     setState({
       opencodeChecks: {
-        ...state.opencodeChecks,
+        ...state.coderChecks,
         [distro]: check,
       },
     })
@@ -117,14 +117,14 @@ export function createWslServersController(options: WslServersControllerOptions)
 
     const opencodeChecks = await Promise.all(
       unique.flatMap((distro) =>
-        distroProbeReady(state.distroProbes[distro]) && !state.opencodeChecks[distro]
+        distroProbeReady(state.distroProbes[distro]) && !state.coderChecks[distro]
           ? [inspectCli(distro).then((check) => [distro, check] as const)]
           : [],
       ),
     )
 
     if (opencodeChecks.length) {
-      setState({ opencodeChecks: { ...state.opencodeChecks, ...Object.fromEntries(opencodeChecks) } })
+      setState({ opencodeChecks: { ...state.coderChecks, ...Object.fromEntries(opencodeChecks) } })
     }
   }
 
@@ -280,7 +280,7 @@ export function createWslServersController(options: WslServersControllerOptions)
       await runJob({ kind: "probe-addable", distros, startedAt: Date.now() }, () => probeAddableDistros(distros))
     },
 
-    async installOpencode(distro: string) {
+    async installCoder(distro: string) {
       await runJob({ kind: "install-opencode", distro, startedAt: Date.now() }, async () => {
         const id = state.servers.find((item) => item.config.distro === distro)?.config.id
 
@@ -358,7 +358,7 @@ function cliCheck(
   resolvedPath: string | null,
   version: string | null,
   expectedVersion: string,
-): WslOpencodeCheck {
+): WslCoderCheck {
   if (!resolvedPath) {
     return {
       distro,
@@ -366,7 +366,7 @@ function cliCheck(
       version: null,
       expectedVersion,
       matchesDesktop: null,
-      error: t("error.opencodeMissing"),
+      error: t("error.coderMissing"),
     }
   }
 
@@ -377,7 +377,7 @@ function cliCheck(
       version: null,
       expectedVersion,
       matchesDesktop: null,
-      error: t("error.opencodeCannotRun"),
+      error: t("error.coderCannotRun"),
     }
   }
 
@@ -391,7 +391,7 @@ function cliCheck(
   }
 }
 
-function requireMatchingCli(t: MainContext["t"], check: WslOpencodeCheck, expected: string) {
+function requireMatchingCli(t: MainContext["t"], check: WslCoderCheck, expected: string) {
   if (check.version === expected) return
   throw new Error(
     t("error.updateVersion", {
@@ -404,7 +404,7 @@ function requireMatchingCli(t: MainContext["t"], check: WslOpencodeCheck, expect
 
 function removeDistroState(state: WslServersState, distro: string) {
   const distroProbes = { ...state.distroProbes }
-  const opencodeChecks = { ...state.opencodeChecks }
+  const opencodeChecks = { ...state.coderChecks }
   delete distroProbes[distro]
   delete opencodeChecks[distro]
 

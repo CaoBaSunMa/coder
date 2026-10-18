@@ -2,7 +2,7 @@ import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
 import { HttpClientRequest } from "effect/http"
 import { Evaluation, EvaluationClient } from "../src/experimental.js"
-import { OpenCode, OpenRouter, TypeSafeAI, VercelAIGateway } from "../src/providers.js"
+import { Coder, OpenRouter, TypeSafeAI, VercelAIGateway } from "../src/providers.js"
 import { it } from "./lib/effect.js"
 import { dynamicResponse } from "./lib/http.js"
 
@@ -116,9 +116,9 @@ describe("experimental Evaluation", () => {
     ),
   )
 
-  it.effect("configures the OpenCode System One endpoint", () =>
+  it.effect("configures the Coder System One endpoint", () =>
     Evaluation.run({
-      model: OpenCode.configure({ apiKey: "opencode-key", baseURL: "https://opencode.test/v1" }).experimental.evaluation(
+      model: Coder.configure({ apiKey: "coder-key", baseURL: "https://opencode.test/v1" }).experimental.evaluation(
         "jev-1.13",
       ),
       state: "hello",
@@ -137,7 +137,7 @@ describe("experimental Evaluation", () => {
           Layer.provide(
             dynamicResponse((input) => {
               expect(input.request.url).toBe("https://opencode.test/v1/systemone")
-              expect(input.request.headers.authorization).toBe("Bearer opencode-key")
+              expect(input.request.headers.authorization).toBe("Bearer coder-key")
               return Effect.succeed(
                 input.respond(
                   JSON.stringify({

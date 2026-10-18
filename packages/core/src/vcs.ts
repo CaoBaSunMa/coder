@@ -2,13 +2,13 @@ export * as Vcs from "./vcs.js"
 
 import path from "path"
 import { Cause, Context, Effect, FiberSet, Layer, Schema, Semaphore, Stream } from "effect"
-import type { VcsDefinition, VcsEditor } from "@opencode/plugin/effect/vcs"
-import { FileDiff } from "@opencode/schema/file-diff"
-import { FileSystem } from "@opencode/schema/filesystem"
-import { Base, BranchList, FileStatus, Info, Mode } from "@opencode/schema/vcs"
-import { VcsEvent } from "@opencode/schema/vcs-event"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
-import { FSUtil } from "@opencode/util/fs-util"
+import type { VcsDefinition, VcsEditor } from "@xcoder/plugin/effect/vcs"
+import { FileDiff } from "@xcoder/schema/file-diff"
+import { FileSystem } from "@xcoder/schema/filesystem"
+import { Base, BranchList, FileStatus, Info, Mode } from "@xcoder/schema/vcs"
+import { VcsEvent } from "@xcoder/schema/vcs-event"
+import { makeLocationNode } from "@xcoder/util/effect/app-node"
+import { FSUtil } from "@xcoder/util/fs-util"
 import { Location } from "./location.js"
 import { Project } from "./project.js"
 import { Bus } from "./bus.js"
@@ -53,7 +53,7 @@ interface Data {
   selection?: string
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Vcs") {}
+export class Service extends Context.Service<Service, Interface>()("@xcoder/Vcs") {}
 
 const layer = Layer.effect(
   Service,

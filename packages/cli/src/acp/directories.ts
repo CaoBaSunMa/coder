@@ -1,10 +1,10 @@
 import { isAbsolute, join, resolve } from "node:path"
 import { isDeepStrictEqual } from "node:util"
-import type { OpenCodeClient } from "@opencode/client/effect"
-import type { Permission } from "@opencode/schema/permission"
-import { AbsolutePath } from "@opencode/schema/schema"
-import type { Session } from "@opencode/schema/session"
-import { FSUtil } from "@opencode/util/fs-util"
+import type { CoderClient } from "@xcoder/client/effect"
+import type { Permission } from "@xcoder/schema/permission"
+import { AbsolutePath } from "@xcoder/schema/schema"
+import type { Session } from "@xcoder/schema/session"
+import { FSUtil } from "@xcoder/util/fs-util"
 import { Effect, Option, Schema } from "effect"
 import { ACPClient } from "./client"
 import { ACPError } from "./error"
@@ -39,7 +39,7 @@ export function list(session: Pick<Session.Info, "metadata">) {
 }
 
 export const activate = Effect.fnUntraced(function* (
-  client: OpenCodeClient,
+  client: CoderClient,
   session: Session.Info,
   directories: readonly string[],
 ) {

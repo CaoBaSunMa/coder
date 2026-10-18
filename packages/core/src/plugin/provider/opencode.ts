@@ -1,7 +1,7 @@
 import { Duration, Effect, Equal, Option, Schema, SchemaGetter, Scope, Semaphore, Stream } from "effect"
-import type { IntegrationOAuthMethodRegistration } from "@opencode/plugin/effect/integration"
-import { define } from "@opencode/plugin/effect/plugin"
-import type { SessionHttpResponse } from "@opencode/plugin/effect/session"
+import type { IntegrationOAuthMethodRegistration } from "@xcoder/plugin/effect/integration"
+import { define } from "@xcoder/plugin/effect/plugin"
+import type { SessionHttpResponse } from "@xcoder/plugin/effect/session"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 import { App } from "../../app.js"
 import { Bus } from "../../bus.js"
@@ -13,13 +13,13 @@ import { Model } from "../../model.js"
 import { Provider } from "../../provider.js"
 import { Variant } from "../../variant.js"
 import { WebSearch } from "../../websearch.js"
-import { ConfigPolicy } from "@opencode/schema/config/policy"
-import { ConfigProvider } from "@opencode/schema/config/provider"
-import { Mcp } from "@opencode/schema/mcp"
-import { Money } from "@opencode/schema/money"
+import { ConfigPolicy } from "@xcoder/schema/config/policy"
+import { ConfigProvider } from "@xcoder/schema/config/provider"
+import { Mcp } from "@xcoder/schema/mcp"
+import { Money } from "@xcoder/schema/money"
 
-const defaultServer = "https://opencode.ai/console"
-const clientID = "opencode-cli"
+const defaultServer = "https://coder.example.com/console"
+const clientID = "coder-cli"
 const methodID = Integration.MethodID.make("device")
 // Drop statements whose action or effect is a value this version does not know, so a newer Console can
 // extend either enum. Malformed statements still fail validation.
@@ -83,11 +83,11 @@ const SsoRequired = Schema.Struct({
 const InvalidGrant = Schema.Struct({ error: Schema.Literal("invalid_grant") })
 // Console's 401 when the session behind the access token was revoked or expired.
 const Unauthorized = Schema.Struct({ _tag: Schema.Literal("Unauthorized") })
-const signedOutMessage = "Reconnect OpenCode Console to continue"
+const signedOutMessage = "Reconnect Coder Console to continue"
 const ssoMessage = (organization: string | undefined) =>
-  `Sign in with SSO again to use ${organization ?? "your OpenCode Console organization"}`
+  `Sign in with SSO again to use ${organization ?? "your Coder Console organization"}`
 
-class SsoRequiredError extends Schema.TaggedError<SsoRequiredError>()("OpencodeConsole.SsoRequired", {
+class SsoRequiredError extends Schema.TaggedError<SsoRequiredError>()("CoderConsole.SsoRequired", {
   organization: Schema.optional(Schema.String),
   url: Schema.String,
 }) {
@@ -97,7 +97,7 @@ class SsoRequiredError extends Schema.TaggedError<SsoRequiredError>()("OpencodeC
 }
 
 // The Console session or refresh token was revoked or expired; only a new device login recovers.
-class SignedOutError extends Schema.TaggedError<SignedOutError>()("OpencodeConsole.SignedOut", {}) {
+class SignedOutError extends Schema.TaggedError<SignedOutError>()("CoderConsole.SignedOut", {}) {
   override get message() {
     return `${signedOutMessage}.`
   }
@@ -105,11 +105,11 @@ class SignedOutError extends Schema.TaggedError<SignedOutError>()("OpencodeConso
 
 function oauth(http: HttpClient.HttpClient) {
   return {
-    integrationID: Integration.ID.make("opencode"),
+    integrationID: Integration.ID.make("coder"),
     method: {
       id: methodID,
       type: "oauth",
-      label: "OpenCode Console account",
+      label: "Coder Console account",
       form: [
         {
           key: "server",
@@ -182,12 +182,12 @@ function oauth(http: HttpClient.HttpClient) {
   } satisfies IntegrationOAuthMethodRegistration
 }
 
-export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | ManagedPolicy.Service | Scope.Scope>({
-  id: "opencode.provider.opencode",
+export const CoderPlugin = define<HttpClient.HttpClient | Bus.Service | ManagedPolicy.Service | Scope.Scope>({
+  id: "opencode.provider.coder",
   effect: Effect.fn(function* (ctx) {
     const bus = yield* Bus.Service
     const client = yield* HttpClient.HttpClient
-    // Every request here goes to the Console, which reads the User-Agent to tell which OpenCode a member runs
+    // Every request here goes to the Console, which reads the User-Agent to tell which Coder a member runs
     // and whether it evaluates the policies it is being sent.
     const http = HttpClient.mapRequest(client, HttpClientRequest.setHeader("User-Agent", App.useragent(ctx.app)))
     const managed = yield* ManagedPolicy.Service
@@ -207,15 +207,15 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
     let reported: IntegrationConnection.Status | undefined
     let explainers: Effect.Success<ReturnType<typeof ctx.session.hook>>[] = []
 
-    const load = Effect.fn("OpencodePlugin.load")(function* () {
-      const connection = yield* ctx.integration.connection.active("opencode")
+    const load = Effect.fn("CoderPlugin.load")(function* () {
+      const connection = yield* ctx.integration.connection.active("coder")
       if (!connection) {
         reported = undefined
         return { config: undefined, connection, organization: undefined, mcp: undefined }
       }
       const status = (status: IntegrationConnection.Status | undefined) => {
         reported = status
-        return ctx.integration.connection.status({ integrationID: "opencode", connection, status })
+        return ctx.integration.connection.status({ integrationID: "coder", connection, status })
       }
       return yield* ctx.integration.connection.resolve(connection).pipe(
         Effect.flatMap((credential) => {
@@ -236,7 +236,7 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
             // Only well-formed Console errors change the connection status; anything else may be transient.
             const next = connectionStatus(cause)
             if (next) yield* status(next)
-            yield* Effect.logWarning("failed to load OpenCode provider config", { cause })
+            yield* Effect.logWarning("failed to load Coder provider config", { cause })
             // A load that fails for the connection already in place keeps its last config: dropping it
             // would lift organization policy while personal credentials keep working.
             return IntegrationConnection.key(connection) === IntegrationConnection.key(snapshot.connection)
@@ -254,11 +254,11 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
       })
 
     yield* ctx.integration.transform((editor) => {
-      editor.update("opencode", (integration) => {
-        integration.name = "OpenCode Console"
+      editor.update("coder", (integration) => {
+        integration.name = "Coder Console"
       })
       editor.method.update(oauth(http))
-      editor.method.update({ integrationID: "opencode", method: { type: "key", label: "API key (service account)" } })
+      editor.method.update({ integrationID: "coder", method: { type: "key", label: "API key (service account)" } })
     })
 
     snapshot = yield* load()
@@ -269,7 +269,7 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
         providers.update(providerID, (provider) => {
           if (source && source.provider !== provider)
             Object.assign(provider, structuredClone(source.provider), { id: provider.id })
-          provider.integrationID = Integration.ID.make("opencode")
+          provider.integrationID = Integration.ID.make("coder")
           if (item.canonical !== undefined) provider.canonical = item.canonical
           if (item.name !== undefined) provider.name = item.name
           provider.package = item.package ?? provider.package
@@ -344,9 +344,9 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
           })
       }
 
-      const item = providers.get(Provider.ID.opencode)
+      const item = providers.get(Provider.ID.coder)
       if (!item) return
-      const hasKey = Boolean(process.env.OPENCODE_API_KEY || snapshot.connection || item.provider.settings?.apiKey)
+      const hasKey = Boolean(process.env.CODER_API_KEY || snapshot.connection || item.provider.settings?.apiKey)
       providers.update(item.provider.id, (provider) => {
         if (!hasKey) {
           provider.activation = "enabled"
@@ -355,10 +355,10 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
       })
     })
     yield* ctx.model.transform((models) => {
-      const item = models.provider.get(Provider.ID.opencode)
+      const item = models.provider.get(Provider.ID.coder)
       if (!item) return
       const hasKey = Boolean(
-        process.env.OPENCODE_API_KEY ||
+        process.env.CODER_API_KEY ||
           snapshot.connection ||
           (item.provider.settings?.apiKey && item.provider.settings.apiKey !== "public"),
       )
@@ -377,21 +377,21 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
       if (!descriptor || !connection) return
       editor.add({
         id: descriptor.providerID,
-        name: "OpenCode Web Search",
+        name: "Coder Web Search",
         execute: (input) =>
           Effect.gen(function* () {
-            const active = yield* ctx.integration.connection.active("opencode")
+            const active = yield* ctx.integration.connection.active("coder")
             if (
               !active ||
               (connection.type === "credential"
                 ? active.type !== "credential" || active.id !== connection.id
                 : active.type !== "env" || active.name !== connection.name)
             ) {
-              return yield* Effect.fail(new Error("OpenCode Console connection changed"))
+              return yield* Effect.fail(new Error("Coder Console connection changed"))
             }
             const credential = yield* ctx.integration.connection.resolve(active)
             if (!credential || credential.type === "external")
-              return yield* Effect.fail(new Error("OpenCode Console is not connected"))
+              return yield* Effect.fail(new Error("Coder Console is not connected"))
             const metadata = credential.metadata
             const orgID = typeof metadata?.orgID === "string" ? metadata.orgID : undefined
             const token = credential.type === "oauth" ? credential.access : credential.key
@@ -413,13 +413,13 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
                 Effect.scoped,
                 Effect.timeoutOrElse({
                   duration: Duration.seconds(25),
-                  orElse: () => Effect.fail(new Error("OpenCode web search request timed out")),
+                  orElse: () => Effect.fail(new Error("Coder web search request timed out")),
                 }),
               )
             if (response.providerID !== descriptor.providerID) {
               return yield* Effect.fail(
                 new Error(
-                  `OpenCode web search returned provider ${response.providerID} instead of ${descriptor.providerID}`,
+                  `Coder web search returned provider ${response.providerID} instead of ${descriptor.providerID}`,
                 ),
               )
             }
@@ -440,7 +440,7 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
       }
     })
 
-    const apply = Effect.fn("OpencodePlugin.apply")(function* (next: typeof snapshot) {
+    const apply = Effect.fn("CoderPlugin.apply")(function* (next: typeof snapshot) {
       snapshot = next
       yield* publish(next)
       yield* guard(next)
@@ -476,16 +476,16 @@ export const OpencodePlugin = define<HttpClient.HttpClient | Bus.Service | Manag
         )
       })
     // Hooks are scoped per provider so requests to unrelated providers skip the HTTP hook path.
-    const guard = Effect.fn("OpencodePlugin.guard")(function* (next: typeof snapshot) {
+    const guard = Effect.fn("CoderPlugin.guard")(function* (next: typeof snapshot) {
       yield* Effect.forEach(explainers, (registration) => registration.dispose, { discard: true })
       explainers = yield* Effect.forEach(
-        next.connection ? new Set([Provider.ID.opencode, ...Object.keys(next.config?.providers ?? {})]) : [],
+        next.connection ? new Set([Provider.ID.coder, ...Object.keys(next.config?.providers ?? {})]) : [],
         (providerID) => ctx.session.hook("http.response", explain, { providerID }).pipe(Scope.provide(scope)),
       )
     })
     yield* guard(snapshot)
     yield* bus.subscribe(Credential.Event.Switched).pipe(
-      Stream.filter((event) => event.data.integrationID === Integration.ID.make("opencode")),
+      Stream.filter((event) => event.data.integrationID === Integration.ID.make("coder")),
       Stream.runForEach(refresh),
       Effect.forkScoped({ startImmediately: true }),
     )
@@ -587,7 +587,7 @@ function normalizeServer(input: unknown) {
       return `${url.origin}${url.pathname.replace(/\/+$/, "")}`
     },
     catch: (cause) =>
-      new Error(`Invalid OpenCode server URL: ${cause instanceof Error ? cause.message : String(cause)}`),
+      new Error(`Invalid Coder server URL: ${cause instanceof Error ? cause.message : String(cause)}`),
   })
 }
 
@@ -630,7 +630,7 @@ function credential(http: HttpClient.HttpClient, server: string, token: typeof T
         ? orgs.toSorted((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id))[0]
         : orgs.find((org) => org.id === token.org_id)
     if (token.org_id != null && !org) {
-      return yield* Effect.fail(new Error(`OpenCode organization not found: ${token.org_id}`))
+      return yield* Effect.fail(new Error(`Coder organization not found: ${token.org_id}`))
     }
     return Credential.OAuth.make({
       type: "oauth" as const,

@@ -3,10 +3,10 @@ import { $ } from "bun"
 import fs from "fs/promises"
 import path from "path"
 import { Effect, Exit } from "effect"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Git } from "@opencode/core/git"
-import { AbsolutePath, RelativePath } from "@opencode/core/schema"
-import { VcsPatch } from "@opencode/core/vcs/patch"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { Git } from "@xcoder/core/git"
+import { AbsolutePath, RelativePath } from "@xcoder/core/schema"
+import { VcsPatch } from "@xcoder/core/vcs/patch"
 import { branch, commit, initRepo, read, withRemote } from "./fixture/git"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
@@ -506,8 +506,8 @@ describe("Git capture recovery", () => {
     Effect.gen(function* () {
       const { repository, capture } = yield* setup
       const twoHoursAgo = Date.now() - 2 * 60 * 60 * 1000
-      const live = path.join(repository.gitDirectory, `index.opencode-${Date.now()}-1-live`)
-      const abandoned = path.join(repository.gitDirectory, `index.opencode-${twoHoursAgo}-1-abandoned`)
+      const live = path.join(repository.gitDirectory, `index.coder-${Date.now()}-1-live`)
+      const abandoned = path.join(repository.gitDirectory, `index.coder-${twoHoursAgo}-1-abandoned`)
       yield* Effect.promise(async () => {
         await Bun.write(live, "")
         await Bun.write(abandoned, "")

@@ -1,5 +1,5 @@
-import { SessionMessage } from "@opencode/schema/session-message"
-import type { SessionMessageUser } from "@opencode/client/promise"
+import { SessionMessage } from "@xcoder/schema/session-message"
+import type { SessionMessageUser } from "@xcoder/client/promise"
 import type { Accessor } from "solid-js"
 import type { PromptComment } from "./comment-note"
 import type { PromptHistoryComment } from "./history/entry"

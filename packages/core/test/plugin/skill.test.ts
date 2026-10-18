@@ -1,10 +1,10 @@
 import { describe, expect } from "bun:test"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { Config } from "@opencode/core/config"
-import { Document, Info } from "@opencode/schema/config"
+import { AppNodeBuilder } from "@xcoder/core/effect/app-node-builder"
+import { Config } from "@xcoder/core/config"
+import { Document, Info } from "@xcoder/schema/config"
 import { Effect, Layer, Stream } from "effect"
-import { SkillPlugin } from "@opencode/core/plugin/skill"
-import { Skill } from "@opencode/core/skill"
+import { SkillPlugin } from "@xcoder/core/plugin/skill"
+import { Skill } from "@xcoder/core/skill"
 import { testEffect } from "../lib/effect"
 import { host } from "./host"
 
@@ -37,9 +37,9 @@ describe("SkillPlugin.Plugin", () => {
 
       expect(skills).toContainEqual(
         expect.objectContaining({
-          id: "opencode",
-          name: "OpenCode",
-          description: expect.stringContaining("any question about OpenCode itself"),
+          id: "coder",
+          name: "Coder",
+          description: expect.stringContaining("any question about Coder itself"),
         }),
       )
       expect(skills).toContainEqual(

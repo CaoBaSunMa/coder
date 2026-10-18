@@ -1,23 +1,23 @@
 import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
-import { LanguageModel } from "@opencode/ai"
-import { OpenAIChat } from "@opencode/ai/protocols"
-import { TestLLM } from "@opencode/ai/testing"
-import { Agent } from "@opencode/core/agent"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode/core/effect/app-node-platform"
-import { Watcher } from "@opencode/core/filesystem/watcher"
-import { Job } from "@opencode/core/job"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { Model } from "@opencode/core/model"
-import { Plugin } from "@opencode/core/plugin"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { SessionRunnerModel } from "@opencode/core/session/runner/model"
-import { Tool } from "@opencode/core/tool"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
+import { LanguageModel } from "@xcoder/ai"
+import { OpenAIChat } from "@xcoder/ai/protocols"
+import { TestLLM } from "@xcoder/ai/testing"
+import { Agent } from "@xcoder/core/agent"
+import { AppNodeBuilder } from "@xcoder/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@xcoder/core/effect/app-node-platform"
+import { Watcher } from "@xcoder/core/filesystem/watcher"
+import { Job } from "@xcoder/core/job"
+import { LocationServiceMap } from "@xcoder/core/location-service-map"
+import { Model } from "@xcoder/core/model"
+import { Plugin } from "@xcoder/core/plugin"
+import { Provider } from "@xcoder/core/provider"
+import { AbsolutePath } from "@xcoder/core/schema"
+import { Session } from "@xcoder/core/session"
+import { SessionRunnerModel } from "@xcoder/core/session/runner/model"
+import { Tool } from "@xcoder/core/tool"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { Global } from "@xcoder/util/global"
 import { tempGlobalLayer } from "./fixture/global"
 import { offlineModels } from "./fixture/models"
 import { tmpdirScoped } from "./fixture/tmpdir"
@@ -66,7 +66,7 @@ describe("subagent observer lifetime", () => {
           const childDir = yield* tmpdirScoped()
           yield* Effect.promise(() =>
             Bun.write(
-              `${parentDir.path}/opencode.json`,
+              `${parentDir.path}/coder.json`,
               JSON.stringify({
                 agents: { reviewer: { mode: "subagent" } },
                 permissions: [{ action: "*", resource: "*", effect: "allow" }],
@@ -74,7 +74,7 @@ describe("subagent observer lifetime", () => {
             ),
           )
           yield* Effect.promise(() =>
-            Bun.write(`${childDir.path}/opencode.json`, JSON.stringify({ agents: { reviewer: { mode: "subagent" } } })),
+            Bun.write(`${childDir.path}/coder.json`, JSON.stringify({ agents: { reviewer: { mode: "subagent" } } })),
           )
           const sessions = yield* Session.Service
           const locations = yield* LocationServiceMap.Service

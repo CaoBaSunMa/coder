@@ -35,14 +35,14 @@ function database() {
   const insert = (input: { channel: string; version: string; time: number; active?: boolean; minimum?: boolean }) =>
     sqlite
       .query(
-        "INSERT INTO artifact (channel, name, distribution, version, metadata, active, minimum, time_created, time_updated) VALUES (?, 'cli', 'opencode', ?, '{}', ?, ?, ?, ?)",
+        "INSERT INTO artifact (channel, name, distribution, version, metadata, active, minimum, time_created, time_updated) VALUES (?, 'cli', 'coder', ?, '{}', ?, ?, ?, ?)",
       )
       .run(input.channel, input.version, input.active ? 1 : 0, input.minimum ? 1 : 0, input.time, input.time)
   return { sqlite, env, queries, insert }
 }
 
 function lookup(env: Env, pathname: string, headers?: HeadersInit) {
-  return worker.fetch(new Request(`https://opencode.ai/update/api/${pathname}`, { headers }), env, {
+  return worker.fetch(new Request(`https://releases.coder.example.com/update/api/${pathname}`, { headers }), env, {
     waitUntil: () => {},
   })
 }
@@ -60,7 +60,7 @@ test("returns a retryable 503 when D1 rejects a lookup", async () => {
     EVENTS: { send: () => Promise.resolve() },
   } as unknown as Env
   const response = await worker.fetch(
-    new Request("https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-win-x64.exe"),
+    new Request("https://releases.coder.example.com/update/api/latest/desktop/opencode/coder-desktop-win-x64.exe"),
     env,
     { waitUntil: () => {} },
   )
@@ -166,15 +166,15 @@ test("caches rollout fallback reads across caller IPs and overlapping releases",
 
 function publishClaims(ref: string) {
   return {
-    repository: "anomalyco/opencode",
+    repository: "coder-ai/coder",
     repository_id: "975734319",
     repository_owner_id: "66570915",
-    workflow_ref: `anomalyco/opencode/.github/workflows/publish.yml@${ref}`,
+    workflow_ref: `coder-ai/coder/.github/workflows/publish.yml@${ref}`,
     ref,
     sha: "0".repeat(40),
     run_id: "1",
     run_attempt: "1",
-    actor: "opencode",
+    actor: "coder",
   }
 }
 

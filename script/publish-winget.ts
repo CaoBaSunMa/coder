@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { Script } from "@opencode/script"
+import { Script } from "@xcoder/script"
 import { mkdir, rm } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -12,17 +12,17 @@ if (Script.channel !== "latest" || !/^\d+\.\d+\.\d+$/.test(Script.version)) {
 const root = fileURLToPath(new URL("..", import.meta.url))
 const dryRun = process.argv.includes("--dry-run")
 const token = process.env.WINGET_GITHUB_TOKEN
-const cli = path.resolve(process.env.OPENCODE_CLI_DIST ?? path.join(root, "packages", "cli", "dist"))
-const desktop = process.env.OPENCODE_DESKTOP_DIST
-if (!desktop) throw new Error("OPENCODE_DESKTOP_DIST is required")
+const cli = path.resolve(process.env.CODER_CLI_DIST ?? path.join(root, "packages", "cli", "dist"))
+const desktop = process.env.CODER_DESKTOP_DIST
+if (!desktop) throw new Error("CODER_DESKTOP_DIST is required")
 const outdir = path.join(cli, "winget")
 const manifestVersion = "1.12.0"
 
 const packages = [
   {
-    identifier: "Anomaly.OpenCode",
-    name: "OpenCode CLI",
-    moniker: "opencode",
+    identifier: "Anomaly.Coder",
+    name: "Coder CLI",
+    moniker: "coder",
     description: "The open source AI coding agent for the terminal.",
     installer: [
       "InstallerType: zip",
@@ -34,28 +34,28 @@ const packages = [
       "- opencode",
     ],
     files: [
-      { architecture: "x64", file: path.join(cli, "opencode-windows-x64-baseline.zip") },
-      { architecture: "arm64", file: path.join(cli, "opencode-windows-arm64.zip") },
+      { architecture: "x64", file: path.join(cli, "coder-windows-x64-baseline.zip") },
+      { architecture: "arm64", file: path.join(cli, "coder-windows-arm64.zip") },
     ],
   },
   {
-    identifier: "Anomaly.OpenCode.Desktop",
+    identifier: "Anomaly.Coder.Desktop",
     // Matches the display name the installer registers with Windows, without its version suffix.
-    name: "OpenCode",
-    moniker: "opencode-desktop",
+    name: "Coder",
+    moniker: "coder-desktop",
     description: "The open source AI coding agent as a desktop app.",
     installer: [
       "InstallerType: nullsoft",
       "Scope: user",
       "UpgradeBehavior: install",
-      // electron-builder derives the NSIS uninstall key from the production app ID, ai.opencode.desktop.
+      // electron-builder derives the NSIS uninstall key from the production app ID, ai.coder.desktop.
       "ProductCode: d074f30d-5f88-5885-b075-be1348cc7676",
       "Protocols:",
       "- opencode",
     ],
     files: [
-      { architecture: "x64", file: path.join(desktop, "opencode-desktop-win-x64.exe") },
-      { architecture: "arm64", file: path.join(desktop, "opencode-desktop-win-arm64.exe") },
+      { architecture: "x64", file: path.join(desktop, "coder-desktop-win-x64.exe") },
+      { architecture: "arm64", file: path.join(desktop, "coder-desktop-win-arm64.exe") },
     ],
   },
 ]
@@ -87,7 +87,7 @@ async function prepare(input: (typeof packages)[number]) {
       for await (const chunk of file.stream()) sha256.update(chunk)
       return [
         `- Architecture: ${item.architecture}`,
-        `  InstallerUrl: https://opencode.ai/files/bin/${encodeURIComponent(Script.version)}/${path.basename(item.file)}`,
+        `  InstallerUrl: https://releases.coder.example.com/files/bin/${encodeURIComponent(Script.version)}/${path.basename(item.file)}`,
         `  InstallerSha256: ${sha256.digest("hex").toUpperCase()}`,
       ]
     }),
@@ -106,14 +106,14 @@ async function prepare(input: (typeof packages)[number]) {
       ...header("defaultLocale"),
       "PackageLocale: en-US",
       // Matches the publisher the desktop installer registers with Windows.
-      "Publisher: OpenCode",
+      "Publisher: Coder",
       "PublisherUrl: https://anoma.ly/",
-      "PublisherSupportUrl: https://github.com/anomalyco/opencode/issues",
-      "PrivacyUrl: https://opencode.ai/legal/privacy-policy",
+      "PublisherSupportUrl: https://github.com/coder-ai/coder/issues",
+      "PrivacyUrl: https://coder.example.com/legal/privacy-policy",
       `PackageName: ${input.name}`,
-      "PackageUrl: https://opencode.ai/",
+      "PackageUrl: https://coder.example.com/",
       "License: MIT",
-      "LicenseUrl: https://github.com/anomalyco/opencode/blob/HEAD/LICENSE",
+      "LicenseUrl: https://github.com/coder-ai/coder/blob/HEAD/LICENSE",
       `ShortDescription: ${input.description}`,
       `Moniker: ${input.moniker}`,
       "Tags:",
@@ -122,7 +122,7 @@ async function prepare(input: (typeof packages)[number]) {
       "- developer-tools",
       "Documentations:",
       "- DocumentLabel: Docs",
-      "  DocumentUrl: https://opencode.ai/docs/",
+      "  DocumentUrl: https://coder.example.com/docs/",
       ...footer("defaultLocale"),
     ],
   }
@@ -198,7 +198,7 @@ async function submit(input: Awaited<ReturnType<typeof prepare>>) {
         title,
         head: `${fork.owner.login}:${branch}`,
         base: "master",
-        body: `Published by the [OpenCode](https://github.com/anomalyco/opencode) release workflow${run ? ` in ${run}` : ""}.`,
+        body: `Published by the [Coder](https://github.com/coder-ai/coder) release workflow${run ? ` in ${run}` : ""}.`,
       },
     }),
   )

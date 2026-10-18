@@ -1,8 +1,8 @@
 import { Effect, Option, Schema, Stream } from "effect"
 import path from "node:path"
-import { define } from "@opencode/plugin/effect/plugin"
-import { FSUtil } from "@opencode/util/fs-util"
-import { Global } from "@opencode/util/global"
+import { define } from "@xcoder/plugin/effect/plugin"
+import { FSUtil } from "@xcoder/util/fs-util"
+import { Global } from "@xcoder/util/global"
 import { Bus } from "../../bus.js"
 import { Credential } from "../../credential.js"
 import { Provider } from "../../provider.js"
@@ -163,10 +163,10 @@ export const GoogleVertexPlugin = define({
     yield* ctx.provider.transform((evt) => {
       for (const item of evt.list()) {
         if (
-          !item.provider.package.startsWith("@opencode/ai/providers/google-vertex") &&
+          !item.provider.package.startsWith("@xcoder/ai/providers/google-vertex") &&
           !(
             item.provider.id === Provider.ID.googleVertex &&
-            item.provider.package === "@opencode/ai/providers/openai-compatible"
+            item.provider.package === "@xcoder/ai/providers/openai-compatible"
           )
         )
           continue
@@ -191,10 +191,10 @@ export const GoogleVertexPlugin = define({
     yield* ctx.model.transform((models) => {
       for (const item of models.provider.list()) {
         if (
-          !item.provider.package.startsWith("@opencode/ai/providers/google-vertex") &&
+          !item.provider.package.startsWith("@xcoder/ai/providers/google-vertex") &&
           !(
             item.provider.id === Provider.ID.googleVertex &&
-            item.provider.package === "@opencode/ai/providers/openai-compatible"
+            item.provider.package === "@xcoder/ai/providers/openai-compatible"
           )
         )
           continue

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode/protocol",
+  "name": "@xcoder/protocol",
   "version": "2.0.32",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anomalyco/opencode.git",
+    "url": "git+https://github.com/coder-ai/coder.git",
     "directory": "packages/protocol"
   },
   "publishConfig": {
@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@opencode/schema": "workspace:*",
+    "@xcoder/schema": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

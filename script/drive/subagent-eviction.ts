@@ -1,17 +1,17 @@
 import { Deferred, Effect, Stream } from "effect"
-import { Llm, OpenCodeDriver } from "opencode-drive"
+import { Llm, CoderDriver } from "coder-drive"
 import { AbsolutePath } from "../../packages/schema/src/schema"
 import { Database } from "bun:sqlite"
 
 const label = process.env.DEMO_LABEL ?? "AFTER"
 const evict = process.env.DEMO_EVICT !== "false"
 
-// Run with OPENCODE_DRIVE_DB=proof.sqlite. Only model output and fixture_hold are
+// Run with CODER_DRIVE_DB=proof.sqlite. Only model output and fixture_hold are
 // simulated. The debug endpoint closes the real graph without waiting an hour.
-// Dynamic tools avoid the static adapter issue: anomalyco/opencode-drive#116.
-export default OpenCodeDriver.use(
+// Dynamic tools avoid the static adapter issue: coder-ai/coder-drive#116.
+export default CoderDriver.use(
   {
-    opencode: { dev: process.env.OPENCODE_DEV ?? process.cwd() },
+    opencode: { dev: process.env.CODER_DEV ?? process.cwd() },
     keepArtifacts: true,
     tui: { recording: true, viewport: { cols: 100, rows: 30 } },
     config: {
@@ -19,7 +19,7 @@ export default OpenCodeDriver.use(
       username: "Demo",
       agents: { reviewer: { mode: "subagent", description: "Review the fixture" } },
     },
-    tuiConfig: { theme: { name: "opencode", mode: "dark" }, animations: false, tabs: { mode: "off" } },
+    tuiConfig: { theme: { name: "coder", mode: "dark" }, animations: false, tabs: { mode: "off" } },
     project: { git: true, files: { "README.md": "# Parent fixture\n", "child/README.md": "# Child fixture\n" } },
   },
   ({ ui, llm, tui, opencode, artifacts, tools }) =>

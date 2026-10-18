@@ -17,9 +17,9 @@ import {
   TranscriptionClient,
   Video,
   VideoClient,
-} from "@opencode/ai"
-import { Route, Protocol, RequestExecutor, WebSocketTransport } from "@opencode/ai/route"
-import { Provider as ProviderSubpath } from "@opencode/ai/provider"
+} from "@xcoder/ai"
+import { Route, Protocol, RequestExecutor, WebSocketTransport } from "@xcoder/ai/route"
+import { Provider as ProviderSubpath } from "@xcoder/ai/provider"
 import {
   AssemblyAI,
   Baseten,
@@ -34,7 +34,7 @@ import {
   Fireworks,
   Google,
   Meta,
-  OpenCode,
+  Coder,
   OpenAI,
   OpenAICompatible,
   OpenRouter,
@@ -45,7 +45,7 @@ import {
   VercelAIGateway,
   XAI,
   ZAI,
-} from "@opencode/ai/providers"
+} from "@xcoder/ai/providers"
 import {
   OpenAIChat,
   OpenAICompatibleChat,
@@ -53,10 +53,10 @@ import {
   OpenAIResponses,
   OpenResponses,
   OpenResponsesChannel,
-} from "@opencode/ai/protocols"
-import * as AnthropicMessages from "@opencode/ai/protocols/anthropic-messages"
-import { TestLLM } from "@opencode/ai/testing"
-import { Evaluation, EvaluationClient } from "@opencode/ai/experimental"
+} from "@xcoder/ai/protocols"
+import * as AnthropicMessages from "@xcoder/ai/protocols/anthropic-messages"
+import { TestLLM } from "@xcoder/ai/testing"
+import { Evaluation, EvaluationClient } from "@xcoder/ai/experimental"
 
 describe("public exports", () => {
   test("modality, provider, and protocol entrypoints load first in a fresh process", async () => {
@@ -127,7 +127,7 @@ describe("public exports", () => {
   })
 
   test("provider barrels expose user-facing facades", async () => {
-    const { OpenAICompatibleResponses } = await import("@opencode/ai/providers")
+    const { OpenAICompatibleResponses } = await import("@xcoder/ai/providers")
 
     expect(OpenAI.model).toBeFunction()
     expect(OpenAI.provider.responses).toBe(OpenAI.responses)
@@ -149,7 +149,7 @@ describe("public exports", () => {
     expect(OpenRouter.model).toBeFunction()
     expect(OpenRouter.experimental.evaluation).toBeFunction()
     expect(TypeSafeAI.experimental.evaluation).toBeFunction()
-    expect(OpenCode.experimental.evaluation).toBeFunction()
+    expect(Coder.experimental.evaluation).toBeFunction()
     expect(VercelAIGateway.experimental.evaluation).toBeFunction()
     expect(XAI.model).toBeFunction()
     expect(XAI.provider.responses).toBe(XAI.responses)

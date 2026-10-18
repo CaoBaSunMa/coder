@@ -10,8 +10,8 @@ import {
   type Media,
   Message,
   SystemPart,
-} from "@opencode/ai"
-import type { StreamOptions } from "@opencode/ai/route"
+} from "@xcoder/ai"
+import type { StreamOptions } from "@xcoder/ai/route"
 import type {
   SessionCompaction,
   SessionContext,
@@ -19,13 +19,13 @@ import type {
   SessionRequest,
   SessionRequestKind,
   SessionTitle,
-} from "@opencode/plugin/effect/session"
-import type { Agent } from "@opencode/schema/agent"
-import type { Model } from "@opencode/schema/model"
-import type { Content } from "@opencode/schema/tool"
+} from "@xcoder/plugin/effect/session"
+import type { Agent } from "@xcoder/schema/agent"
+import type { Model } from "@xcoder/schema/model"
+import type { Content } from "@xcoder/schema/tool"
 import { Cause, Context, Effect, Layer, Result, Stream } from "effect"
 import { HttpClientRequest, HttpClientResponse } from "effect/http"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { makeLocationNode } from "@xcoder/util/effect/app-node"
 import { App } from "../app.js"
 import { Permission } from "../permission.js"
 import { PluginHooks } from "../plugin/hooks.js"
@@ -225,7 +225,7 @@ export interface Interface {
   readonly title: (input: Input) => Effect.Effect<Prepared<SessionTitle>>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SessionModelRequest") {}
+export class Service extends Context.Service<Service, Interface>()("@xcoder/SessionModelRequest") {}
 
 export const layer = Layer.effect(
   Service,
@@ -280,15 +280,15 @@ export const layer = Layer.effect(
         model: model.model,
         http: {
           headers: {
-            "x-opencode-session-id": session.id,
-            ...(session.parentID ? { "x-opencode-parent-session-id": session.parentID } : {}),
+            "x-coder-session-id": session.id,
+            ...(session.parentID ? { "x-coder-parent-session-id": session.parentID } : {}),
             "x-session-affinity": affinity,
             "X-Session-Id": affinity,
             ...(session.parentID ? { "x-parent-session-id": session.parentID } : {}),
             "User-Agent": App.useragent(app),
-            "x-opencode-project": session.projectID,
-            "x-opencode-session": affinity,
-            "x-opencode-client": app.name,
+            "x-coder-project": session.projectID,
+            "x-coder-session": affinity,
+            "x-coder-client": app.name,
           },
         },
         // TODO: Persist cache lineage so nested forks reuse the root session's cache key.

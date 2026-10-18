@@ -1,16 +1,16 @@
 import { describe, expect, test } from "bun:test"
 import { SqliteClient } from "@effect/sql-sqlite-bun"
-import { EffectDrizzleSqlite } from "@opencode/core/database/drizzle"
-import { Database } from "@opencode/core/database/database"
-import { DatabaseMigration } from "@opencode/core/database/migration"
-import { V1Migration } from "@opencode/core/database/v1-migration"
-import { SessionMessage } from "@opencode/core/session/message"
-import { SessionSchema } from "@opencode/core/session/schema"
-import { SessionTable } from "@opencode/core/session/sql"
-import { Project } from "@opencode/core/project"
-import { ProjectTable } from "@opencode/core/project/sql"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Global } from "@opencode/util/global"
+import { EffectDrizzleSqlite } from "@xcoder/core/database/drizzle"
+import { Database } from "@xcoder/core/database/database"
+import { DatabaseMigration } from "@xcoder/core/database/migration"
+import { V1Migration } from "@xcoder/core/database/v1-migration"
+import { SessionMessage } from "@xcoder/core/session/message"
+import { SessionSchema } from "@xcoder/core/session/schema"
+import { SessionTable } from "@xcoder/core/session/sql"
+import { Project } from "@xcoder/core/project"
+import { ProjectTable } from "@xcoder/core/project/sql"
+import { AbsolutePath } from "@xcoder/core/schema"
+import { Global } from "@xcoder/util/global"
 import { Effect, Fiber, Layer, Logger, Schedule, Schema, Scope } from "effect"
 import { eq, sql } from "drizzle-orm"
 import type { SqlClient } from "effect/sql/SqlClient"
@@ -928,7 +928,7 @@ describe("V1Migration database workflow", () => {
 
   test("imports previous V2 sessions and messages containing apostrophes", async () => {
     await using tmp = await tmpdir()
-    const filename = path.join(tmp.path, "opencode-next.db")
+    const filename = path.join(tmp.path, "coder-next.db")
     const sqlite = await import("bun:sqlite")
     const source = new sqlite.Database(filename)
     source.run(`
@@ -1046,7 +1046,7 @@ describe("V1Migration database workflow", () => {
 
   test("imports previous V2 databases missing newer nullable columns", async () => {
     await using tmp = await tmpdir()
-    const filename = path.join(tmp.path, "opencode-next.db")
+    const filename = path.join(tmp.path, "coder-next.db")
     const sqlite = await import("bun:sqlite")
     const source = new sqlite.Database(filename)
     source.run(`

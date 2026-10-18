@@ -1,11 +1,11 @@
 import { existsSync } from "fs"
 import path from "path"
 import { render, useRenderer, useTerminalDimensions } from "@opentui/solid"
-import { registerOpencodeSpinner } from "./component/register-spinner"
+import { registerCoderSpinner } from "./component/register-spinner"
 import { Effect, Latch } from "effect"
-import { Service, type Endpoint } from "@opencode/client/effect/service"
-import { OpenCode, type SessionInfo } from "@opencode/client"
-import { Global } from "@opencode/util/global"
+import { Service, type Endpoint } from "@xcoder/client/effect/service"
+import { Coder, type SessionInfo } from "@xcoder/client"
+import { Global } from "@xcoder/util/global"
 import { ClipboardProvider, useClipboard } from "./context/clipboard"
 import { LogProvider, type LogSink } from "./context/log"
 import { ExitProvider, useExit } from "./context/exit"
@@ -86,12 +86,13 @@ import { PromptHistoryProvider } from "./prompt/history"
 import { FrecencyProvider } from "./prompt/frecency"
 import { PromptStashProvider } from "./prompt/stash"
 import { Toast, ToastProvider, useToast } from "./ui/toast"
-import { isFallbackTitle } from "@opencode/util/session-title-fallback"
+import { isFallbackTitle } from "@xcoder/util/session-title-fallback"
 import * as Model from "./util/model"
 import { ArgsProvider, useArgs, type Args } from "./context/args"
-import { openUrl } from "@opencode/util/open"
+import { openUrl } from "@xcoder/util/open"
 import { PromptRefProvider, usePromptRef } from "./context/prompt"
 import { Config, ConfigProvider, useConfig } from "./config"
+import { I18nProvider, useI18n } from "./context/i18n"
 import { newSessionLocation } from "./config/new-session-location"
 import { UpdateNotificationProvider, useUpdateNotification, type UpdateSource } from "./context/update-notification"
 import { PluginProvider, usePlugin, type PackageSource } from "./plugin/context"
@@ -110,7 +111,7 @@ import { PanelProvider, usePanel } from "./context/panel"
 import { SessionFrame } from "./component/session-frame"
 import { createTuiClipboard } from "./clipboard"
 
-registerOpencodeSpinner()
+registerCoderSpinner()
 
 const appGlobalBindingCommands = ["session.list", "session.new", "open.menu"] as const
 
@@ -214,7 +215,7 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
     terminalSuspend: process.platform !== "win32",
   })
   const options = { baseUrl: input.server.endpoint.url, headers: Service.headers(input.server.endpoint) }
-  const api = OpenCode.make(options)
+  const api = Coder.make(options)
   const location = yield* Effect.tryPromise(() => api.file.list({ location: { directory: process.cwd() } })).pipe(
     Effect.map((response) => response.location),
     Effect.catch(() => Effect.tryPromise(() => api.location.get())),
@@ -228,7 +229,7 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
         reconnect: async (signal: AbortSignal) => {
           const endpoint = await managed.reconnect(signal)
           const next = { baseUrl: endpoint.url, headers: Service.headers(endpoint) }
-          return { api: OpenCode.make(next), url: endpoint.url }
+          return { api: Coder.make(next), url: endpoint.url }
         },
         restart: managed.restart,
       }
@@ -256,8 +257,8 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
             Effect.sync(() => destroyRenderer(renderer)),
           )
         }
-        if (process.env.OPENCODE_DRIVE) {
-          const { Drive } = yield* Effect.promise(() => import("@opencode/simulation/frontend"))
+        if (process.env.CODER_DRIVE) {
+          const { Drive } = yield* Effect.promise(() => import("@xcoder/simulation/frontend"))
           return yield* Drive.create(options, input.app.version)
         }
         return yield* Effect.acquireRelease(
@@ -311,7 +312,7 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
                     <ErrorBoundary
                       fallback={(error, reset) => (
                         <ClipboardProvider value={clipboard}>
-                          <ErrorComponent error={error} reset={reset} mode={mode} />
+                          <ErrorComponent error={error} reset={reset} mode={mode} locale={config.locale} />
                         </ClipboardProvider>
                       )}
                     >
@@ -340,21 +341,21 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
                             >
                               <TuiStartupProvider
                                 value={{
-                                  initialRoute: process.env.OPENCODE_STORY
+                                  initialRoute: process.env.CODER_STORY
                                     ? {
                                         type: "plugin",
                                         id: "opencode.storybook",
                                         name: "storybook",
-                                        // OPENCODE_STORY=1 opens the index; any other value opens that story.
+                                        // CODER_STORY=1 opens the index; any other value opens that story.
                                         data:
-                                          process.env.OPENCODE_STORY === "1"
+                                          process.env.CODER_STORY === "1"
                                             ? undefined
-                                            : { story: process.env.OPENCODE_STORY },
+                                            : { story: process.env.CODER_STORY },
                                       }
-                                    : process.env.OPENCODE_ROUTE
-                                      ? JSON.parse(process.env.OPENCODE_ROUTE)
+                                    : process.env.CODER_ROUTE
+                                      ? JSON.parse(process.env.CODER_ROUTE)
                                       : undefined,
-                                  skipInitialLoading: Boolean(process.env.OPENCODE_FAST_BOOT),
+                                  skipInitialLoading: Boolean(process.env.CODER_FAST_BOOT),
                                 }}
                               >
                                 <ClipboardProvider value={clipboard}>
@@ -364,67 +365,73 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
                                       service={input.config}
                                       options={{ terminalSuspend: process.platform !== "win32" }}
                                     >
-                                      <Keymap.Provider>
-                                        <ToastProvider>
-                                          <RouteProvider
-                                            initialRoute={
-                                              input.args.continue
-                                                ? {
-                                                    type: "session",
-                                                    sessionID: "dummy",
-                                                  }
-                                                : undefined
-                                            }
-                                          >
-                                            <ClientProvider api={api} url={input.server.endpoint.url} service={service}>
-                                              <PermissionProvider>
-                                                <DataProvider directory={directory}>
-                                                  <LocationProvider>
-                                                    <SessionTabsProvider>
-                                                      <SessionTerminalsProvider>
-                                                        <ThemeProvider
-                                                          mode={mode}
-                                                          source={createThemeSource(global.config)}
-                                                        >
-                                                          <ThemeErrorToast />
-                                                          <LocalProvider>
-                                                            <PromptStashProvider>
-                                                              <DialogProvider>
-                                                                <FrecencyProvider>
-                                                                  <PromptHistoryProvider>
-                                                                    <PromptRefProvider>
-                                                                      <EditorContextProvider>
-                                                                        <AttentionProvider>
-                                                                          <UpdateNotificationProvider
-                                                                            updater={input.updater}
-                                                                          >
-                                                                            <PanelProvider>
-                                                                              <PluginProvider
-                                                                                packages={input.packages}
-                                                                                directories={pluginDirectories}
-                                                                              >
-                                                                                <App />
-                                                                              </PluginProvider>
-                                                                            </PanelProvider>
-                                                                          </UpdateNotificationProvider>
-                                                                        </AttentionProvider>
-                                                                      </EditorContextProvider>
-                                                                    </PromptRefProvider>
-                                                                  </PromptHistoryProvider>
-                                                                </FrecencyProvider>
-                                                              </DialogProvider>
-                                                            </PromptStashProvider>
-                                                          </LocalProvider>
-                                                        </ThemeProvider>
-                                                      </SessionTerminalsProvider>
-                                                    </SessionTabsProvider>
-                                                  </LocationProvider>
-                                                </DataProvider>
-                                              </PermissionProvider>
-                                            </ClientProvider>
-                                          </RouteProvider>
-                                        </ToastProvider>
-                                      </Keymap.Provider>
+                                      <I18nProvider>
+                                        <Keymap.Provider>
+                                          <ToastProvider>
+                                            <RouteProvider
+                                              initialRoute={
+                                                input.args.continue
+                                                  ? {
+                                                      type: "session",
+                                                      sessionID: "dummy",
+                                                    }
+                                                  : undefined
+                                              }
+                                            >
+                                              <ClientProvider
+                                                api={api}
+                                                url={input.server.endpoint.url}
+                                                service={service}
+                                              >
+                                                <PermissionProvider>
+                                                  <DataProvider directory={directory}>
+                                                    <LocationProvider>
+                                                      <SessionTabsProvider>
+                                                        <SessionTerminalsProvider>
+                                                          <ThemeProvider
+                                                            mode={mode}
+                                                            source={createThemeSource(global.config)}
+                                                          >
+                                                            <ThemeErrorToast />
+                                                            <LocalProvider>
+                                                              <PromptStashProvider>
+                                                                <DialogProvider>
+                                                                  <FrecencyProvider>
+                                                                    <PromptHistoryProvider>
+                                                                      <PromptRefProvider>
+                                                                        <EditorContextProvider>
+                                                                          <AttentionProvider>
+                                                                            <UpdateNotificationProvider
+                                                                              updater={input.updater}
+                                                                            >
+                                                                              <PanelProvider>
+                                                                                <PluginProvider
+                                                                                  packages={input.packages}
+                                                                                  directories={pluginDirectories}
+                                                                                >
+                                                                                  <App />
+                                                                                </PluginProvider>
+                                                                              </PanelProvider>
+                                                                            </UpdateNotificationProvider>
+                                                                          </AttentionProvider>
+                                                                        </EditorContextProvider>
+                                                                      </PromptRefProvider>
+                                                                    </PromptHistoryProvider>
+                                                                  </FrecencyProvider>
+                                                                </DialogProvider>
+                                                              </PromptStashProvider>
+                                                            </LocalProvider>
+                                                          </ThemeProvider>
+                                                        </SessionTerminalsProvider>
+                                                      </SessionTabsProvider>
+                                                    </LocationProvider>
+                                                  </DataProvider>
+                                                </PermissionProvider>
+                                              </ClientProvider>
+                                            </RouteProvider>
+                                          </ToastProvider>
+                                        </Keymap.Provider>
+                                      </I18nProvider>
                                     </ConfigProvider>
                                   </ArgsProvider>
                                 </ClipboardProvider>
@@ -481,6 +488,7 @@ function App() {
   const promptRef = usePromptRef()
   const plugins = usePlugin()
   const clipboard = useClipboard()
+  const i18n = useI18n()
   const terminalEnvironment = useTuiTerminalEnvironment()
   let paletteTimer: ReturnType<typeof setTimeout> | undefined
   const afterFrame = () => {
@@ -607,23 +615,25 @@ function App() {
     if (!terminalTitleEnabled()) return
 
     if (route.data.type === "home") {
-      renderer.setTerminalTitle("OpenCode")
+      renderer.setTerminalTitle(i18n.t("app.name"))
       return
     }
 
     if (route.data.type === "session") {
       const title = session?.title
       if (!title || isFallbackTitle(title)) {
-        renderer.setTerminalTitle("OpenCode")
+        renderer.setTerminalTitle(i18n.t("app.name"))
         return
       }
 
-      renderer.setTerminalTitle(`OC | ${title.length > 40 ? title.slice(0, 37) + "…" : title}`)
+      renderer.setTerminalTitle(
+        i18n.t("app.terminalTitle", { title: title.length > 40 ? title.slice(0, 37) + "…" : title }),
+      )
       return
     }
 
     if (route.data.type === "plugin") {
-      renderer.setTerminalTitle(`OC | ${route.data.name}`)
+      renderer.setTerminalTitle(i18n.t("app.terminalTitle", { title: route.data.name }))
     }
   })
 
@@ -701,7 +711,7 @@ function App() {
     if (config.data.highlights === false) return
     if (route.data.type !== "home" || dialog.stack.length > 0 || promptRef.current?.current.text) return
     if (args.prompt || args.continue || args.sessionID || args.newSessionID) return
-    if (process.env.OPENCODE_DRIVE || process.env.OPENCODE_STORY || process.env.OPENCODE_ROUTE) return
+    if (process.env.CODER_DRIVE || process.env.CODER_STORY || process.env.CODER_ROUTE) return
     void claim(storage, {
       version: app.version,
       count: items.length,
@@ -999,7 +1009,7 @@ function App() {
         : []),
       {
         name: "opencode.settings",
-        title: "Open settings",
+        title: i18n.t("command.settings"),
         suggested: true,
         slash: { name: "settings" },
         run: () => {
@@ -1009,7 +1019,7 @@ function App() {
       },
       {
         name: "opencode.status",
-        title: "View status",
+        title: i18n.t("command.status"),
         slash: { name: "status" },
         run: () => {
           dialog.replace(() => <DialogStatus />)
@@ -1020,7 +1030,7 @@ function App() {
         ? [
             {
               name: "opencode.update",
-              title: "Update OpenCode",
+              title: i18n.t("command.update"),
               slash: { name: "update" },
               run: () => updater.open?.("manual"),
               category: "System",
@@ -1115,7 +1125,7 @@ function App() {
       },
       {
         name: "help.show",
-        title: "Help",
+        title: i18n.t("command.help"),
         slash: { name: "help" },
         run: () => {
           dialog.replace(() => <DialogHelp />)
@@ -1124,16 +1134,16 @@ function App() {
       },
       {
         name: "docs.open",
-        title: "Open docs",
+        title: i18n.t("command.docs"),
         run: () => {
-          openUrl("https://opencode.ai/docs").catch(() => {})
+          openUrl("https://coder.example.com/docs").catch(() => {})
           dialog.clear()
         },
         category: "System",
       },
       {
         name: "app.exit",
-        title: "Exit the app",
+        title: i18n.t("command.exit"),
         slash: { name: "exit", aliases: ["quit", "q"] },
         run: () => exit(),
         category: "System",

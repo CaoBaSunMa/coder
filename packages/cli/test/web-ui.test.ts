@@ -1,5 +1,5 @@
 import { NodeFileSystem, NodeHttpServer } from "@effect/platform-node"
-import { ServerProcess } from "@opencode/server/process"
+import { ServerProcess } from "@xcoder/server/process"
 import { afterAll, describe, expect, test } from "bun:test"
 import { Effect } from "effect"
 import { HttpServer, HttpServerError, HttpServerRequest, HttpServerResponse } from "effect/http"
@@ -11,7 +11,7 @@ import { brotliCompressSync } from "node:zlib"
 import { WebUi } from "../src/services/web-ui"
 import { it } from "../../core/test/lib/effect"
 
-const root = await mkdtemp(path.join(tmpdir(), "opencode-web-ui-"))
+const root = await mkdtemp(path.join(tmpdir(), "coder-web-ui-"))
 afterAll(() => rm(root, { recursive: true, force: true }))
 
 describe("web UI", () => {

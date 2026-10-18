@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { dict } from "@opencode/ui/i18n/en"
+import { dict } from "@xcoder/ui/i18n/en"
 import en from "@/runtime/i18n/en"
 import { settingsSearchIndex, type SettingsSearchServer } from "./search-index"
 import { rankSettings } from "./search-results"
@@ -7,7 +7,7 @@ import type { SettingsView } from "./surface"
 
 const strings: Record<string, string> = { ...dict, ...en }
 
-const project = { id: "proj_opencode", name: "OpenCode", worktree: "/projects/opencode", expanded: false }
+const project = { id: "proj_opencode", name: "Coder", worktree: "/projects/opencode", expanded: false }
 
 const servers: SettingsSearchServer[] = [
   { key: "local", name: "Local server", connected: true, projects: [project] },
@@ -82,7 +82,7 @@ describe("settings search index", () => {
   test("retains project avatars and excludes color when a custom icon owns its appearance", () => {
     const withIcon = { ...project, icon: { color: "orange", override: "data:image/png;base64,example" } }
     const items = index({ servers: [{ ...servers[0], projects: [withIcon] }] })
-    expect(rankSettings("opencode", items, root)[0].projectInfo).toEqual(withIcon)
+    expect(rankSettings("coder", items, root)[0].projectInfo).toEqual(withIcon)
     expect(rankSettings("opencode color", items, root)).toEqual([])
   })
 })
@@ -112,7 +112,7 @@ describe("settings search ranking", () => {
         .filter((item) => item.project)
         .map((item) => item.entity),
     ).toEqual([true])
-    expect(rankSettings("opencode", index(), root).map((item) => item.entity)).toEqual([true, true])
+    expect(rankSettings("coder", index(), root).map((item) => item.entity)).toEqual([true, true])
   })
 
   test("normalizes whitespace, case, and Unicode in qualified names", () => {

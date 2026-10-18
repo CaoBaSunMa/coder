@@ -1808,7 +1808,7 @@ export function make(options: ClientOptions) {
               method: "POST",
               path: `/api/pty/${encodeURIComponent(input.ptyID)}/connect-token`,
               query: { location: input["location"] },
-              headers: { "x-opencode-ticket": input["x-opencode-ticket"] },
+              headers: { "x-coder-ticket": input["x-coder-ticket"] },
               successStatus: 200,
               declaredStatuses: [400, 401, 403, 404],
               empty: false,
@@ -1933,7 +1933,7 @@ export function make(options: ClientOptions) {
             {
               method: "POST",
               path: `/api/experimental/persistent-pty/${encodeURIComponent(input.ptyID)}/connect-token`,
-              headers: { "x-opencode-ticket": input["x-opencode-ticket"] },
+              headers: { "x-coder-ticket": input["x-coder-ticket"] },
               successStatus: 200,
               declaredStatuses: [400, 401, 403, 404, 503],
               empty: false,

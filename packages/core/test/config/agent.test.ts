@@ -2,21 +2,21 @@ import { describe, expect, test } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
 import { Effect, Fiber, Schema, Stream } from "effect"
-import { Agent } from "@opencode/core/agent"
-import { Bus } from "@opencode/core/bus"
-import { Config } from "@opencode/core/config"
-import { Directory, Document, Event, Info } from "@opencode/schema/config"
-import { Model } from "@opencode/schema/model"
-import { ConfigAgentPlugin } from "@opencode/core/config/plugin/agent"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { FSUtil } from "@opencode/util/fs-util"
-import { Global } from "@opencode/util/global"
-import { Permission } from "@opencode/core/permission"
-import { AgentPlugin } from "@opencode/core/plugin/agent"
-import { AbsolutePath } from "@opencode/core/schema"
-import { ConfigNormalize } from "@opencode/core/config/normalize"
-import { ConfigAgentV1 } from "@opencode/core/v1/config/agent"
+import { Agent } from "@xcoder/core/agent"
+import { Bus } from "@xcoder/core/bus"
+import { Config } from "@xcoder/core/config"
+import { Directory, Document, Event, Info } from "@xcoder/schema/config"
+import { Model } from "@xcoder/schema/model"
+import { ConfigAgentPlugin } from "@xcoder/core/config/plugin/agent"
+import { AppNodeBuilder } from "@xcoder/core/effect/app-node-builder"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { FSUtil } from "@xcoder/util/fs-util"
+import { Global } from "@xcoder/util/global"
+import { Permission } from "@xcoder/core/permission"
+import { AgentPlugin } from "@xcoder/core/plugin/agent"
+import { AbsolutePath } from "@xcoder/core/schema"
+import { ConfigNormalize } from "@xcoder/core/config/normalize"
+import { ConfigAgentV1 } from "@xcoder/core/v1/config/agent"
 import { advance, drain } from "../lib/clock"
 import { tmpdir, tmpdirScoped } from "../fixture/tmpdir"
 import { testEffect } from "../lib/effect"
@@ -229,8 +229,8 @@ permissions:
 
       const build = yield* agents.get(Agent.defaultID)
       if (!build) throw new Error("expected configured build agent")
-      const opencodeData = path.join(global.home, ".local", "share", "opencode", "*")
-      const mcpAuth = path.join(global.home, ".local", "share", "opencode", "mcp-auth.json")
+      const opencodeData = path.join(global.home, ".local", "share", "coder", "*")
+      const mcpAuth = path.join(global.home, ".local", "share", "coder", "mcp-auth.json")
       expect(build.permissions).toEqual([
         ...defaultPermissions,
         { action: "question", resource: "*", effect: "allow" },
@@ -623,7 +623,7 @@ Use native v2 fields.`,
           )
 
           yield* configTest.emitChange({ type: "create", path: path.join(tmp.path, "commands", "review.md") })
-          yield* configTest.emitChange({ type: "update", path: path.join(tmp.path, "opencode.json") })
+          yield* configTest.emitChange({ type: "update", path: path.join(tmp.path, "coder.json") })
           yield* drain
           expect(reloads).toBe(0)
 

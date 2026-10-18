@@ -19,10 +19,10 @@ body:
       required: false
 
   - type: input
-    id: opencode-version
+    id: coder-version
     attributes:
-      label: OpenCode version
-      description: What version of OpenCode are you using?
+      label: Coder version
+      description: What version of Coder are you using?
     validations:
       required: false
 

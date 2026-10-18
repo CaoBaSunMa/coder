@@ -1,7 +1,7 @@
-import { ClientError, OpenCode, type SessionStatsInfo } from "@opencode/client"
-import { Service } from "@opencode/client/effect/service"
-import { TokenUsage } from "@opencode/schema/token-usage"
-import { activityCalendar } from "@opencode/util/activity-calendar"
+import { ClientError, Coder, type SessionStatsInfo } from "@xcoder/client"
+import { Service } from "@xcoder/client/effect/service"
+import { TokenUsage } from "@xcoder/schema/token-usage"
+import { activityCalendar } from "@xcoder/util/activity-calendar"
 import { Effect, Option } from "effect"
 import { EOL } from "node:os"
 import { Commands } from "../commands"
@@ -20,7 +20,7 @@ const handler = Effect.fn("cli.stats")(function* (input: Runtime.Input<typeof Co
     server: Option.getOrUndefined(input.server),
     standalone: input.standalone,
   })
-  const client = OpenCode.make({ baseUrl: server.endpoint.url, headers: Service.headers(server.endpoint) })
+  const client = Coder.make({ baseUrl: server.endpoint.url, headers: Service.headers(server.endpoint) })
   const range = statsRange({ days, year, all: input.all })
   const projectID =
     project === "."
@@ -120,7 +120,7 @@ export function renderStats(stats: SessionStatsInfo, options: RenderOptions) {
           "",
           style("no activity in this range", "2", options.color),
           "",
-          style("opencode.ai", "2", options.color),
+          style("coder.example.com", "2", options.color),
         ]
       : [
           heading,
@@ -131,7 +131,7 @@ export function renderStats(stats: SessionStatsInfo, options: RenderOptions) {
           `${metricCount(stats.prompts, "prompt", options.color)} · ${metricCount(stats.steps, "step", options.color)} · ${metricCount(totalTokens, "token", options.color)}`,
           `${toolSummary} · ${metricCount(stats.activeDays, "active day", options.color)} · best streak ${style(stats.streak.toString(), primary, options.color)} day${stats.streak === 1 ? "" : "s"}`,
           "",
-          style("opencode.ai", "2", options.color),
+          style("coder.example.com", "2", options.color),
         ]
 
   if (options.cost) lines.push(...(lines.length > 0 ? [""] : []), ...renderCost(stats))

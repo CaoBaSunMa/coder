@@ -833,7 +833,7 @@
             ],
             "additionalProperties": false
           },
-          "description": "Command configuration, see https://opencode.ai/docs/commands"
+          "description": "Command configuration, see https://coder.example.com/docs/commands"
         },
         "skills": {
           "type": "object",
@@ -1037,7 +1037,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/AgentConfig"
           },
-          "description": "Agent configuration, see https://opencode.ai/docs/agents"
+          "description": "Agent configuration, see https://coder.example.com/docs/agents"
         },
         "provider": {
           "type": "object",

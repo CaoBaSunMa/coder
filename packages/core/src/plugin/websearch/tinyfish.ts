@@ -1,6 +1,6 @@
 export * as WebSearchTinyFish from "./tinyfish.js"
 
-import { define } from "@opencode/plugin/effect/plugin"
+import { define } from "@xcoder/plugin/effect/plugin"
 import { Duration, Effect, Option, Schema, Scope } from "effect"
 import { HttpClient, HttpClientRequest } from "effect/http"
 import { App } from "../../app.js"
@@ -114,7 +114,7 @@ const initialize = (http: HttpClient.HttpClient, headers: Record<string, string>
         params: {
           protocolVersion: "2025-06-18",
           capabilities: {},
-          clientInfo: { name: "opencode", version: "1.0" },
+          clientInfo: { name: "coder", version: "1.0" },
         },
       }),
     )

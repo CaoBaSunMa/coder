@@ -1,4 +1,4 @@
-import type { PromptInput, PromptMention } from "@opencode/schema"
+import type { PromptInput, PromptMention } from "@xcoder/schema"
 import type { EditablePromptInput } from "./codec"
 import { promptOffsetWidth } from "./display"
 import { expandTrackedPastedText } from "./part"

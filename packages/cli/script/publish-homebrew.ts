@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { Script } from "@opencode/script"
+import { Script } from "@xcoder/script"
 import { $ } from "bun"
 import { mkdir, rm } from "node:fs/promises"
 import path from "node:path"
@@ -16,11 +16,11 @@ const valid =
 if (!valid) throw new Error(`Expected a ${Script.channel} release version`)
 
 const dir = fileURLToPath(new URL("..", import.meta.url))
-const root = path.resolve(process.env.OPENCODE_CLI_DIST ?? path.join(dir, "dist"))
+const root = path.resolve(process.env.CODER_CLI_DIST ?? path.join(dir, "dist"))
 const outdir = path.join(root, "homebrew-tap")
 const dryRun = process.argv.includes("--dry-run")
-const name = Script.channel === "beta" ? "opencode-beta" : "opencode-v2"
-const formulaClass = Script.channel === "beta" ? "OpencodeBeta" : "OpencodeV2"
+const name = Script.channel === "beta" ? "coder-beta" : "coder"
+const formulaClass = Script.channel === "beta" ? "CoderBeta" : "Coder"
 
 const targets = await Promise.all(
   [
@@ -29,14 +29,14 @@ const targets = await Promise.all(
     { name: "linux-arm64", archive: "tar.gz" },
     { name: "linux-x64-baseline", archive: "tar.gz" },
   ].map(async (target) => {
-    const filename = `opencode-${target.name}.${target.archive}`
+    const filename = `coder-${target.name}.${target.archive}`
     const file = Bun.file(path.join(root, filename))
     if (!(await file.exists()) || !file.size) throw new Error(`Missing Homebrew archive: ${filename}`)
     const sha256 = new Bun.CryptoHasher("sha256")
     for await (const chunk of file.stream()) sha256.update(chunk)
     return {
       ...target,
-      url: `https://opencode.ai/files/bin/${encodeURIComponent(Script.version)}/${filename}`,
+      url: `https://releases.coder.example.com/files/bin/${encodeURIComponent(Script.version)}/${filename}`,
       sha256: sha256.digest("hex"),
     }
   }),
@@ -47,7 +47,7 @@ if (dryRun) await mkdir(outdir, { recursive: true })
 if (!dryRun) {
   const token = process.env.GITHUB_TOKEN
   if (!token) throw new Error("GITHUB_TOKEN is required to update the Homebrew tap")
-  await $`git clone ${`https://x-access-token:${token}@github.com/anomalyco/homebrew-tap.git`} ${outdir}`
+  await $`git clone ${`https://x-access-token:${token}@github.com/coder-ai/homebrew-tap.git`} ${outdir}`
   await $`git checkout -B master`.cwd(outdir)
 }
 
@@ -68,13 +68,13 @@ await Bun.write(
     "# frozen_string_literal: true",
     "",
     `class ${formulaClass} < Formula`,
-    `  desc "OpenCode V2${Script.channel === "beta" ? " beta" : ""} - the AI coding agent for the terminal"`,
-    '  homepage "https://github.com/anomalyco/opencode"',
+    `  desc "Coder${Script.channel === "beta" ? " beta" : ""} - the AI coding agent for the terminal"`,
+    '  homepage "https://github.com/coder-ai/coder"',
     `  version "${Script.version}"`,
     '  license "MIT"',
     "",
     '  depends_on "ripgrep"',
-    '  conflicts_with "opencode", because: "both install an opencode binary"',
+    ...(Script.channel === "beta" ? ['  conflicts_with "coder", because: "both install a coder binary"'] : []),
     "",
     "  on_macos do",
     "    if Hardware::CPU.arm?",
@@ -97,7 +97,7 @@ await Bun.write(
     "  end",
     "",
     "  def install",
-    '    bin.install "opencode"',
+    '    bin.install "coder"',
     "  end",
     "end",
     "",

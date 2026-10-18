@@ -1,20 +1,20 @@
 import { expect } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
-import { Database } from "@opencode/core/database/database"
-import { Location } from "@opencode/core/location"
-import { Permission } from "@opencode/core/permission"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { ProjectTable } from "@opencode/core/project/sql"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { Tool } from "@opencode/core/tool"
-import { OpenCodeTools } from "@opencode/core/tool/plugin/opencode"
-import { WorktreeTable } from "@opencode/core/worktree/sql"
-import { WorktreeStrategies } from "@opencode/core/worktree/strategies"
-import { Model } from "@opencode/schema/model"
+import { Database } from "@xcoder/core/database/database"
+import { Location } from "@xcoder/core/location"
+import { Permission } from "@xcoder/core/permission"
+import { Plugin } from "@xcoder/core/plugin"
+import { PluginHost } from "@xcoder/core/plugin/host"
+import { ProjectTable } from "@xcoder/core/project/sql"
+import { Provider } from "@xcoder/core/provider"
+import { AbsolutePath } from "@xcoder/core/schema"
+import { Session } from "@xcoder/core/session"
+import { Tool } from "@xcoder/core/tool"
+import { CoderTools } from "@xcoder/core/tool/plugin/opencode"
+import { WorktreeTable } from "@xcoder/core/worktree/sql"
+import { WorktreeStrategies } from "@xcoder/core/worktree/strategies"
+import { Model } from "@xcoder/schema/model"
 import { Effect } from "effect"
 import { initRepo } from "./fixture/git"
 import { tmpdirScoped } from "./fixture/tmpdir"
@@ -73,7 +73,7 @@ it.effect("groups available models by provider with paging", () =>
         model.enabled = false
       })
     })
-    yield* OpenCodeTools.Plugin.effect(pluginHost)
+    yield* CoderTools.Plugin.effect(pluginHost)
     // The caller runs on `test`, which sorts first despite `other` coming earlier alphabetically.
     const session = yield* sessions.create({
       location: Location.Ref.make({ directory: location.directory }),
@@ -88,7 +88,7 @@ it.effect("groups available models by provider with paging", () =>
           type: "tool-call",
           id: `call-${JSON.stringify(input)}`,
           name: "execute",
-          input: { code: `return await tools.opencode.models(${JSON.stringify(input)})` },
+          input: { code: `return await tools.coder.models(${JSON.stringify(input)})` },
         },
       }).pipe(Effect.map((result) => JSON.parse(result.content?.[0]?.type === "text" ? result.content[0].text : "")))
 
@@ -190,7 +190,7 @@ worktreeIt.live("creates, lists, and removes worktrees for the plugin's project"
       .run()
       .pipe(Effect.orDie)
     yield* strategies.transform((editor) => editor.configure({ directory: AbsolutePath.make(parent.path) }))
-    yield* OpenCodeTools.Plugin.effect(yield* PluginHost.make(plugins))
+    yield* CoderTools.Plugin.effect(yield* PluginHost.make(plugins))
     const session = yield* sessions.create({ location: Location.Ref.make({ directory: location.directory }) })
     const registry = yield* Tool.Service
     const call = (name: string, input: Record<string, unknown>) =>
@@ -201,7 +201,7 @@ worktreeIt.live("creates, lists, and removes worktrees for the plugin's project"
           type: "tool-call",
           id: `call-${name}-${JSON.stringify(input)}`,
           name: "execute",
-          input: { code: `return await tools.opencode.${name}(${JSON.stringify(input)})` },
+          input: { code: `return await tools.coder.${name}(${JSON.stringify(input)})` },
         },
       })
     const run = (name: string, input: Record<string, unknown>) =>

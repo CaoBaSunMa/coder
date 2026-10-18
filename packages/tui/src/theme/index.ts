@@ -1,8 +1,8 @@
-import { migrateV1, parseThemeDocument, type ThemeDocument, type ModeDefinition } from "@opencode/theme/tui"
+import { migrateV1, parseThemeDocument, type ThemeDocument, type ModeDefinition } from "@xcoder/theme/tui"
 import { resolveThemeColors } from "./resolve"
 import { DEFAULT_THEMES, type Theme, type ThemeV1Json } from "./v1"
-import opencode from "./assets/v2/opencode.json" with { type: "json" }
-import opencode2 from "./assets/v2/opencode2.json" with { type: "json" }
+import opencode from "./assets/v2/coder.json" with { type: "json" }
+import coder2 from "./assets/v2/coder2.json" with { type: "json" }
 
 export { DEFAULT_THEMES, type Theme, type ThemeV1Json } from "./v1"
 
@@ -17,32 +17,32 @@ let opencodeTheme: (ThemeDocument & {
   readonly dark: ModeDefinition
 }) | undefined
 
-export function getOpenCodeTheme() {
+export function getCoderTheme() {
   if (opencodeTheme) return opencodeTheme
-  const document = parseThemeDocument(opencode, "opencode") as NonNullable<typeof opencodeTheme>
+  const document = parseThemeDocument(opencode, "coder") as NonNullable<typeof opencodeTheme>
   opencodeTheme = document
   return document
 }
 
-let opencode2Theme: ThemeDocument | undefined
+let coder2Theme: ThemeDocument | undefined
 
 // Temporary theme for the "new-designs" experiment. It is not part of allThemes(), so only the
 // TUI theme context offers it, and only while the experiment is enabled.
-export function getOpenCode2Theme() {
-  opencode2Theme ??= parseThemeDocument(opencode2, "opencode2")
-  return opencode2Theme
+export function getCoder2Theme() {
+  coder2Theme ??= parseThemeDocument(coder2, "coder2")
+  return coder2Theme
 }
 
 function listThemes(): Record<string, ThemeDocumentSource> {
   // Priority: defaults < custom files < generated system.
   const themes: Record<string, ThemeDocumentSource> = {
     ...DEFAULT_THEMES,
-    opencode: getOpenCodeTheme(),
+    opencode: getCoderTheme(),
     ...customThemes,
   }
   return {
     ...themes,
-    system: systemTheme ?? themes.system ?? themes.opencode,
+    system: systemTheme ?? themes.system ?? themes.coder,
   }
 }
 

@@ -1,17 +1,17 @@
 import { expect } from "bun:test"
 import path from "path"
-import { LanguageModel, LLMClient } from "@opencode/ai"
-import { OpenAIChat } from "@opencode/ai/protocols"
-import { TestLLM } from "@opencode/ai/testing"
-import { llmClient } from "@opencode/core/effect/app-node-platform"
-import { makeMemoryDriver } from "@opencode/core/environment/index"
-import { SessionRunnerModel } from "@opencode/core/session/runner/model"
-import { WorkspaceDriver } from "@opencode/core/workspace/driver"
-import { Plugin } from "@opencode/plugin/effect"
+import { LanguageModel, LLMClient } from "@xcoder/ai"
+import { OpenAIChat } from "@xcoder/ai/protocols"
+import { TestLLM } from "@xcoder/ai/testing"
+import { llmClient } from "@xcoder/core/effect/app-node-platform"
+import { makeMemoryDriver } from "@xcoder/core/environment/index"
+import { SessionRunnerModel } from "@xcoder/core/session/runner/model"
+import { WorkspaceDriver } from "@xcoder/core/workspace/driver"
+import { Plugin } from "@xcoder/plugin/effect"
 import { Context, Deferred, Effect, Exit, Layer, Schema, Scope } from "effect"
 import { tmpdirScoped } from "../../core/test/fixture/tmpdir"
 import { testEffect } from "../../core/test/lib/effect"
-import { AbsolutePath, Agent, Location, OpenCode } from "../src/effect"
+import { AbsolutePath, Agent, Location, Coder } from "../src/effect"
 
 const it = testEffect(Layer.empty)
 const metadata = Schema.decodeUnknownSync(Schema.Struct({ threadID: Schema.String }))
@@ -38,7 +38,7 @@ it.live(
       const configured: string[] = []
       const closed: number[] = []
       const executed: number[] = []
-      const options: OpenCode.CreateOptions = {
+      const options: Coder.CreateOptions = {
         database: { path: path.join(directory.path, "sessions.db") },
         app: { name: "instance-test", version: "1.2.3" },
         events: { persist: true },
@@ -105,7 +105,7 @@ it.live(
         ],
       }
       yield* llm.push(TestLLM.hangAfter())
-      const first = yield* OpenCode.create(options, embed).pipe(Scope.provide(firstScope))
+      const first = yield* Coder.create(options, embed).pipe(Scope.provide(firstScope))
       const session = yield* first.sessions.create({
         title: "Recovery fixture",
         location: Location.Ref.make({ directory: AbsolutePath.make(directory.path) }),
@@ -121,7 +121,7 @@ it.live(
       yield* Scope.close(firstScope, Exit.void)
       expect(closed).toEqual([1])
       yield* llm.push(TestLLM.tool("recovered-tool", "thread_echo", {}), TestLLM.text("Recovered", "answer"))
-      const second = yield* OpenCode.create(options, embed).pipe(Scope.provide(secondScope))
+      const second = yield* Coder.create(options, embed).pipe(Scope.provide(secondScope))
       yield* Deferred.await(started).pipe(Effect.timeout("5 seconds"))
       expect((yield* llm.requests()).length).toBe(1)
       yield* Deferred.succeed(release, undefined)
@@ -159,7 +159,7 @@ it.live(
         suspendForIdle: () => Effect.void,
         destroy: () => Effect.void,
       })
-      const opencode = yield* OpenCode.create(
+      const opencode = yield* Coder.create(
         {
           config: { directory: directory.path, project: false, content: "{}" },
           models: { fetch: false },
@@ -247,7 +247,7 @@ it.live(
       const hostScope = yield* Scope.fork(yield* Effect.scope)
       const attempts: string[] = []
       const released: string[] = []
-      const layer = OpenCode.layer({
+      const layer = Coder.layer({
         config: { directory: directory.path, project: false, content: "{}" },
         models: { fetch: false },
         fs: { filewatcher: false },
@@ -276,7 +276,7 @@ it.live(
             }),
         },
       }).pipe(Layer.provide(Layer.succeed(Personas, { of: (threadID) => Effect.succeed(`persona-for-${threadID}`) })))
-      const opencode = Context.get(yield* Layer.build(layer).pipe(Scope.provide(hostScope)), OpenCode.Service)
+      const opencode = Context.get(yield* Layer.build(layer).pipe(Scope.provide(hostScope)), Coder.Service)
       const session = yield* opencode.sessions.create({
         title: "Service-configured fixture",
         location: Location.Ref.make({ directory: AbsolutePath.make(directory.path) }),

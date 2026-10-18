@@ -1,8 +1,8 @@
-export * as OpenCode from "./opencode"
+export * as Coder from "./opencode"
 
-import { OpenCode, type OpenCodeClient } from "@opencode/client/effect"
-import type { Session } from "@opencode/core/session"
-import type { Workspace } from "@opencode/core/workspace"
+import { Coder, type CoderClient } from "@xcoder/client/effect"
+import type { Session } from "@xcoder/core/session"
+import type { Workspace } from "@xcoder/core/workspace"
 import { Context, Effect, Layer } from "effect"
 import type { Config, Scope } from "effect"
 import { FetchHttpClient, HttpClient } from "effect/http"
@@ -16,13 +16,13 @@ export type EmbedOptions = EmbeddedHost.EmbedOptions
 export type InstanceOptions<R = never> = SdkInstances.Options<R>
 export type InstanceConfiguration = SdkInstances.Configuration
 
-export type Interface = Omit<OpenCodeClient, "plugin" | "workspace"> & {
-  readonly sessions: Omit<OpenCodeClient["session"], "create" | "get" | "move"> & {
+export type Interface = Omit<CoderClient, "plugin" | "workspace"> & {
+  readonly sessions: Omit<CoderClient["session"], "create" | "get" | "move"> & {
     readonly create: Session.Interface["create"]
     readonly get: (input: { readonly sessionID: Session.ID }) => ReturnType<Session.Interface["get"]>
     readonly move: Session.Interface["move"]
   }
-  readonly events: OpenCodeClient["event"]
+  readonly events: CoderClient["event"]
   readonly workspace: {
     readonly create: Workspace.Interface["create"]
     readonly provision: (options: {
@@ -30,18 +30,18 @@ export type Interface = Omit<OpenCodeClient, "plugin" | "workspace"> & {
     }) => ReturnType<Workspace.Interface["provision"]>
     readonly destroy: (options: { readonly workspaceID: Workspace.ID }) => ReturnType<Workspace.Interface["destroy"]>
   }
-  readonly plugin: EmbeddedHost.Interface["plugins"]["register"] & OpenCodeClient["plugin"]
+  readonly plugin: EmbeddedHost.Interface["plugins"]["register"] & CoderClient["plugin"]
 }
 
 export const create: <R = never>(
   options?: CreateOptions<R>,
   embed?: EmbedOptions,
-) => Effect.Effect<Interface, Config.ConfigError | Error, Scope.Scope | R> = Effect.fn("OpenCode.create")(function* <
+) => Effect.Effect<Interface, Config.ConfigError | Error, Scope.Scope | R> = Effect.fn("Coder.create")(function* <
   R = never,
 >(options: CreateOptions<R> = {}, embed: EmbedOptions = {}) {
   const host = yield* Effect.acquireRelease(EmbeddedHost.create(options, embed), (host) => Effect.promise(host.close))
   const httpClient = yield* HttpClient.HttpClient.pipe(Effect.provide(FetchHttpClient.layer))
-  const client = yield* OpenCode.make({ baseUrl: "http://opencode.local" }).pipe(
+  const client = yield* Coder.make({ baseUrl: "http://opencode.local" }).pipe(
     Effect.provideService(
       HttpClient.HttpClient,
       // FetchHttpClient reads Fetch at request time; callers must not replace this host's in-process transport.
@@ -67,7 +67,7 @@ export const create: <R = never>(
   }
 })
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/sdk/OpenCode") {}
+export class Service extends Context.Service<Service, Interface>()("@xcoder/sdk/Coder") {}
 
 export const layer = <R = never>(
   options: CreateOptions<R> = {},

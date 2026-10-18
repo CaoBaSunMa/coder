@@ -44,7 +44,7 @@ const shell = Array.from({ length: 100 }, (_, index) => {
 })
 
 // Seed only this Playwright context, before opening the production draft store.
-const request = indexedDB.open("opencode-drafts", 1)
+const request = indexedDB.open("coder-drafts", 1)
 
 request.onupgradeneeded = () => {
   request.result.createObjectStore("documents")

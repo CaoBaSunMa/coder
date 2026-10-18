@@ -1,13 +1,13 @@
 export * as ServerProcess from "./process"
 
 import { NodeHttpServer } from "@effect/platform-node"
-import { Bus } from "@opencode/core/bus"
-import { SessionRestart } from "@opencode/core/session/execution/restart"
-import { InstallationEvent } from "@opencode/schema/installation-event"
-import { hasPtyConnectTicketURL } from "@opencode/protocol/groups/pty"
-import { hasPersistentPtyConnectTicketURL } from "@opencode/protocol/groups/persistent-pty"
-import { isPairingConnectURL } from "@opencode/protocol/groups/server"
-import { Global } from "@opencode/util/global"
+import { Bus } from "@xcoder/core/bus"
+import { SessionRestart } from "@xcoder/core/session/execution/restart"
+import { InstallationEvent } from "@xcoder/schema/installation-event"
+import { hasPtyConnectTicketURL } from "@xcoder/protocol/groups/pty"
+import { hasPersistentPtyConnectTicketURL } from "@xcoder/protocol/groups/persistent-pty"
+import { isPairingConnectURL } from "@xcoder/protocol/groups/server"
+import { Global } from "@xcoder/util/global"
 import { Cause, Context, Effect, Exit, Latch, Layer, Option, Ref, Scope } from "effect"
 import { HttpMiddleware, HttpRouter, HttpServerRequest, HttpServerResponse } from "effect/http"
 import { NetAddress } from "effect/net"
@@ -178,7 +178,7 @@ function dispatch(
   urls: () => ReadonlyArray<string>,
   tmp: string,
 ): App {
-  const auth = ServerAuth.Config.of({ password: Option.some(password), username: "opencode" })
+  const auth = ServerAuth.Config.of({ password: Option.some(password), username: "coder" })
   return Effect.gen(function* () {
     const request = yield* HttpServerRequest.HttpServerRequest
     const url = new URL(request.url, "http://localhost")

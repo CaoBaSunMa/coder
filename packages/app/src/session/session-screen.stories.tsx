@@ -13,7 +13,7 @@ import {
   STORY_TIME,
   subagentDocument,
   terminalPassedDocument,
-} from "@opencode/session-ui/storybook"
+} from "@xcoder/session-ui/storybook"
 import { SessionPreview } from "./story-model"
 
 const description = "opencode · modular-session-ui"
@@ -48,7 +48,7 @@ const implementAndVerify = () => (
 )
 
 export default {
-  title: "OpenCode/Session/Complete workspace",
+  title: "Coder/Session/Complete workspace",
   id: "app-current-session-surface",
   component: SessionPreview,
   parameters: {

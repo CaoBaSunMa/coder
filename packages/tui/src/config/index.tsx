@@ -1,12 +1,13 @@
 export * as Config from "."
 
 import { createBindingLookup } from "@opentui/keymap/extras"
-import { Vcs } from "@opencode/schema/vcs"
+import { Vcs } from "@xcoder/schema/vcs"
 import { Schema } from "effect"
 import { createContext, onCleanup, type JSX, useContext } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
 import { watch } from "fs"
 import path from "path"
+import { resolveLocale, type Locale } from "../util/i18n"
 import { TuiKeybind } from "./keybind"
 
 export interface Interface {
@@ -75,6 +76,9 @@ export const Info = Schema.Struct({
       }),
     }),
   ).annotate({ description: "Color theme settings" }),
+  locale: Schema.optional(Schema.Literals(["en", "zh"])).annotate({
+    description: "Interface language: 'en' for English or 'zh' for 简体中文 (default: English)",
+  }),
   keybinds: Schema.optional(TuiKeybind.KeybindOverrides).annotate({ description: "Custom key bindings" }),
   plugins: Schema.optional(Schema.Array(Plugin)).annotate({
     description: "Ordered plugin enablement directives and external package declarations",
@@ -249,14 +253,17 @@ export const Info = Schema.Struct({
   }),
   animations: Schema.optional(Schema.Boolean).annotate({ description: "Enable interface animations" }),
   highlights: Schema.optional(Schema.Boolean).annotate({
-    description: "Show the release highlights once after OpenCode updates",
+    description: "Show the release highlights once after Coder updates",
   }),
   mouse: Schema.optional(Schema.Boolean).annotate({ description: "Enable terminal mouse capture" }),
   cursor: Schema.optional(Cursor),
 })
 export type Info = Schema.Schema.Type<typeof Info>
 
-export type Resolved = Omit<Info, "attention" | "cursor" | "keybinds" | "leader" | "mouse" | "session" | "tabs"> & {
+export type Resolved = Omit<
+  Info,
+  "attention" | "cursor" | "keybinds" | "leader" | "locale" | "mouse" | "session" | "tabs"
+> & {
   attention: {
     notifications: boolean
     sound: boolean
@@ -266,6 +273,7 @@ export type Resolved = Omit<Info, "attention" | "cursor" | "keybinds" | "leader"
   }
   keybinds: TuiKeybind.BindingLookupView
   leader: { timeout: number }
+  locale: Locale
   mouse: boolean
   cursor?: {
     style: "block" | "underline" | "line" | "default"
@@ -314,6 +322,7 @@ export function resolve(
       bindingDefaults: TuiKeybind.bindingDefaults(),
     }),
     leader: { timeout: input.leader?.timeout ?? 2000 },
+    locale: resolveLocale({ explicit: input.locale, environment: options.environment ?? process.env }),
     mouse: input.mouse ?? true,
     cursor: input.cursor
       ? {

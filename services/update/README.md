@@ -1,14 +1,14 @@
-# OpenCode Update
+# Coder Update
 
 The update Worker serves all selected artifacts for a channel.
 
 ```sh
-curl 'https://opencode.ai/update/api/latest'
-curl 'https://opencode.ai/update/api/latest/cli'
-curl 'https://opencode.ai/update/api/latest/cli/npm'
+curl 'https://releases.coder.example.com/update/api/latest'
+curl 'https://releases.coder.example.com/update/api/latest/cli'
+curl 'https://releases.coder.example.com/update/api/latest/cli/npm'
 ```
 
-The same Worker also serves the original `https://update.opencode.ai` hostname without
+The same Worker also serves the original `https://releases.coder.example.com` hostname without
 the `/update` prefix. Admin forms, pagination, and redirects preserve the request's mount.
 
 ## Desktop update feeds
@@ -16,7 +16,7 @@ the `/update` prefix. Admin forms, pagination, and redirects preserve the reques
 Electron updater manifests are available at `/api/<channel>/desktop/<distribution>/<filename>`:
 
 ```sh
-curl 'https://opencode.ai/update/api/beta/desktop/opencode/latest-mac.yml'
+curl 'https://releases.coder.example.com/update/api/beta/desktop/opencode/latest-mac.yml'
 ```
 
 Use `latest.yml` for Windows, `latest-mac.yml` for macOS, `latest-linux.yml` for Linux x64,
@@ -76,13 +76,13 @@ channel transparently resolves to `beta` for older clients.
 
 Choose a minimum that older clients can install and that can itself consume the active
 release. For the CLI package migration, retain a package-aware release published as
-`@opencode-ai/cli` as the minimum before activating releases under `@opencode/cli`.
+`@opencode-ai/cli` as the minimum before activating releases under `@xcoder/cli`.
 
 Both admin mounts must be protected by the same Cloudflare Access self-hosted application:
 
-- Public hostname/path: `update.opencode.ai/admin*`
-- Public hostname/path: `opencode.ai/update/admin*`
-- Policy: allow the OpenCode team identity group
+- Public hostname/path: `releases.coder.example.com/admin*`
+- Public hostname/path: `coder.example.com/update/admin*`
+- Policy: allow the Coder team identity group
 
 Configure Access before deploying the new Worker route. The Worker has `workers_dev`
 and preview URLs disabled; it is exposed through its custom hostname and the `/update` routes.
@@ -112,19 +112,19 @@ The publish workflow also registers direct binary downloads with distribution
 `opencode`, after uploading every file to the public files bucket:
 
 ```sh
-curl 'https://opencode.ai/update/api/dev/cli/opencode'
-curl 'https://opencode.ai/update/api/dev/cli-node/opencode'
-curl 'https://opencode.ai/update/api/latest/desktop/opencode'
+curl 'https://releases.coder.example.com/update/api/dev/cli/opencode'
+curl 'https://releases.coder.example.com/update/api/dev/cli-node/opencode'
+curl 'https://releases.coder.example.com/update/api/latest/desktop/opencode'
 ```
 
 `metadata.files` maps each filename to its direct
-`https://opencode.ai/files/bin/<version>/<filename>` URL, SHA-256 checksum, and
+`https://releases.coder.example.com/files/bin/<version>/<filename>` URL, SHA-256 checksum, and
 byte size. Desktop records additionally contain `metadata.manifests`, with
 the CDN URLs and the original Electron update checksums. Existing `npm`,
 `github`, and `aur` distributions are published independently.
 
-GitHub Actions publishes artifacts through `POST https://opencode.ai/update/api/publish`
-using a short-lived OIDC token with audience `https://update.opencode.ai`. The original
+GitHub Actions publishes artifacts through `POST https://releases.coder.example.com/update/api/publish`
+using a short-lived OIDC token with audience `https://releases.coder.example.com`. The original
 hostname and token audience remain supported. The Worker accepts only tokens signed by
 GitHub for repository ID `975734319`, owner ID `66570915`, and `.github/workflows/publish.yml`
 on configured publishing refs.

@@ -1,6 +1,6 @@
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import { Tool } from "@opencode/core/tool"
-import { Plugin } from "@opencode/plugin/effect"
+import { SdkPlugins } from "@xcoder/core/plugin/sdk"
+import { Tool } from "@xcoder/core/tool"
+import { Plugin } from "@xcoder/plugin/effect"
 import { createHash } from "node:crypto"
 import {
   Cause,
@@ -40,7 +40,7 @@ export interface Interface {
   readonly stream: (request: ProviderRequest) => Stream.Stream<ProviderResponseEvent, ProviderDisconnectedError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/simulation/SimulatedProvider") {}
+export class Service extends Context.Service<Service, Interface>()("@xcoder/simulation/SimulatedProvider") {}
 
 interface ProviderInvocation extends ProviderRequest {
   readonly id: string
@@ -312,7 +312,7 @@ function handle(
       return SimulationProtocol.Handshake.dispatch(
         {
           role: "backend",
-          server: { name: "opencode", version },
+          server: { name: "coder", version },
           capabilities: SimulationProtocol.Backend.Capabilities,
         },
         request.params,

@@ -10,7 +10,7 @@ function handle(harness: Harness, request: SimulationProtocol.Frontend.Request, 
       return SimulationProtocol.Handshake.dispatch(
         {
           role: "ui",
-          server: { name: "opencode", version },
+          server: { name: "coder", version },
           capabilities: SimulationProtocol.Frontend.Capabilities,
         },
         request.params,

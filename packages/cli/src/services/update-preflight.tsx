@@ -3,10 +3,10 @@
 // version-mismatched background service before the TUI attaches.
 import { createCliRenderer, RGBA, TextAttributes, type CliRenderer } from "@opentui/core"
 import { render, useTerminalDimensions } from "@opentui/solid"
-import { OPENCODE_VERSION } from "../version"
-import { registerOpencodeSpinner } from "@opencode/tui/component/register-spinner"
-import { SPINNER_FRAMES } from "@opencode/tui/component/spinner"
-import { go } from "@opencode/tui/logo"
+import { CODER_VERSION } from "../version"
+import { registerCoderSpinner } from "@xcoder/tui/component/register-spinner"
+import { SPINNER_FRAMES } from "@xcoder/tui/component/spinner"
+import { go } from "@xcoder/tui/logo"
 import { setTimeout } from "node:timers/promises"
 import {
   batch,
@@ -22,7 +22,7 @@ import {
   untrack,
 } from "solid-js"
 
-const stages = ["Keeping your session safe", "Starting the new background service", "Loading OpenCode"] as const
+const stages = ["Keeping your session safe", "Starting the new background service", "Loading Coder"] as const
 const stageFloor = 480
 const transitionDuration = 420
 const completionHold = 650
@@ -72,7 +72,7 @@ type Session = {
 }
 
 async function open(from?: string): Promise<Session> {
-  registerOpencodeSpinner()
+  registerCoderSpinner()
   const [active, setActive] = createSignal(0)
   const [outcome, setOutcome] = createSignal<"running" | "success" | "failure">("running")
   const [failure, setFailure] = createSignal("")
@@ -325,7 +325,7 @@ function UpdateFooter(props: {
   const statusSweep = createSweep()
   const runningHeader = () =>
     phrase(
-      ["OpenCode", colors.muted, true],
+      ["Coder", colors.muted, true],
       ["is updating", colors.muted],
       ...(props.from
         ? ([
@@ -334,14 +334,14 @@ function UpdateFooter(props: {
           ] as const)
         : []),
       ["to", colors.muted],
-      [OPENCODE_VERSION, colors.accent],
+      [CODER_VERSION, colors.accent],
     )
   const completedHeader = phrase(
-    ["OpenCode", colors.muted, true],
+    ["Coder", colors.muted, true],
     ["updated to", colors.muted],
-    [OPENCODE_VERSION, colors.accent],
+    [CODER_VERSION, colors.accent],
   )
-  const pausedHeader = phrase(["OpenCode", colors.muted, true], ["update paused", colors.muted])
+  const pausedHeader = phrase(["Coder", colors.muted, true], ["update paused", colors.muted])
   const outcomeStatus = () =>
     props.outcome() === "success"
       ? [...styled("✓", colors.success), ...styled(" Ready", colors.text)]

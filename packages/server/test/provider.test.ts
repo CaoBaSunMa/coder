@@ -1,6 +1,6 @@
 import { expect } from "bun:test"
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import { Plugin } from "@opencode/plugin/effect"
+import { SdkPlugins } from "@xcoder/core/plugin/sdk"
+import { Plugin } from "@xcoder/plugin/effect"
 import { Context, Deferred, Effect, Fiber, Layer } from "effect"
 import { HttpEffect, HttpRouter, HttpServer } from "effect/http"
 import { tmpdirScoped } from "../../core/test/fixture/tmpdir"
@@ -11,7 +11,7 @@ it.live(
   "provider reads stay nonblocking while authentication discovery waits for plugins",
   () =>
     Effect.gen(function* () {
-      const tmp = yield* tmpdirScoped("opencode-provider-endpoints-")
+      const tmp = yield* tmpdirScoped("coder-provider-endpoints-")
       const started = yield* Deferred.make<void>()
       const release = yield* Deferred.make<void>()
       const context = yield* Layer.build(
@@ -27,7 +27,7 @@ it.live(
               providers: {
                 custom: {
                   name: "Configured Custom Provider",
-                  package: "@opencode/ai/providers/openai-compatible",
+                  package: "@xcoder/ai/providers/openai-compatible",
                   settings: { apiKey: "secret" },
                   models: { chat: {} },
                 },
@@ -81,7 +81,7 @@ it.live(
       const discovered = yield* Fiber.join(integrations)
       expect(discovered.status).toBe(200)
       expect(yield* Effect.promise(() => discovered.json())).toMatchObject({
-        data: expect.arrayContaining([expect.objectContaining({ id: "opencode" })]),
+        data: expect.arrayContaining([expect.objectContaining({ id: "coder" })]),
       })
     }),
   15_000,

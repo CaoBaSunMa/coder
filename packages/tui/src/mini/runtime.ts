@@ -8,8 +8,8 @@
 //   3. starts the stream transport (SDK event subscription), lazily for fresh
 //      local sessions,
 //   4. runs the prompt queue until the footer closes.
-import { SessionMessage } from "@opencode/schema/session-message"
-import type { LocationRef } from "@opencode/client/promise"
+import { SessionMessage } from "@xcoder/schema/session-message"
+import type { LocationRef } from "@xcoder/client/promise"
 import type { Config } from "../config"
 import { newSessionLocation } from "../config/new-session-location"
 import { errorMessage } from "../util/error"
@@ -151,7 +151,7 @@ function formRequestOptions(location: LocationRef | undefined) {
   if (!location) return
   return {
     headers: {
-      "x-opencode-directory": encodeURIComponent(location.directory),
+      "x-coder-directory": encodeURIComponent(location.directory),
     },
   }
 }

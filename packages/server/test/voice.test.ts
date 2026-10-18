@@ -1,8 +1,8 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 import { expect } from "bun:test"
-import { Voice } from "@opencode/core/voice"
-import { makeLocationNode } from "@opencode/util/effect/app-node"
+import { Voice } from "@xcoder/core/voice"
+import { makeLocationNode } from "@xcoder/util/effect/app-node"
 import { Effect, Layer } from "effect"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
@@ -36,7 +36,7 @@ const voice = makeLocationNode({
 
 it.live("routes POST /api/experimental/voice/session and maps errors", () =>
   Effect.gen(function* () {
-    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-voice-endpoint-")))
+    const tmp = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("coder-voice-endpoint-")))
     const global = path.join(tmp.path, "global")
     yield* Effect.promise(() => fs.mkdir(global))
     const handler = yield* ServerFetch.make(

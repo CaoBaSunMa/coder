@@ -1,4 +1,4 @@
-import { Resource } from "@opencode/console-resource"
+import { Resource } from "@xcoder/console-resource"
 
 const paths: Record<string, string | undefined> = {
   "POST /zen/v1/chat/completions": "/openai/v1/chat/completions",

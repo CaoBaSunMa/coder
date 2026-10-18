@@ -1,6 +1,6 @@
 import { expect } from "bun:test"
-import { OpenCode, type SessionMessageInfo } from "@opencode/client"
-import { Session } from "@opencode/schema/session"
+import { Coder, type SessionMessageInfo } from "@xcoder/client"
+import { Session } from "@xcoder/schema/session"
 import { Effect } from "effect"
 import { it } from "../../core/test/lib/effect"
 import { ServerFetch } from "../src/fetch"
@@ -41,7 +41,7 @@ const setup = Effect.gen(function* () {
     models: { fetch: false },
     fs: { filewatcher: false },
   })
-  const api = OpenCode.make({
+  const api = Coder.make({
     baseUrl: "http://opencode.local",
     fetch: Object.assign((input: string | URL | Request, init?: RequestInit) => handler(new Request(input, init)), {
       preconnect: fetch.preconnect,

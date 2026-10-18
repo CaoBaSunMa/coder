@@ -1,18 +1,18 @@
 import { describe, expect } from "bun:test"
 import { Deferred, Duration, Effect, Layer, LayerMap, Stream } from "effect"
 import { TestClock } from "effect/testing"
-import { define } from "@opencode/plugin/effect/plugin"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
-import { Command } from "@opencode/core/command"
-import { ConfigPluginSource } from "@opencode/core/config/plugin/source"
-import { Instance } from "@opencode/core/instance"
-import { LocationServiceMap } from "@opencode/core/location-services"
-import { Location } from "@opencode/core/location"
-import { Plugin } from "@opencode/core/plugin"
-import { SdkPlugins } from "@opencode/core/plugin/sdk"
-import { AbsolutePath } from "@opencode/core/schema"
+import { define } from "@xcoder/plugin/effect/plugin"
+import { AppNodeBuilder } from "@xcoder/core/effect/app-node-builder"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { Global } from "@xcoder/util/global"
+import { Command } from "@xcoder/core/command"
+import { ConfigPluginSource } from "@xcoder/core/config/plugin/source"
+import { Instance } from "@xcoder/core/instance"
+import { LocationServiceMap } from "@xcoder/core/location-services"
+import { Location } from "@xcoder/core/location"
+import { Plugin } from "@xcoder/core/plugin"
+import { SdkPlugins } from "@xcoder/core/plugin/sdk"
+import { AbsolutePath } from "@xcoder/core/schema"
 import { Database } from "../../src/database/database"
 import { Bus } from "../../src/bus"
 import { tempGlobalLayer } from "../fixture/global"
@@ -202,7 +202,7 @@ describe("PluginSupervisor", () => {
     }),
   )
 
-  for (const targets of [["opencode.config.policy", "opencode.provider.opencode", "opencode.config.agent"], ["*"]]) {
+  for (const targets of [["opencode.config.policy", "opencode.provider.coder", "opencode.config.agent"], ["*"]]) {
     it.effect(`keeps policy enforcement and the Console connection through plugin removals: ${targets}`, () =>
       Effect.gen(function* () {
         source.operations = targets.map((target) => ({ type: "remove", target }))
@@ -218,7 +218,7 @@ describe("PluginSupervisor", () => {
         )
         const status = (id: string) => inventory.find((plugin) => plugin.id === id)?.state.status
         expect(status("opencode.config.policy")).toBe("active")
-        expect(status("opencode.provider.opencode")).toBe("active")
+        expect(status("opencode.provider.coder")).toBe("active")
         // Removals still apply to everything else, including instance and builtin plugins.
         expect(status("opencode.config.agent")).toBeUndefined()
         expect(inventory.some((plugin) => plugin.id === id)).toBe(targets[0] !== "*")

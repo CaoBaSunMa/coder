@@ -6,7 +6,7 @@ import { storyDocument, storyTool } from "../storybook/current-session-scenarios
 import { type ContextGroupPart, CurrentContextToolGroup } from "./tool-renderer"
 
 export default {
-  title: "OpenCode/Work/Tool group",
+  title: "Coder/Work/Tool group",
   id: "current-tool-group",
   component: CurrentContextToolGroup,
 }
@@ -79,7 +79,7 @@ export const MixedReasoning = {
         id: "reasoning_first",
         text: "The renderer groups adjacent tools. Check the relevant skills before changing it.",
       },
-      storyTool("reasoning_skill_first", "skill", "completed", { id: "opencode" }),
+      storyTool("reasoning_skill_first", "skill", "completed", { id: "coder" }),
       storyTool("reasoning_skill_second", "skill", "completed", { id: "frontend-design" }),
       {
         type: "reasoning",

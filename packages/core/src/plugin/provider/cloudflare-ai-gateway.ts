@@ -1,7 +1,7 @@
 import { Effect } from "effect"
 import { isArrayNonEmpty } from "effect/Array"
-import { define } from "@opencode/plugin/effect/plugin"
-import { Form } from "@opencode/schema/form"
+import { define } from "@xcoder/plugin/effect/plugin"
+import { Form } from "@xcoder/schema/form"
 import { Provider } from "../../provider.js"
 import { configuredSettings } from "./configured.js"
 

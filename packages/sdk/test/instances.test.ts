@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises"
 import { join } from "node:path"
 import { Schema } from "effect"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
-import { OpenCode, Session, SessionMessage } from "../src"
+import { Coder, Session, SessionMessage } from "../src"
 
 const metadata = Schema.decodeUnknownSync(Schema.Struct({ account: Schema.String }))
 const hostOptions = (directory: string) => ({
@@ -14,19 +14,19 @@ const hostOptions = (directory: string) => ({
 })
 
 test("Promise instances are lazy, share by key and Location, and stay isolated between hosts", async () => {
-  await using directory = await tmpdir("opencode-promise-instances-")
+  await using directory = await tmpdir("coder-promise-instances-")
   const otherDirectory = join(directory.path, "other")
   await mkdir(otherDirectory)
   const configured: string[] = []
   const setups: string[] = []
   const cleanups: string[] = []
   const createHost = (name: string) => {
-    const instances: OpenCode.InstanceOptions = {
+    const instances: Coder.InstanceOptions = {
       key(session) {
         expect(typeof session.time.created).toBe("number")
         return metadata(session.metadata).account
       },
-      configure(key): OpenCode.InstanceConfiguration {
+      configure(key): Coder.InstanceConfiguration {
         configured.push(`${name}:${key}`)
         return {
           plugins: [
@@ -47,7 +47,7 @@ test("Promise instances are lazy, share by key and Location, and stay isolated b
         }
       },
     }
-    return OpenCode.create({
+    return Coder.create({
       ...hostOptions(directory.path),
       database: { path: join(directory.path, `${name}.sqlite`) },
       instances,
@@ -145,11 +145,11 @@ test("Promise instances are lazy, share by key and Location, and stay isolated b
 test.each(["configuration", "plugin setup"])(
   "Promise instance %s failure admits nothing, preserves healthy instances, and can be retried",
   async (failure) => {
-    await using directory = await tmpdir("opencode-promise-instance-failure-")
+    await using directory = await tmpdir("coder-promise-instance-failure-")
     const configured: string[] = []
     const setups: string[] = []
     const cleanups: string[] = []
-    await using opencode = await OpenCode.create({
+    await using opencode = await Coder.create({
       ...hostOptions(directory.path),
       instances: {
         key: (session) => metadata(session.metadata).account,
@@ -221,12 +221,12 @@ test.each(["configuration", "plugin setup"])(
 )
 
 test("Promise instances reconstruct callbacks for persisted Sessions only on a cold prompt", async () => {
-  await using directory = await tmpdir("opencode-promise-instance-restart-")
+  await using directory = await tmpdir("coder-promise-instance-restart-")
   const sessionID = Session.ID.create()
   const configured: string[] = []
   const setups: number[] = []
   const cleanups: number[] = []
-  const options: OpenCode.CreateOptions = {
+  const options: Coder.CreateOptions = {
     ...hostOptions(directory.path),
     instances: {
       key: (session) => metadata(session.metadata).account,
@@ -252,7 +252,7 @@ test("Promise instances reconstruct callbacks for persisted Sessions only on a c
       },
     },
   }
-  await using first = await OpenCode.create(options)
+  await using first = await Coder.create(options)
   const created = await first.sessions.create({
     id: sessionID,
     location: { directory: directory.path },
@@ -263,7 +263,7 @@ test("Promise instances reconstruct callbacks for persisted Sessions only on a c
   await first.close()
   expect(cleanups).toEqual([1])
 
-  await using second = await OpenCode.create(options)
+  await using second = await Coder.create(options)
   expect(await second.sessions.get({ sessionID })).toMatchObject({
     id: sessionID,
     location: created.location,
@@ -295,11 +295,11 @@ test("Promise instances reconstruct callbacks for persisted Sessions only on a c
 }, 20_000)
 
 test("Promise instance plugin ID collisions reject admission and reconstruct on retry", async () => {
-  await using directory = await tmpdir("opencode-promise-instance-collision-")
+  await using directory = await tmpdir("coder-promise-instance-collision-")
   const configured: string[] = []
   const setups: string[] = []
   const cleanups: string[] = []
-  await using opencode = await OpenCode.create({
+  await using opencode = await Coder.create({
     ...hostOptions(directory.path),
     plugins: [
       {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { ClientError, type SessionStatsInfo } from "@opencode/client"
+import { ClientError, type SessionStatsInfo } from "@xcoder/client"
 import { Effect } from "effect"
 import { renderStats, request } from "../src/commands/handlers/stats"
 
@@ -99,7 +99,7 @@ describe("stats rendering", () => {
     expect(output).toContain("+1 more tool")
   })
 
-  test("uses the OpenCode palette in color mode", () => {
+  test("uses the Coder palette in color mode", () => {
     const output = renderStats(stats, options({ color: true }))
     expect(output).toContain("\x1b[1;36m")
     expect(output).not.toContain("38;5;45")

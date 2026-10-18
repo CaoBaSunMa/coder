@@ -5,12 +5,12 @@ ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=${BUN_RUNTIME_TRANSPILER_CACHE_PATH}
 RUN apk add --no-cache libgcc libstdc++ ripgrep
 
 FROM base AS build-amd64
-COPY dist/cli-linux-x64-baseline-musl/bin/opencode /usr/local/bin/opencode
+COPY dist/cli-linux-x64-baseline-musl/bin/coder /usr/local/bin/coder
 
 FROM base AS build-arm64
-COPY dist/cli-linux-arm64-musl/bin/opencode /usr/local/bin/opencode
+COPY dist/cli-linux-arm64-musl/bin/coder /usr/local/bin/coder
 
 ARG TARGETARCH
 FROM build-${TARGETARCH}
-RUN ln -s opencode /usr/local/bin/opencode2 && opencode --version && opencode2 --version
-ENTRYPOINT ["opencode"]
+RUN ln -s opencode /usr/local/bin/coder2 && opencode --version && coder2 --version
+ENTRYPOINT ["coder"]

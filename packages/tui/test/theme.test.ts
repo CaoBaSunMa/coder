@@ -2,12 +2,12 @@ import { expect, test } from "bun:test"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { TerminalColors } from "@opentui/core"
-import { allThemes, hasTheme, getOpenCodeTheme, parseTheme, resolveTheme } from "../src/theme"
+import { allThemes, hasTheme, getCoderTheme, parseTheme, resolveTheme } from "../src/theme"
 import { discoverThemes } from "../src/theme/discovery"
 import { configDirectories } from "../src/util/config-directories"
 import { terminalMode } from "../src/theme/system"
-import opencodeSource from "../src/theme/assets/opencode.json" with { type: "json" }
-import type { ThemeV1Json } from "@opencode/theme/tui/v1"
+import opencodeSource from "../src/theme/assets/coder.json" with { type: "json" }
+import type { ThemeV1Json } from "@xcoder/theme/tui/v1"
 import { tmpdir } from "./fixture/fixture"
 
 const opencodeV1 = opencodeSource as ThemeV1Json
@@ -18,13 +18,13 @@ test("rejects unrecognized theme structures", () => {
 })
 
 test("registers opencode as a native V2 theme", () => {
-  expect(allThemes().opencode).toBe(getOpenCodeTheme())
-  expect(parseTheme(getOpenCodeTheme()).base).toBeDefined()
+  expect(allThemes().coder).toBe(getCoderTheme())
+  expect(parseTheme(getCoderTheme()).base).toBeDefined()
 })
 
-test("keeps the experimental opencode2 theme out of the global theme list", () => {
-  expect(allThemes().opencode2).toBeUndefined()
-  expect(hasTheme("opencode2")).toBe(false)
+test("keeps the experimental coder2 theme out of the global theme list", () => {
+  expect(allThemes().coder2).toBeUndefined()
+  expect(hasTheme("coder2")).toBe(false)
 })
 
 test("detects V1 themes from their theme field and caches migrations", () => {
@@ -41,8 +41,8 @@ test("detects V1 themes from their theme field and caches migrations", () => {
 
 test("decodes native V2 themes lazily once", () => {
   const source = {
-    base: getOpenCodeTheme().base,
-    light: { ...getOpenCodeTheme().light, categorical: ["red"] },
+    base: getCoderTheme().base,
+    light: { ...getCoderTheme().light, categorical: ["red"] },
   } as const
 
   const document = parseTheme(source)
@@ -77,7 +77,7 @@ test("replacement sources receive independent parse caches", () => {
 
 test("hasTheme checks theme presence", () => {
   expect(hasTheme("missing-theme")).toBe(false)
-  expect(hasTheme("opencode")).toBe(true)
+  expect(hasTheme("coder")).toBe(true)
 })
 
 test("resolveTheme rejects circular color refs", () => {
@@ -139,9 +139,9 @@ test("theme directories include global config before project directories", async
   const global = path.join(tmp.path, "global")
   const project = path.join(tmp.path, "repo", "package")
   await mkdir(path.join(global, "themes"), { recursive: true })
-  await mkdir(path.join(project, ".opencode", "themes"), { recursive: true })
+  await mkdir(path.join(project, ".coder", "themes"), { recursive: true })
   await writeFile(path.join(global, "themes", "global.json"), JSON.stringify({ source: "global" }))
-  await writeFile(path.join(project, ".opencode", "themes", "project.json"), JSON.stringify({ source: "project" }))
+  await writeFile(path.join(project, ".coder", "themes", "project.json"), JSON.stringify({ source: "project" }))
 
   await expect(discoverThemes(configDirectories(global, project))).resolves.toEqual({
     global: { source: "global" },

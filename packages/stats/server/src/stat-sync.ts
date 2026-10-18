@@ -1,8 +1,8 @@
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
-import { ModelStatRepo } from "@opencode/stats-core/domain/model"
-import { R2Sql } from "@opencode/stats-core/r2-sql"
-import { layer as statsLayer } from "@opencode/stats-core/runtime"
-import { syncStats } from "@opencode/stats-core/stat-sync"
+import { ModelStatRepo } from "@xcoder/stats-core/domain/model"
+import { R2Sql } from "@xcoder/stats-core/r2-sql"
+import { layer as statsLayer } from "@xcoder/stats-core/runtime"
+import { syncStats } from "@xcoder/stats-core/stat-sync"
 import { Cause, Duration, Effect, Layer, Schedule } from "effect"
 
 const SYNC_INTERVAL = "1 hour"

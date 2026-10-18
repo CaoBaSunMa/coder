@@ -1,7 +1,7 @@
-import { ConfigPolicyPlugin } from "@opencode/core/config/plugin/policy"
-import { Mcp } from "@opencode/core/mcp/index"
-import { Skill } from "@opencode/core/skill"
-import { ID } from "@opencode/schema/event"
+import { ConfigPolicyPlugin } from "@xcoder/core/config/plugin/policy"
+import { Mcp } from "@xcoder/core/mcp/index"
+import { Skill } from "@xcoder/core/skill"
+import { ID } from "@xcoder/schema/event"
 import { Effect, Stream } from "effect"
 import { host } from "../plugin/host"
 

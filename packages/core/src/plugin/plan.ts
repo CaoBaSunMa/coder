@@ -1,10 +1,10 @@
 export * as PlanPlugin from "./plan.js"
 
-import { Message, ToolFailure } from "@opencode/ai"
-import { define } from "@opencode/plugin/effect/plugin"
-import { Agent } from "@opencode/schema/agent"
-import type { SessionEvent } from "@opencode/schema/session-event"
-import { Global } from "@opencode/util/global"
+import { Message, ToolFailure } from "@xcoder/ai"
+import { define } from "@xcoder/plugin/effect/plugin"
+import { Agent } from "@xcoder/schema/agent"
+import type { SessionEvent } from "@xcoder/schema/session-event"
+import { Global } from "@xcoder/util/global"
 import { Effect, Stream } from "effect"
 import path from "path"
 import { Permission } from "../permission.js"
@@ -28,7 +28,7 @@ export const Plugin = define({
   id: "opencode.plan",
   effect: Effect.fn(function* (ctx) {
     const global = yield* Global.Service
-    const directory = path.join(global.home, ".opencode", "plan")
+    const directory = path.join(global.home, ".coder", "plan")
     const enterReminder = enter(directory)
     yield* ctx.agent.transform((editor) => {
       editor.update(plan, (item) => {

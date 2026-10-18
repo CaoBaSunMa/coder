@@ -1,6 +1,6 @@
-import type { SessionStatsInfo } from "@opencode/client"
-import { Plugin } from "@opencode/plugin/tui"
-import { activityCalendar } from "@opencode/util/activity-calendar"
+import type { SessionStatsInfo } from "@xcoder/client"
+import { Plugin } from "@xcoder/plugin/tui"
+import { activityCalendar } from "@xcoder/util/activity-calendar"
 import { TextAttributes } from "@opentui/core"
 import { useTerminalDimensions } from "@opentui/solid"
 import { createMemo, createResource, createSignal, For, Show } from "solid-js"
@@ -131,7 +131,7 @@ export function StatsPoster(props: { stats: SessionStatsInfo }) {
         </For>
       </box>
       <box width="100%" flexDirection="row" justifyContent="flex-end">
-        <text fg={theme.text.base}>opencode.ai</text>
+        <text fg={theme.text.base}>coder.example.com</text>
       </box>
     </box>
   )

@@ -5,7 +5,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import type { Page } from "@playwright/test"
 import { benchmark, benchmarkDiagnostics, expect } from "../benchmark"
-import { mockOpenCodeServer } from "../../utils/mock-server"
+import { mockCoderServer } from "../../utils/mock-server"
 import { expectSessionTitle } from "../../utils/waits"
 import type {} from "./probe"
 
@@ -104,7 +104,7 @@ for (const scenario of ["visible-output", "hidden-output", "full-scrollback-tear
         pid: pty.pid,
       }
 
-      await mockOpenCodeServer(page, {
+      await mockCoderServer(page, {
         directory: dir,
         project: {
           id: location.project.id,
@@ -117,13 +117,13 @@ for (const scenario of ["visible-output", "hidden-output", "full-scrollback-tear
         provider: {
           all: [
             {
-              id: "opencode",
-              name: "OpenCode",
+              id: "coder",
+              name: "Coder",
               models: { test: { id: "test", name: "Test", limit: { context: 200_000 } } },
             },
           ],
-          connected: ["opencode"],
-          default: { providerID: "opencode", modelID: "test" },
+          connected: ["coder"],
+          default: { providerID: "coder", modelID: "test" },
         },
         sessions: [
           {

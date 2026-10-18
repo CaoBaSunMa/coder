@@ -1,12 +1,12 @@
-import { base64Encode } from "@opencode/util/encode"
-import type { JsonValue, OpenCodeEvent, SessionMessageAssistant, SessionMessageInfo } from "@opencode/client/promise"
+import { base64Encode } from "@xcoder/util/encode"
+import type { JsonValue, CoderEvent, SessionMessageAssistant, SessionMessageInfo } from "@xcoder/client/promise"
 import type { Page } from "@playwright/test"
-import { mockOpenCodeServer } from "../../utils/mock-server"
+import { mockCoderServer } from "../../utils/mock-server"
 import { expectAppVisible, expectSessionTitle } from "../../utils/waits"
 import { expect } from "../benchmark"
 import { createTwoFilesPatch } from "diff"
 
-const directory = "C:/OpenCode/TimelineStateRegression"
+const directory = "C:/Coder/TimelineStateRegression"
 
 const projectID = "proj_timeline_state_regression"
 
@@ -25,9 +25,9 @@ export const textPartID = `${assistantMessageID}:text:0`
 
 const title = "Timeline collapse state regression"
 
-const model = { providerID: "opencode", modelID: "claude-opus-4-6", variant: "max" }
+const model = { providerID: "coder", modelID: "claude-opus-4-6", variant: "max" }
 
-type EventPayload = OpenCodeEvent
+type EventPayload = CoderEvent
 
 const userMessage = {
   id: userMessageID,
@@ -121,7 +121,7 @@ export async function setupTimelineBenchmark(
     assistantMessage,
   ]
 
-  await mockOpenCodeServer(page, {
+  await mockCoderServer(page, {
     directory,
     project: project(),
     provider: provider(),
@@ -391,9 +391,9 @@ let eventSequence = 0
 
 function timelineEvent<Type extends "session.text.started" | "session.text.delta">(
   type: Type,
-  data: Extract<OpenCodeEvent, { type: Type }>["data"],
+  data: Extract<CoderEvent, { type: Type }>["data"],
   durable = false,
-): Extract<OpenCodeEvent, { type: Type }> {
+): Extract<CoderEvent, { type: Type }> {
   eventSequence++
 
   return {
@@ -403,7 +403,7 @@ function timelineEvent<Type extends "session.text.started" | "session.text.delta
     data,
     location: { directory },
     ...(durable ? { durable: { aggregateID: sessionID, seq: eventSequence, version: 1 } } : {}),
-  } as unknown as Extract<OpenCodeEvent, { type: Type }>
+  } as unknown as Extract<CoderEvent, { type: Type }>
 }
 
 function historicalMarkdown(index: number) {
@@ -550,12 +550,12 @@ function provider() {
   return {
     all: [
       {
-        id: "opencode",
-        name: "OpenCode",
+        id: "coder",
+        name: "Coder",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],
-    connected: ["opencode"],
-    default: { providerID: "opencode", modelID: "claude-opus-4-6" },
+    connected: ["coder"],
+    default: { providerID: "coder", modelID: "claude-opus-4-6" },
   }
 }

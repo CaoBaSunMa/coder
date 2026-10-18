@@ -1,0 +1,133 @@
+# Coder 二开品牌与部署说明（BRAND.md）
+
+本仓库是 **OpenCode V2**（上游 `anomalyco/opencode`，`dev` 分支）的二次开发分支，产品定名为 **Coder**，
+用于满足信创（信息技术应用创新）场景的 AI 编程助手需求。本文件记录所有已改名的标识、**必须替换的占位符**，
+以及上游同步方式。部署到真实环境前，请按第 3 节逐项替换。
+
+## 1. 命名约定
+
+| 项目 | 上游 OpenCode | 本分支 Coder |
+| --- | --- | --- |
+| 产品名 | OpenCode | Coder |
+| CLI 命令 | `opencode` / `opencode2` | `coder` / `coder2`（兼容垫片） |
+| npm scope | `@opencode/*` | `@xcoder/*` |
+| npm 主安装包 | `@opencode/cli` | `@xcoder/cli` |
+| 平台二进制包 | `@opencode/cli-<target>` | `@xcoder/cli-<target>` |
+| 环境变量前缀 | `OPENCODE_*`（123 个） | `CODER_*` |
+| 全局配置目录 | `~/.config/opencode` | `~/.config/coder` |
+| 数据目录 | `~/.local/share/opencode` | `~/.local/share/coder` |
+| 状态/日志目录 | `~/.local/state/opencode`、`~/.cache/opencode` | `~/.local/state/coder`、`~/.cache/coder` |
+| Windows 机器级配置 | `%ProgramData%\opencode` | `%ProgramData%\coder` |
+| 项目配置目录 | `.opencode/` | `.coder/` |
+| 项目配置文件 | `opencode.json(c)` | `coder.json(c)` |
+| 二进制安装目录（install 脚本） | `~/.opencode/bin` | `~/.coder/bin` |
+| 本机服务端口 | `0xC0DE` / `0xC0DF` | `0xC1DE` / `0xC1DF`（避免与同机上游实例冲突） |
+| 服务注册文件 | `service.json`（状态目录内） | 同名（状态目录已隔离） |
+| 桌面端 appId | `ai.opencode.desktop*` | `ai.coder.desktop*` |
+| 桌面端 productName | OpenCode / OpenCode Dev / OpenCode Beta | Coder / Coder Dev / Coder Beta |
+| 桌面端 URL 协议 | `opencode://` | `coder://` |
+| CLI 制品命名 | `opencode-<target>.zip/tar.gz` | `coder-<target>.zip/tar.gz` |
+| 桌面端制品命名 | `opencode-desktop-<os>-<arch>.<ext>` | `coder-desktop-<os>-<arch>.<ext>` |
+| Homebrew 公式 | `opencode-v2` / `opencode-beta` | `coder` / `coder-beta` |
+
+编译期常量（`packages/cli/script/build.ts` 注入）同步改名：`CODER_VERSION`、`CODER_CHANNEL`、
+`CODER_ARTIFACT`、`CODER_LIBC`、`CODER_CLI_DIST` 等。
+
+**刻意保留的上游外部依赖**（不可改名，否则无法安装）：
+
+- `@opencode-ai/pty` / `@opencode-ai/pty-*`：终端 PTY 预编译产物（上游发布，作为第三方依赖使用）。
+- `@opencode-ai/sdk`：`github/` 目录中 GitHub Action 集成所用（上游云端服务，本轮未启用）。
+- `@opentui/*`、`@ff-labs/*`、`@pierre/*`、`@opentunnel/*` 等第三方包。
+- `patches/` 目录中的补丁（其中 `@silvia-odwyer/photon-node` 的 `__CODER_PHOTON_WASM_PATH`
+  与 `packages/core`、`packages/cli` 中的定义必须保持一致，改一处要同步另一处）。
+
+**本轮未纳入改名的目录**（下游文档/营销/站点，后续里程碑整体替换，不参与编译）：
+
+- `services/www`（官网与 V2 文档站）、`packages/web`（文档内容）、`packages/console`（控制台营销站）、
+  `packages/posts`、`services/changelog`、`salesforce/`、`infra/`、`nix/`、`specs/`、`perf/`、`flake.*`。
+  这些目录中仍会出现 `opencode` / `OpenCode` 字样，属预期现象。
+
+## 2. 改名方式
+
+机械改名由一次性脚本 `script/rebrand-fork.ts` 完成（规则、排除目录、命名空间保护都写在脚本里），
+并对以下文件做了人工修整：
+
+- `install`（安装脚本）：改用 `@xcoder` scope、`~/.coder/bin`、新增内网 npm 源覆盖变量
+  `CODER_NPM_REGISTRY`，移除上游的 `@opencode-ai` 旧包回落逻辑。
+- `packages/cli/script/publish-homebrew.ts`：公式名 `coder`/`coder-beta`、类名 `Coder`/`CoderBeta`。
+- `packages/cli/src/services/service-config.ts`：服务端口改为 `0xC1DE`。
+- `.github/workflows/publish.yml`：删除 V1 遗留构建/上传/下载步骤（`packages/opencode/*` 已不存在）。
+- `.github/workflows/`：删除上游内部机器人工作流（`opencode.yml`、`review.yml`、`triage.yml`、
+  `duplicate-issues.yml`、`docs-*`、`pr-*`、`close-*`、`compliance-close.yml`、`notify-discord.yml`、
+  `deploy-www/changelog/posts.yml`、`deploy.yml`、`models-snapshot.yml`、`publish-github-action.yml`、
+  `release-github-action.yml`、`stats.yml`），保留发布/测试/基础设施类共 10 个。
+
+> 脚本为一次性工具，已执行完毕；上游合并后如出现新的 `opencode` 标识，请手工按同样规则处理，
+> 不要重复整仓执行 `rebrand-fork.ts`。
+
+## 3. 必须替换的占位符（部署前检查清单）
+
+### 3.1 域名
+
+| 占位符 | 用途 | 代码位置（示例） |
+| --- | --- | --- |
+| `https://coder.example.com` | 官网 / 安装脚本 `/install` / 文档 / 配置 `$schema` / 登录 | `install`、`packages/cli/src/config/schema.ts` |
+| `https://releases.coder.example.com/update/api` | 更新与发布 API（渠道、清单、发布回调） | `packages/cli/src/services/updater.ts`、`script/update-artifact.ts`、`services/update` |
+| `https://releases.coder.example.com/files/bin` | 二进制与桌面安装包文件服务 | `script/update-artifact.ts`、`packages/cli/script/publish*.ts` |
+| `https://models.coder.example.com` | 模型目录（models.dev 兼容快照） | 模型解析与快照逻辑 |
+| `https://console.coder.example.com` / `https://app.coder.example.com` | OpenCode Console 云端（登录、推理网关、Web 搜索、统计） | `packages/core`、`packages/console`（本轮未启用） |
+| `https://dev.coder.example.com` | 开发/预览站点 | 站点与服务配置 |
+| `registry.coder.example.com/coder` | 容器镜像仓库（原 `ghcr.io/anomalyco/opencode`） | `.github/workflows/containers.yml` |
+
+### 3.2 代码托管与分发
+
+| 占位符 | 用途 |
+| --- | --- |
+| `coder-ai/coder` | Git 仓库（`github/` 集成、文档链接、CI 守卫 `if: github.repository == 'coder-ai/coder'`） |
+| `coder-ai/homebrew-tap` | Homebrew tap 仓库（`packages/cli/script/publish-homebrew.ts`） |
+| `coder-production-files` | S3/R2 存储桶名（`script/update-artifact.ts`） |
+| npm registry | 默认 `https://registry.npmjs.org`；内网可在安装脚本用 `CODER_NPM_REGISTRY` 覆盖，发布侧在 CI 配置 |
+| AUR | `packages/cli/script/publish-aur.ts`（Beta 渠道，可选） |
+
+### 3.3 CI 密钥 / 变量（`.github/workflows/publish.yml`）
+
+`vars.CODER_APP_ID`、`secrets.CODER_APP_SECRET`、`secrets.CODER_API_KEY`、
+`secrets.APPLE_CERTIFICATE` / `APPLE_CERTIFICATE_PASSWORD` / `APPLE_API_KEY` / `APPLE_API_KEY_PATH` /
+`APPLE_API_ISSUER`、`secrets.AZURE_TRUSTED_SIGNING_*` / `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` /
+`AZURE_SUBSCRIPTION_ID`、`secrets.CLOUDFLARE_API_TOKEN`、`secrets.AUR_KEY`、
+`secrets.WINGET_GITHUB_TOKEN`、`secrets.SENTRY_AUTH_TOKEN`、`vars.SENTRY_ORG`、
+`vars.WEB_SENTRY_DSN`、`vars.WEB_SENTRY_PROJECT`、`secrets.DISCORD_WEBHOOK`。
+
+### 3.4 代码签名
+
+- Windows：`packages/desktop/electron-builder.config.ts` 的 `win.signtoolOptions.sign` →
+  `script/sign-windows.ps1`（Azure Trusted Signing）。信创环境需替换为自有代码签名证书方案。
+- macOS：Apple Developer ID + 公证，见 `publish.yml` 的 `sign-cli-macos` 步骤与
+  `packages/cli/script/entitlements.plist`、`packages/desktop/resources/entitlements*.plist`。
+- Linux：不上签名（AppImage/deb/rpm）。
+
+## 4. 上游同步
+
+```sh
+# 已配置的远程
+git remote -v
+# origin    https://github.com/coder-ai/coder.git        （占位，替换为真实仓库）
+# upstream  https://github.com/anomalyco/opencode.git
+
+git fetch upstream dev
+git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
+```
+
+合并上游时注意：
+
+1. `script/rebrand-fork.ts` 触及的文件最容易冲突；冲突解决以“保留 Coder 品牌 + 采纳上游功能”为准。
+2. 上游若新增 `OPENCODE_*` 环境变量、`opencode` 命令引用、`opencode.ai` 端点，需要按第 1 节规则补改名。
+3. 上游 `dev` 是唯一基线分支；本仓库默认分支亦为 `dev`。
+
+## 5. 已知遗留（本轮范围外）
+
+- TUI（终端界面）默认仍为英文；简体中文界面为可选能力，见 `docs/tui-i18n.md`。
+- 官网/文档站（`services/www`、`packages/web`）仍是上游内容，需下一里程碑整体替换。
+- `.coder/` 下的仓库自用开发配置、`.github/ISSUE_TEMPLATE`、`CHANGELOG.md` 保留上游历史与措辞。
+- `github/`（GitHub Action）仍依赖上游 `@opencode-ai/sdk`，未启用。
+- `flake.nix`/`nix/`、`infra/`、`salesforce/` 未适配本分支品牌。

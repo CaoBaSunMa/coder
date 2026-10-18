@@ -1,3 +1,3 @@
-# @opencode/core
+# @xcoder/core
 
-Core runtime services for OpenCode.
+Core runtime services for Coder.

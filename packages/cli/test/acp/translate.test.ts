@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import { OpenCodeEvent, type OpenCodeEventEncoded } from "@opencode/protocol/groups/event"
-import { Session } from "@opencode/schema/session"
-import { SessionMessage } from "@opencode/schema/session-message"
+import { CoderEvent, type CoderEventEncoded } from "@xcoder/protocol/groups/event"
+import { Session } from "@xcoder/schema/session"
+import { SessionMessage } from "@xcoder/schema/session-message"
 import { Schema } from "effect"
 import path from "node:path"
 import { ACPReplay } from "../../src/acp/replay"
@@ -32,10 +32,10 @@ const ctx: ACPTranslate.TurnContext = {
   childUpdates: false,
   compaction: false,
 }
-const decodeEvent = Schema.decodeUnknownSync(OpenCodeEvent)
+const decodeEvent = Schema.decodeUnknownSync(CoderEvent)
 const decodeMessage = Schema.decodeUnknownSync(SessionMessage.Info)
 
-const live = (...events: OpenCodeEventEncoded[]) => [delivered(root, "msg_input"), ...events]
+const live = (...events: CoderEventEncoded[]) => [delivered(root, "msg_input"), ...events]
 const usage = (input: number, output: number, reasoning = 0, read = 0, write = 0) => ({
   input,
   output,
@@ -70,7 +70,7 @@ const compactionMessage = (input: Record<string, unknown>) => ({
 type Row = {
   readonly name: string
   readonly ctx?: Partial<ACPTranslate.TurnContext>
-  readonly events?: OpenCodeEventEncoded[]
+  readonly events?: CoderEventEncoded[]
   readonly messages?: unknown[]
   readonly expected: object
 }
@@ -627,7 +627,7 @@ function translate(row: Row) {
   }
 }
 
-function run(events: ReadonlyArray<OpenCodeEventEncoded>, context = ctx) {
+function run(events: ReadonlyArray<CoderEventEncoded>, context = ctx) {
   return events.reduce<{
     state: ACPTranslate.TurnState
     outputs: ACPTranslate.Output[]

@@ -1,13 +1,13 @@
-import { Badge } from "@opencode/ui/badge"
-import { Icon } from "@opencode/ui/icon"
-import { IconButton } from "@opencode/ui/icon-button"
-import { iconNames, type IconName } from "@opencode/ui/icons/provider"
-import { Menu } from "@opencode/ui/menu"
-import { ProviderIcon } from "@opencode/ui/provider-icon"
+import { Badge } from "@xcoder/ui/badge"
+import { Icon } from "@xcoder/ui/icon"
+import { IconButton } from "@xcoder/ui/icon-button"
+import { iconNames, type IconName } from "@xcoder/ui/icons/provider"
+import { Menu } from "@xcoder/ui/menu"
+import { ProviderIcon } from "@xcoder/ui/provider-icon"
 import type { JSX } from "solid-js"
 import { createMemo, For, Match, Show, Switch } from "solid-js"
 import { consoleProviderGroup, consoleProviderName } from "@/providers/catalog/console"
-import { OpenCodeLogo } from "@/providers/opencode-logo"
+import { CoderLogo } from "@/providers/coder-logo"
 import { useLanguage } from "@/runtime/i18n/language"
 import customManagedProvider from "@/providers/custom-managed-provider.svg"
 import "@/settings/settings.css"
@@ -34,8 +34,8 @@ export function ProviderModelIcon(props: { provider: ModelProvider; class?: stri
 
   return (
     <Switch>
-      <Match when={props.provider.id === "opencode"}>
-        <OpenCodeLogo class={`size-4 ${props.class ?? ""}`} />
+      <Match when={props.provider.id === "coder"}>
+        <CoderLogo class={`size-4 ${props.class ?? ""}`} />
       </Match>
       <Match when={icon()} keyed>
         {(id) => <ProviderIcon id={id} width={16} height={16} class={props.class} />}
@@ -52,7 +52,7 @@ export function consoleModelGroup<T extends ModelItem>(items: readonly T[]) {
   return consoleProviderGroup([...new Map(items.map((item) => [item.provider.id, item.provider])).values()])
 }
 
-/** Provider sections for a model list, with Console workspace providers nested under one OpenCode Console section. */
+/** Provider sections for a model list, with Console workspace providers nested under one Coder Console section. */
 export function ProviderModelSections<T extends ModelItem>(props: {
   groups: ModelGroup<T>[]
   managed: ReturnType<typeof consoleModelGroup<T>>
@@ -91,8 +91,8 @@ export function ProviderModelSections<T extends ModelItem>(props: {
 
   // Only the keyless catalog is free; a Zen key or Console account keeps the provider's own name.
   const name = (group: ModelGroup<T>) =>
-    group.category === "opencode" && group.items.every((item) => !item.cost?.input)
-      ? language.t("provider.connect.opencode.freeName")
+    group.category === "coder" && group.items.every((item) => !item.cost?.input)
+      ? language.t("provider.connect.coder.freeName")
       : group.items[0].provider.name
 
   function Header(input: { id: string; icon: JSX.Element; title: JSX.Element; badge?: string; action?: JSX.Element }) {
@@ -153,8 +153,8 @@ export function ProviderModelSections<T extends ModelItem>(props: {
             >
               <Header
                 id={CONSOLE_GROUP_KEY}
-                icon={<OpenCodeLogo class="size-4 shrink-0" />}
-                title={language.t("provider.connect.opencode.name")}
+                icon={<CoderLogo class="size-4 shrink-0" />}
+                title={language.t("provider.connect.coder.name")}
                 badge={managed().group.workspace}
               />
               <Show when={props.expanded(CONSOLE_GROUP_KEY)}>

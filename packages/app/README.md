@@ -71,25 +71,25 @@ Environment options:
 
 ## Deployment
 
-The `deploy` GitHub Actions workflow uses SST to deploy the web app to `beta.opencode.ai` on every push to the
-`beta` branch in `anomalyco/opencode`. The `dev` and `production` stages do not deploy the web app.
+The `deploy` GitHub Actions workflow uses SST to deploy the web app to `beta.coder.example.com` on every push to the
+`beta` branch in `coder-ai/coder`. The `dev` and `production` stages do not deploy the web app.
 
 `beta` is the team's dogfooding branch: `dev` merged in by hand, plus commits pushed directly to it. Do not rebase or
-force-push it. Each push also runs the `publish` workflow, which ships the same commit as the OpenCode Beta desktop app
+force-push it. Each push also runs the `publish` workflow, which ships the same commit as the Coder Beta desktop app
 (see `packages/desktop/README.md`).
 
 The beta SST stage deploys only the web app, using the `WebApp` StaticSite definition in `infra/webapp.ts`. It sets
 the build channel and Sentry environment to `beta` without deploying the API, console, database, or billing
 infrastructure.
 
-`VITE_OPENCODE_SERVER_MODE` controls which server the web build provides at startup:
+`VITE_CODER_SERVER_MODE` controls which server the web build provides at startup:
 
 | Mode               | Initial server                                                                       |
 | ------------------ | ------------------------------------------------------------------------------------ |
 | `none`             | No initial server. The beta deployment uses this mode.                               |
 | `origin` (default) | The current page's origin. CLI builds explicitly use this mode for `opencode serve`. |
 
-In Vite development mode, `origin` uses `VITE_OPENCODE_SERVER_HOST` / `VITE_OPENCODE_SERVER_PORT`
+In Vite development mode, `origin` uses `VITE_CODER_SERVER_HOST` / `VITE_CODER_SERVER_PORT`
 (default: `http://localhost:4096`) instead of the frontend origin. Both modes restore user-added servers
 from storage. Desktop provides the local server it discovers or starts through native initialization.
 
@@ -107,7 +107,7 @@ opencode pair --url https://opencode.example.com
 ```
 
 This replaces the addresses in the printed links and QR code.
-The proxy URL must reach the OpenCode API, not just the frontend. For separate frontend and API processes,
+The proxy URL must reach the Coder API, not just the frontend. For separate frontend and API processes,
 route `/api` to the service while preserving the `/api` prefix. No machine-specific app or CLI build is required.
 
 When an HTTPS page fails to connect to a non-loopback HTTP server, the connection forms show a specific
@@ -119,8 +119,8 @@ video input; insecure pages and unavailable cameras show an explanation beside t
 
 The workflow reuses the repository's `CLOUDFLARE_API_TOKEN` and web Sentry settings. The Cloudflare token
 must cover SST's R2 state storage, KV assets, Workers, and custom-domain management in the account that
-owns `opencode.ai`. The beta GitHub environment must allow deployments from the `beta` branch; it does not
+owns `coder.example.com`. The beta GitHub environment must allow deployments from the `beta` branch; it does not
 need AWS credentials.
 
 SST manages the beta site's custom domain. The first deployment creates its DNS record and TLS certificate.
-Do not create a CNAME for `beta.opencode.ai` first, because it would conflict with the Workers custom domain.
+Do not create a CNAME for `beta.coder.example.com` first, because it would conflict with the Workers custom domain.

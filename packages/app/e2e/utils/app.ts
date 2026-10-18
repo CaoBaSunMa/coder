@@ -1,6 +1,6 @@
 import { expect, type Page, type Request } from "@playwright/test"
-import type { SessionMessageInfo } from "@opencode/client/promise"
-import { base64Encode, checksum } from "@opencode/util/encode"
+import type { SessionMessageInfo } from "@xcoder/client/promise"
+import { base64Encode, checksum } from "@xcoder/util/encode"
 
 // The mocked default server. Production builds connect to their own origin, so CI points this at the app.
 export const SERVER = `http://${process.env.PLAYWRIGHT_SERVER_HOST ?? "127.0.0.1"}:${process.env.PLAYWRIGHT_SERVER_PORT ?? "4096"}`
@@ -114,7 +114,7 @@ function storageEntries(input: SeedInput): [string, string, boolean][] {
       : {}),
     ...(input.settings ? { "settings.v3": input.settings } : {}),
     ...(input.locale ? { "opencode.global.dat:language": { locale: input.locale } } : {}),
-    ...(input.theme ? { "opencode-theme-id": input.theme.id, "opencode-color-scheme": input.theme.scheme } : {}),
+    ...(input.theme ? { "coder-theme-id": input.theme.id, "coder-color-scheme": input.theme.scheme } : {}),
     ...input.storage,
   }
 
@@ -173,13 +173,13 @@ export function provider(...models: ModelSeed[]) {
   return {
     all: [
       {
-        id: "opencode",
-        name: "OpenCode",
+        id: "coder",
+        name: "Coder",
         models: Object.fromEntries(all.map((model) => [model.id, { limit: { context: 200_000 }, ...model }])),
       },
     ],
-    connected: ["opencode"],
-    default: { providerID: "opencode", modelID: all[0]!.id },
+    connected: ["coder"],
+    default: { providerID: "coder", modelID: all[0]!.id },
   }
 }
 

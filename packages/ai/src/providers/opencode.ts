@@ -2,8 +2,8 @@ import { HttpOptions, ProviderID, type ModelID } from "../schema/index.js"
 import { AuthOptions, type ProviderAuthOption } from "../route/auth-options.js"
 import { SystemOne } from "../experimental/system-one.js"
 
-export const id = ProviderID.make("opencode")
-const baseURL = "https://opencode.ai/inference/systemone/v1"
+export const id = ProviderID.make("coder")
+const baseURL = "https://coder.example.com/inference/systemone/v1"
 
 export type Options = ProviderAuthOption<"optional"> & {
   readonly baseURL?: string
@@ -16,8 +16,8 @@ export const configure = (input: Options = {}) => {
     SystemOne.model({
       id: modelID,
       provider: id,
-      providerMetadataKey: "opencode",
-      auth: AuthOptions.bearer(input, "OPENCODE_API_KEY"),
+      providerMetadataKey: "coder",
+      auth: AuthOptions.bearer(input, "CODER_API_KEY"),
       baseURL: input.baseURL ?? baseURL,
       headers: input.headers,
       http: HttpOptions.make(input.http),
@@ -28,4 +28,4 @@ export const configure = (input: Options = {}) => {
 export const provider = configure()
 export const experimental = provider.experimental
 
-export * as OpenCode from "./opencode.js"
+export * as Coder from "./opencode.js"

@@ -4,16 +4,16 @@ import os from "node:os"
 import path from "node:path"
 import { expect } from "bun:test"
 import { binaryPath } from "@opencode-ai/pty"
-import { PersistentPty } from "@opencode/schema/persistent-pty"
-import { Session } from "@opencode/schema/session"
+import { PersistentPty } from "@xcoder/schema/persistent-pty"
+import { Session } from "@xcoder/schema/session"
 import { Effect, Exit, Schema, Scope } from "effect"
 import { HttpServer } from "effect/http"
-import { OpenCode } from "../../client/src/promise/index"
+import { Coder } from "../../client/src/promise/index"
 import { it } from "../../core/test/lib/effect"
 import { ServerProcess } from "../src/process"
 
-// opencode-pty does not support Windows, and its package resolves no binary on other unsupported platforms.
-const binary = process.platform === "win32" ? undefined : (process.env.OPENCODE_PTY_BIN ?? binaryPath)
+// coder-pty does not support Windows, and its package resolves no binary on other unsupported platforms.
+const binary = process.platform === "win32" ? undefined : (process.env.CODER_PTY_BIN ?? binaryPath)
 const smoke = binary !== undefined && existsSync(binary) ? it.live : it.live.skip
 
 smoke(
@@ -31,7 +31,7 @@ smoke(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = OpenCode.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Coder.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
       const sessionID = "ses_terminal_read"
       expect(yield* Effect.promise(() => client.experimental.persistentPty.read({ sessionID }))).toBeNull()
       expect(existsSync(fixture.directory)).toBeFalse()
@@ -132,7 +132,7 @@ smoke(
   20_000,
 )
 
-async function waitForRead(client: ReturnType<typeof OpenCode.make>, sessionID: string, ptyID: string) {
+async function waitForRead(client: ReturnType<typeof Coder.make>, sessionID: string, ptyID: string) {
   for (let attempt = 0; attempt < 100; attempt++) {
     const result = await client.experimental.persistentPty.read({ sessionID })
     if (result?.ptyID === ptyID) return result
@@ -246,7 +246,7 @@ smoke(
         `/api/experimental/persistent-pty/${first.id}/connect-token`,
         undefined,
         {
-          "x-opencode-ticket": "1",
+          "x-coder-ticket": "1",
         },
       )
       if (!isRecord(ticket.data) || typeof ticket.data.ticket !== "string") throw new Error("Invalid connect ticket")
@@ -468,9 +468,9 @@ smoke(
 function testDirectory() {
   return Effect.acquireRelease(
     Effect.promise(async () => {
-      const environment = { binary: process.env.OPENCODE_PTY_BIN, shell: process.env.SHELL }
-      const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-pty-server-test-"))
-      process.env.OPENCODE_PTY_BIN = binary
+      const environment = { binary: process.env.CODER_PTY_BIN, shell: process.env.SHELL }
+      const root = await fs.mkdtemp(path.join(os.tmpdir(), "coder-pty-server-test-"))
+      process.env.CODER_PTY_BIN = binary
       process.env.SHELL = "/bin/sh"
       return {
         database: path.join(root, "opencode.db"),
@@ -482,7 +482,7 @@ function testDirectory() {
     (fixture) =>
       Effect.promise(async () => {
         await fs.rm(fixture.root, { recursive: true, force: true })
-        restore("OPENCODE_PTY_BIN", fixture.environment.binary)
+        restore("CODER_PTY_BIN", fixture.environment.binary)
         restore("SHELL", fixture.environment.shell)
       }),
   )
@@ -594,7 +594,7 @@ function attachAndExit(base: string, ptyID: string) {
     try: async () => {
       const response = await Effect.runPromise(
         request(base, "POST", `/api/experimental/persistent-pty/${ptyID}/connect-token`, undefined, {
-          "x-opencode-ticket": "1",
+          "x-coder-ticket": "1",
         }),
       )
       if (!isRecord(response.data) || typeof response.data.ticket !== "string")
@@ -639,8 +639,8 @@ async function verifySharedControl(base: string, ptyID: string) {
     second.socket.send(inputFrame(70, 20, "from-second\n"))
     await waitForSocketOutput([first, second], "from-second")
 
-    // opencode-pty v0.1.13 uses /proc on Linux and returns None on other platforms:
-    // https://github.com/anomalyco/opencode-pty/blob/v0.1.13/src/service.rs#L1091-L1128
+    // coder-pty v0.1.13 uses /proc on Linux and returns None on other platforms:
+    // https://github.com/coder-ai/coder-pty/blob/v0.1.13/src/service.rs#L1091-L1128
     if (process.platform === "linux") await waitForForegroundProcess([first, second], "cat")
     if (process.platform !== "linux") {
       expect(first.foregroundProcess).toBeNull()
@@ -697,7 +697,7 @@ async function openTerminalSocket(
 ) {
   const response = await Effect.runPromise(
     request(base, "POST", `/api/experimental/persistent-pty/${ptyID}/connect-token`, undefined, {
-      "x-opencode-ticket": "1",
+      "x-coder-ticket": "1",
     }),
   )
   if (!isRecord(response.data) || typeof response.data.ticket !== "string")

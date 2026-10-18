@@ -605,7 +605,7 @@ test("shows no-match and still closes after a flat filter goes empty", async () 
     tmp.path,
     [
       { title: "models.dev", value: "models.dev", category: "Projects" },
-      { title: "opencode2", value: "opencode2", category: "Projects" },
+      { title: "coder2", value: "coder2", category: "Projects" },
     ],
     undefined,
     undefined,
@@ -615,7 +615,7 @@ test("shows no-match and still closes after a flat filter goes empty", async () 
   try {
     await select.app.waitForFrame((frame) => frame.includes("models.dev"))
     await select.app.mockInput.typeText("models")
-    await select.app.waitForFrame((frame) => frame.includes("models.dev") && !frame.includes("opencode2"))
+    await select.app.waitForFrame((frame) => frame.includes("models.dev") && !frame.includes("coder2"))
     await select.app.mockInput.typeText(" missing")
     await select.app.waitForFrame((frame) => frame.includes("No results found"))
     expect(select.app.captureCharFrame()).not.toContain("models.dev")

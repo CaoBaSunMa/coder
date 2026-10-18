@@ -1,13 +1,13 @@
 {
-  "name": "@opencode/desktop",
+  "name": "@xcoder/desktop",
   "private": true,
   "version": "2.0.32",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://coder.example.com",
   "author": {
-    "name": "OpenCode",
-    "email": "hello@opencode.ai"
+    "name": "Coder",
+    "email": "hello@coder.example.com"
   },
   "scripts": {
     "typecheck": "tsc -b",
@@ -35,11 +35,11 @@
     "@brendonovich/vite-plugin-opencode": "0.1.3",
     "@effect/platform-node": "catalog:",
     "@lydell/node-pty": "catalog:",
-    "@opencode/app": "workspace:*",
-    "@opencode/gui-extensions": "workspace:*",
-    "@opencode/client": "workspace:*",
-    "@opencode/schema": "workspace:*",
-    "@opencode/ui": "workspace:*",
+    "@xcoder/app": "workspace:*",
+    "@xcoder/gui-extensions": "workspace:*",
+    "@xcoder/client": "workspace:*",
+    "@xcoder/schema": "workspace:*",
+    "@xcoder/ui": "workspace:*",
     "@sentry/solid": "catalog:",
     "@sentry/vite-plugin": "catalog:",
     "@solidjs/router": "catalog:",

@@ -4,12 +4,12 @@ import { randomUUID } from "crypto"
 import fs from "fs/promises"
 import os from "os"
 import path from "path"
-import { define } from "@opencode/plugin/effect/plugin"
+import { define } from "@xcoder/plugin/effect/plugin"
 import { Effect } from "effect"
 import { ChildProcess } from "effect/process"
-import { FileDiff } from "@opencode/schema/file-diff"
-import { Base, BranchList, FileStatus, Info, Mode } from "@opencode/schema/vcs"
-import { AppProcess } from "@opencode/util/process"
+import { FileDiff } from "@xcoder/schema/file-diff"
+import { Base, BranchList, FileStatus, Info, Mode } from "@xcoder/schema/vcs"
+import { AppProcess } from "@xcoder/util/process"
 import { Location } from "../../location.js"
 import type { Adapter, BranchOptions, DiffOptions } from "../../vcs.js"
 import { DiffError } from "../../vcs.js"
@@ -559,7 +559,7 @@ const untrackedBatch = Effect.fnUntraced(function* (
 
   return yield* Effect.acquireUseRelease(
     Effect.promise(async () => {
-      const base = path.join(os.tmpdir(), `opencode-untracked-${randomUUID()}`)
+      const base = path.join(os.tmpdir(), `coder-untracked-${randomUUID()}`)
       await fs.writeFile(`${base}.list`, eligible.map((file) => `${file}\0`).join(""))
       return base
     }),

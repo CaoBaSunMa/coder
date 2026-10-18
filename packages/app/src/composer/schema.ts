@@ -1,7 +1,7 @@
 import { Schema, SchemaGetter, Struct } from "effect"
-import { checksum } from "@opencode/util/encode"
-import { SessionMessage } from "@opencode/schema/session-message"
-import { Skill } from "@opencode/schema/skill"
+import { checksum } from "@xcoder/util/encode"
+import { SessionMessage } from "@xcoder/schema/session-message"
+import { Skill } from "@xcoder/schema/skill"
 import { Persistence } from "@/runtime/persistence/schema"
 import { FileSelection, SelectedLineRange } from "@/workspaces/files/types"
 

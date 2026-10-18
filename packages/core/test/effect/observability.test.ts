@@ -4,8 +4,8 @@ import { Effect, Layer, Logger } from "effect"
 import fs from "fs/promises"
 import os from "os"
 import path from "path"
-import { fileLogger } from "@opencode/util/observability/logging"
-import { resource } from "@opencode/util/observability/otlp"
+import { fileLogger } from "@xcoder/util/observability/logging"
+import { resource } from "@xcoder/util/observability/otlp"
 
 const otelResourceAttributes = process.env.OTEL_RESOURCE_ATTRIBUTES
 
@@ -49,7 +49,7 @@ describe("resource", () => {
 })
 
 test("falls back to local logging when OTLP initialization fails", async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-observability-test-"))
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "coder-observability-test-"))
   await using _ = {
     async [Symbol.asyncDispose]() {
       await fs.rm(dir, { recursive: true, force: true })
@@ -61,7 +61,7 @@ test("falls back to local logging when OTLP initialization fails", async () => {
       "--eval",
       `
         import { Effect } from "effect"
-        import { Observability } from "@opencode/util/observability"
+        import { Observability } from "@xcoder/util/observability"
         await Effect.void.pipe(Effect.provide(Observability.layer()), Effect.scoped, Effect.runPromise)
       `,
     ],
@@ -85,7 +85,7 @@ test("falls back to local logging when OTLP initialization fails", async () => {
 })
 
 test("file logger appends concurrent runs with a run on every line", async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-log-test-"))
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "coder-log-test-"))
   await using _ = {
     async [Symbol.asyncDispose]() {
       await fs.rm(dir, { recursive: true, force: true })
@@ -113,7 +113,7 @@ test("file logger appends concurrent runs with a run on every line", async () =>
 })
 
 test("file logger flattens nested objects", async () => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-log-test-"))
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "coder-log-test-"))
   await using _ = {
     async [Symbol.asyncDispose]() {
       await fs.rm(dir, { recursive: true, force: true })

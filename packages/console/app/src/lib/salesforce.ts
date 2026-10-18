@@ -1,4 +1,4 @@
-import { Resource } from "@opencode/console-resource"
+import { Resource } from "@xcoder/console-resource"
 import { z } from "zod"
 import { consoleAccountFields, type ConsoleAccount } from "./console-account"
 

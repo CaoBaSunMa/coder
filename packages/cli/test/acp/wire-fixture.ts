@@ -17,17 +17,17 @@ import {
   type RequestPermissionResponse,
   type SessionNotification,
 } from "@agentclientprotocol/sdk"
-import { OpenCode } from "@opencode/client/effect"
-import type { OpenCodeEventEncoded } from "@opencode/protocol/groups/event"
-import type { Agent } from "@opencode/schema/agent"
-import type { Command } from "@opencode/schema/command"
-import { Form } from "@opencode/schema/form"
-import type { Location } from "@opencode/schema/location"
-import type { Model } from "@opencode/schema/model"
-import type { Plugin } from "@opencode/schema/plugin"
-import type { Session } from "@opencode/schema/session"
-import type { SessionMessage } from "@opencode/schema/session-message"
-import type { TokenUsage } from "@opencode/schema/token-usage"
+import { Coder } from "@xcoder/client/effect"
+import type { CoderEventEncoded } from "@xcoder/protocol/groups/event"
+import type { Agent } from "@xcoder/schema/agent"
+import type { Command } from "@xcoder/schema/command"
+import { Form } from "@xcoder/schema/form"
+import type { Location } from "@xcoder/schema/location"
+import type { Model } from "@xcoder/schema/model"
+import type { Plugin } from "@xcoder/schema/plugin"
+import type { Session } from "@xcoder/schema/session"
+import type { SessionMessage } from "@xcoder/schema/session-message"
+import type { TokenUsage } from "@xcoder/schema/token-usage"
 import type { BunRequest } from "bun"
 import { createTwoFilesPatch } from "diff"
 import { Duration, Effect, Exit, Logger, Option, Schema, Scope } from "effect"
@@ -36,7 +36,7 @@ import { ACP } from "../../src/acp/agent"
 import { ACPTurn } from "../../src/acp/turn"
 
 // The fake server sends and stores the wire form of each value.
-type OpenCodeEvent = OpenCodeEventEncoded
+type CoderEvent = CoderEventEncoded
 type AgentInfo = typeof Agent.Info.Encoded
 type CommandInfo = typeof Command.Info.Encoded
 type LocationRef = typeof Location.PublicRef.Encoded
@@ -46,12 +46,12 @@ type PluginInfo = typeof Plugin.Info.Encoded
 type SessionInfo = typeof Session.Info.Encoded
 type SessionMessageInfo = typeof SessionMessage.Info.Encoded
 type TokenUsageInfo = typeof TokenUsage.Info.Encoded
-type DurableEvent = Extract<OpenCodeEvent, { durable: unknown }>
-type EphemeralEvent = Exclude<OpenCodeEvent, DurableEvent>
-type EventData<Type extends OpenCodeEvent["type"]> = Extract<OpenCodeEvent, { type: Type }>["data"]
+type DurableEvent = Extract<CoderEvent, { durable: unknown }>
+type EphemeralEvent = Exclude<CoderEvent, DurableEvent>
+type EventData<Type extends CoderEvent["type"]> = Extract<CoderEvent, { type: Type }>["data"]
 type AssistantMessage = Extract<SessionMessageInfo, { type: "assistant" }>
 
-type Events = ReadonlyArray<OpenCodeEvent> | void
+type Events = ReadonlyArray<CoderEvent> | void
 type Hook<Input> = (input: Input) => Events | Promise<Events>
 
 type ServerRequest = {
@@ -295,7 +295,7 @@ export const interrupted = (sessionID: string) =>
 export const failed = (sessionID: string, error: EventData<"session.execution.failed">["error"]) =>
   durableEvent("session.execution.failed", { sessionID, error })
 
-export function turn(sessionID: string, inboxID: string, ...events: OpenCodeEvent[]): OpenCodeEvent[] {
+export function turn(sessionID: string, inboxID: string, ...events: CoderEvent[]): CoderEvent[] {
   return [delivered(sessionID, inboxID), ...events, succeeded(sessionID)]
 }
 
@@ -428,7 +428,7 @@ export async function startWire(options: WireOptions = {}) {
   const logs: Array<Pick<Logger.Options<unknown>, "message" | "cause">> = []
   const agentScope = Scope.makeUnsafe()
   const agentConnection = await Effect.runPromise(
-    OpenCode.make({ baseUrl: server.url }).pipe(
+    Coder.make({ baseUrl: server.url }).pipe(
       Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((client) => ACP.connect(client, ndJsonStream(agentToClient.writable, clientToAgent.readable))),
       Scope.provide(agentScope),
@@ -604,7 +604,7 @@ function startServer(options: WireOptions, changed: () => void) {
     cancelledForms,
     repliedForms,
     mcp,
-    send(...events: ReadonlyArray<OpenCodeEvent>) {
+    send(...events: ReadonlyArray<CoderEvent>) {
       events.forEach((event) => {
         const seq = ++counter.events
         const stamped = {

@@ -1,9 +1,9 @@
-import { Button } from "@opencode/ui/button"
-import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@opencode/ui/dialog"
-import { Divider } from "@opencode/ui/divider"
-import { Icon } from "@opencode/ui/icon"
-import { TextInput } from "@opencode/ui/text-input"
-import { useDialog } from "@opencode/ui/context/dialog"
+import { Button } from "@xcoder/ui/button"
+import { Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@xcoder/ui/dialog"
+import { Divider } from "@xcoder/ui/divider"
+import { Icon } from "@xcoder/ui/icon"
+import { TextInput } from "@xcoder/ui/text-input"
+import { useDialog } from "@xcoder/ui/context/dialog"
 import { useMutation } from "@tanstack/solid-query"
 import {
   type Component,

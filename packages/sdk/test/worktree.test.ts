@@ -1,13 +1,13 @@
 import { expect, test } from "bun:test"
 import { mkdir, rm } from "node:fs/promises"
 import { join } from "node:path"
-import { Plugin } from "@opencode/plugin"
+import { Plugin } from "@xcoder/plugin"
 import { initRepo } from "../../core/test/fixture/git"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
-import { OpenCode } from "../src"
+import { Coder } from "../src"
 
 test("embedded worktree APIs use project IDs and SDK-registered strategies", async () => {
-  await using directory = await tmpdir("opencode-sdk-worktree-")
+  await using directory = await tmpdir("coder-sdk-worktree-")
   await initRepo(directory.path)
   const state = { activated: 0, discovered: 0, removed: 0 }
   const plugin = Plugin.define({
@@ -36,7 +36,7 @@ test("embedded worktree APIs use project IDs and SDK-registered strategies", asy
       )
     },
   })
-  await using opencode = await OpenCode.create({
+  await using opencode = await Coder.create({
     plugins: [plugin],
     config: { directory: directory.path, project: false },
     models: { fetch: false },

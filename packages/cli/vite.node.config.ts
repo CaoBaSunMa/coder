@@ -30,17 +30,17 @@ function appAssetsPlugin(): Plugin {
   return {
     name: "opencode:app-assets",
     resolveId(id) {
-      if (id === "virtual:opencode-app-assets") return "\0virtual:opencode-app-assets"
+      if (id === "virtual:coder-app-assets") return "\0virtual:coder-app-assets"
     },
     load(id) {
-      if (id !== "\0virtual:opencode-app-assets") return
+      if (id !== "\0virtual:coder-app-assets") return
       return `import { readFileSync } from "node:fs"
 import path from "node:path"
 import { getRawAsset, isSea } from "node:sea"
 export default () =>
   isSea()
     ? new Uint8Array(getRawAsset(${JSON.stringify(appArchiveAsset)}))
-    : readFileSync(path.join(process.env.OPENCODE_NODE_ASSETS_DIR, ${JSON.stringify(appArchiveAsset)}))`
+    : readFileSync(path.join(process.env.CODER_NODE_ASSETS_DIR, ${JSON.stringify(appArchiveAsset)}))`
     },
   }
 }
@@ -77,7 +77,7 @@ function fffNodePlugin(): Plugin {
         const start = code.indexOf("if (!nativeBinding) {")
         if (start === -1) this.error("Failed to rewrite ffi-rs native binding loader")
         return `const unavailable = () => { throw new Error("ffi-rs native binding unavailable") }
-const nativeBinding = globalThis.__OPENCODE_FFF_FFI ?? {
+const nativeBinding = globalThis.__CODER_FFF_FFI ?? {
   DataType: new Proxy({}, { get: (target, key) => target[key] ?? key }),
   PointerType: {},
   FFITypeTag: {},
@@ -129,9 +129,9 @@ function nodePrelude(input: NodeBuildInput) {
     input.target.platform === "darwin"
       ? `${input.target.nodePtyPackage}/prebuilds/darwin-${input.target.arch}/spawn-helper`
       : undefined
-  const opencodePtyAsset = input.target.opencodePtyAsset
+  const opencodePtyAsset = input.target.coderPtyAsset
   const promiseModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.promise")]
-if (!sdk) throw new Error("OpenCode Promise plugin SDK is unavailable")
+if (!sdk) throw new Error("Coder Promise plugin SDK is unavailable")
 export const Agent = sdk.Agent
 export const Command = sdk.Command
 export const Connection = sdk.Connection
@@ -146,14 +146,14 @@ export const Skill = sdk.Skill`
     .replace("opencode.plugin.v2.promise", "opencode.plugin.v2.effect")
     .replace("Promise plugin", "Effect plugin")
   const promisePluginModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.promise")]
-if (!sdk) throw new Error("OpenCode Promise plugin SDK is unavailable")
+if (!sdk) throw new Error("Coder Promise plugin SDK is unavailable")
 export const define = sdk.Plugin.define`
   const effectPluginModule = promisePluginModule
     .replace("opencode.plugin.v2.promise", "opencode.plugin.v2.effect")
     .replace("Promise plugin", "Effect plugin")
   const promiseToolModule = `export {}`
   const effectToolModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.effect")]
-if (!sdk) throw new Error("OpenCode Effect plugin SDK is unavailable")
+if (!sdk) throw new Error("Coder Effect plugin SDK is unavailable")
 export const Error = sdk.Tool.Error
 `
   return `#!/usr/bin/env -S node ${nodeExecArgv.join(" ")}
@@ -167,12 +167,12 @@ const __filename = import.meta.filename
 const __dirname = import.meta.dirname
 const require = __cjs_mod__.createRequire(import.meta.url)
 const __ocPluginModules = ${JSON.stringify({
-    "@opencode/plugin": "opencode:plugin-v2",
-    "@opencode/plugin/promise/plugin": "opencode:plugin-promise-plugin",
-    "@opencode/plugin/promise/tool": "opencode:plugin-promise-tool",
-    "@opencode/plugin/effect": "opencode:plugin-v2-effect",
-    "@opencode/plugin/effect/plugin": "opencode:plugin-v2-effect-plugin",
-    "@opencode/plugin/effect/tool": "opencode:plugin-v2-effect-tool",
+    "@xcoder/plugin": "opencode:plugin-v2",
+    "@xcoder/plugin/promise/plugin": "opencode:plugin-promise-plugin",
+    "@xcoder/plugin/promise/tool": "opencode:plugin-promise-tool",
+    "@xcoder/plugin/effect": "opencode:plugin-v2-effect",
+    "@xcoder/plugin/effect/plugin": "opencode:plugin-v2-effect-plugin",
+    "@xcoder/plugin/effect/tool": "opencode:plugin-v2-effect-tool",
   })}
 const __ocPluginSources = ${JSON.stringify({
     "opencode:plugin-v2": promiseModule,
@@ -195,7 +195,7 @@ __cjs_mod__.registerHooks({
   },
 })
 const __ocUid = typeof process.getuid === "function" ? process.getuid() : undefined
-const __ocCacheRoot = __ocPath.join(__ocTmpdir(), \`opencode-node-\${__ocUid ?? "user"}\`)
+const __ocCacheRoot = __ocPath.join(__ocTmpdir(), \`coder-node-\${__ocUid ?? "user"}\`)
 if (__ocIsSea()) {
   try {
     __ocMkdir(__ocCacheRoot, { mode: 0o700 })
@@ -230,21 +230,21 @@ if (__ocIsSea()) {
     }
   }
 }
-process.env.OPENCODE_NODE_ASSETS_DIR = __ocAssetRoot
+process.env.CODER_NODE_ASSETS_DIR = __ocAssetRoot
 process.env.OTUI_ASSET_ROOT = __ocAssetRoot
-process.env.OPENCODE_NODE_PTY_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.nodePtyEntryAsset)})
-process.env.OPENCODE_PARCEL_WATCHER_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.parcelWatcherAsset)})
-process.env.OPENCODE_PHOTON_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(photonWasmAsset)})
-process.env.OPENCODE_TREE_SITTER_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.runtime)})
-process.env.OPENCODE_TREE_SITTER_BASH_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.bash)})
-process.env.OPENCODE_TREE_SITTER_POWERSHELL_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.powershell)})
+process.env.CODER_NODE_PTY_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.nodePtyEntryAsset)})
+process.env.CODER_PARCEL_WATCHER_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.parcelWatcherAsset)})
+process.env.CODER_PHOTON_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(photonWasmAsset)})
+process.env.CODER_TREE_SITTER_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.runtime)})
+process.env.CODER_TREE_SITTER_BASH_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.bash)})
+process.env.CODER_TREE_SITTER_POWERSHELL_WASM_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(shellParserWasmAssets.powershell)})
 process.env.FFF_BINARY_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.fffAsset)})
-process.env.OPENCODE_FFF_FFI_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.fffFfiAsset)})
-if (__ocPersistentPty && !process.env.OPENCODE_PTY_BIN) process.env.OPENCODE_PTY_BIN = __ocPath.join(__ocAssetRoot, __ocPersistentPty)
+process.env.CODER_FFF_FFI_PATH = __ocPath.join(__ocAssetRoot, ${JSON.stringify(input.target.fffFfiAsset)})
+if (__ocPersistentPty && !process.env.CODER_PTY_BIN) process.env.CODER_PTY_BIN = __ocPath.join(__ocAssetRoot, __ocPersistentPty)
 try {
-  globalThis.__OPENCODE_FFF_FFI = require(process.env.OPENCODE_FFF_FFI_PATH)
+  globalThis.__CODER_FFF_FFI = require(process.env.CODER_FFF_FFI_PATH)
 } catch {}
-globalThis.__OPENCODE_PHOTON_WASM_PATH = process.env.OPENCODE_PHOTON_WASM_PATH
+globalThis.__CODER_PHOTON_WASM_PATH = process.env.CODER_PHOTON_WASM_PATH
 if (process.platform === "linux") process.env.OPENTUI_LIBC = "glibc"`
 }
 
@@ -275,12 +275,12 @@ export function mainConfig(input: NodeBuildInput): UserConfig {
     resolve,
     esbuild: { jsx: "automatic" },
     define: {
-      OPENCODE_VERSION: JSON.stringify(input.version),
-      OPENCODE_CLI_NAME: JSON.stringify("opencode2-node"),
-      OPENCODE_CHANNEL: JSON.stringify(input.channel),
-      OPENCODE_ARTIFACT: JSON.stringify("cli-node"),
-      ...(input.highlights ? { OPENCODE_RELEASE_HIGHLIGHTS: JSON.stringify(input.highlights) } : {}),
-      OPENCODE_LIBC: input.target.platform === "linux" ? JSON.stringify("glibc") : "undefined",
+      CODER_VERSION: JSON.stringify(input.version),
+      CODER_CLI_NAME: JSON.stringify("coder2-node"),
+      CODER_CHANNEL: JSON.stringify(input.channel),
+      CODER_ARTIFACT: JSON.stringify("cli-node"),
+      ...(input.highlights ? { CODER_RELEASE_HIGHLIGHTS: JSON.stringify(input.highlights) } : {}),
+      CODER_LIBC: input.target.platform === "linux" ? JSON.stringify("glibc") : "undefined",
       FFF_LIBC: input.target.platform === "linux" ? JSON.stringify("gnu") : "undefined",
       "process.env.WS_NO_BUFFER_UTIL": JSON.stringify("1"),
     },
@@ -299,8 +299,8 @@ export function mainConfig(input: NodeBuildInput): UserConfig {
 }
 
 export default mainConfig({
-  version: process.env.OPENCODE_VERSION ?? "local",
-  channel: process.env.OPENCODE_CHANNEL ?? "local",
+  version: process.env.CODER_VERSION ?? "local",
+  channel: process.env.CODER_CHANNEL ?? "local",
   assetHash: "local",
   target: nodeTarget(process.platform, process.arch),
 })

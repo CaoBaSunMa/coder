@@ -3,7 +3,7 @@ import type {
   IntegrationInfo,
   IntegrationMethod,
   IntegrationOauthConnectOutput,
-} from "@opencode/client/promise"
+} from "@xcoder/client/promise"
 import { useLanguage } from "@/runtime/i18n/language"
 import { usePlatform } from "@/runtime/platform/platform"
 import { useServerSDK } from "@/runtime/server/client"
@@ -24,11 +24,11 @@ type Polling = {
   attempt?: Authorization
 }
 
-// OpenCode Go and OpenCode Zen both bill through the OpenCode Console, so the
+// Coder Go and Coder Zen both bill through the Coder Console, so the
 // Console sign-in is the connection method for both providers.
-export const CONSOLE_INTEGRATION = "opencode"
+export const CONSOLE_INTEGRATION = "coder"
 
-export const CONSOLE_PROVIDERS = new Set(["opencode", "opencode-go"])
+export const CONSOLE_PROVIDERS = new Set(["coder", "coder-go"])
 
 export function consoleIntegration(provider: string) {
   return CONSOLE_PROVIDERS.has(provider) ? CONSOLE_INTEGRATION : provider
@@ -408,7 +408,7 @@ export function createProviderConnectionController(options: {
       .then((response) => {
         if (isConsole() && platform.platform === "desktop") {
           const url = new URL(response.data.url)
-          url.searchParams.set("client_id", "opencode-desktop")
+          url.searchParams.set("client_id", "coder-desktop")
           // Lets the Console return link focus the window that started the sign-in.
           url.searchParams.set("return_window", platform.windowID)
           response.data.url = url.href

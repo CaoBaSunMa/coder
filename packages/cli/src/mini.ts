@@ -1,6 +1,6 @@
-import { Service, type Endpoint } from "@opencode/client/effect/service"
-import { ClientError, OpenCode, type OpenCodeClient } from "@opencode/client/promise"
-import type { MiniFrontendInput } from "@opencode/tui/mini"
+import { Service, type Endpoint } from "@xcoder/client/effect/service"
+import { ClientError, Coder, type CoderClient } from "@xcoder/client/promise"
+import type { MiniFrontendInput } from "@xcoder/tui/mini"
 import { setTimeout } from "node:timers/promises"
 import { readStdin } from "./util/io"
 import { createMiniHost, INTERACTIVE_INPUT_ERROR, usingInteractiveStdin } from "./mini-host"
@@ -35,7 +35,7 @@ export async function runMini(input: MiniCommandInput) {
     validate(input)
     await usingInteractiveStdin(async (terminal) => {
       const initialInput = mergeInput(process.stdin.isTTY ? undefined : await readStdin(), input.prompt)
-      const frontendTask = import("@opencode/tui/mini")
+      const frontendTask = import("@xcoder/tui/mini")
       const directory = localDirectory()
       const connection = createMiniConnection(input.server)
       const sdk = connection.sdk
@@ -43,7 +43,7 @@ export async function runMini(input: MiniCommandInput) {
       const requested = parseModel(input.model)
       const model = requested ? { providerID: requested.providerID, modelID: requested.id } : undefined
       const prepare = prepareTarget(input.agent)
-      const resolveTarget = async (initial: OpenCodeClient, signal: AbortSignal) => {
+      const resolveTarget = async (initial: CoderClient, signal: AbortSignal) => {
         const resolved = await resolveMiniTarget({
           sdk: initial,
           reconnect: connection.reconnect,
@@ -79,7 +79,7 @@ export async function runMini(input: MiniCommandInput) {
         }
       }
       const create = (
-        client: OpenCodeClient,
+        client: CoderClient,
         next: {
           location: { directory: string }
           agent: string | undefined
@@ -137,7 +137,7 @@ export async function runMini(input: MiniCommandInput) {
 /** @internal Exported for CLI boundary tests. */
 export function createMiniConnection(input: MiniCommandInput["server"]) {
   const make = (endpoint: Endpoint) =>
-    OpenCode.make({
+    Coder.make({
       baseUrl: endpoint.url,
       headers: Service.headers(endpoint),
     })
@@ -155,10 +155,10 @@ export function createMiniConnection(input: MiniCommandInput["server"]) {
 
 /** @internal Exported for reconnect lifecycle tests. */
 export async function resolveMiniTarget<A>(input: {
-  sdk: OpenCodeClient
-  reconnect?: (signal: AbortSignal) => Promise<OpenCodeClient>
+  sdk: CoderClient
+  reconnect?: (signal: AbortSignal) => Promise<CoderClient>
   signal: AbortSignal
-  resolve: (sdk: OpenCodeClient) => Promise<A>
+  resolve: (sdk: CoderClient) => Promise<A>
 }) {
   let sdk = input.sdk
   while (true) {

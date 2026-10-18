@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
-import { Integration } from "@opencode/core/integration"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { ProviderPlugins } from "@opencode/core/plugin/provider"
-import { LLMGatewayPlugin } from "@opencode/core/plugin/provider/llmgateway"
-import { Provider } from "@opencode/core/provider"
+import { Integration } from "@xcoder/core/integration"
+import { Plugin } from "@xcoder/core/plugin"
+import { PluginHost } from "@xcoder/core/plugin/host"
+import { ProviderPlugins } from "@xcoder/core/plugin/provider"
+import { LLMGatewayPlugin } from "@xcoder/core/plugin/provider/llmgateway"
+import { Provider } from "@xcoder/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -32,7 +32,7 @@ describe("LLMGatewayPlugin", () => {
       })
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.make("llmgateway"), (provider) => {
-          provider.package = "@opencode/ai/providers/openai-compatible"
+          provider.package = "@xcoder/ai/providers/openai-compatible"
           provider.settings = { baseURL: "https://api.llmgateway.io/v1" }
           provider.headers = { Existing: "value" }
         })
@@ -41,9 +41,9 @@ describe("LLMGatewayPlugin", () => {
       yield* addPlugin()
       expect((yield* catalog.get(Provider.ID.make("llmgateway")))?.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
-        "X-Title": "opencode",
-        "X-Source": "opencode",
+        "HTTP-Referer": "https://coder.example.com/",
+        "X-Title": "coder",
+        "X-Source": "coder",
       })
       expect((yield* catalog.get(Provider.ID.openrouter))?.headers).toBeUndefined()
     }),
@@ -59,7 +59,7 @@ describe("LLMGatewayPlugin", () => {
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.make("llmgateway"), (provider) => {
           provider.activation = "disabled"
-          provider.package = "@opencode/ai/providers/openai-compatible"
+          provider.package = "@xcoder/ai/providers/openai-compatible"
           provider.settings = { baseURL: "https://api.llmgateway.io/v1" }
         })
       })

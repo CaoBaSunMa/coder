@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
-import { Model } from "@opencode/core/model"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { ProviderPlugins } from "@opencode/core/plugin/provider"
-import { OpenRouterPlugin } from "@opencode/core/plugin/provider/openrouter"
-import { Provider } from "@opencode/core/provider"
+import { Model } from "@xcoder/core/model"
+import { Plugin } from "@xcoder/core/plugin"
+import { PluginHost } from "@xcoder/core/plugin/host"
+import { ProviderPlugins } from "@xcoder/core/plugin/provider"
+import { OpenRouterPlugin } from "@xcoder/core/plugin/provider/openrouter"
+import { Provider } from "@xcoder/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -27,7 +27,7 @@ describe("OpenRouterPlugin", () => {
       const catalog = yield* Provider.Service
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.openrouter, (provider) => {
-          provider.package = "@opencode/ai/providers/openrouter"
+          provider.package = "@xcoder/ai/providers/openrouter"
           provider.headers = { Existing: "value" }
         })
         catalog.update(Provider.ID.make("nvidia"), () => {})
@@ -36,8 +36,8 @@ describe("OpenRouterPlugin", () => {
 
       expect((yield* catalog.get(Provider.ID.openrouter))?.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
-        "X-Title": "opencode",
+        "HTTP-Referer": "https://coder.example.com/",
+        "X-Title": "coder",
       })
       expect((yield* catalog.get(Provider.ID.make("nvidia")))?.headers).toBeUndefined()
     }),
@@ -49,7 +49,7 @@ describe("OpenRouterPlugin", () => {
       const models = yield* Model.Service
       yield* catalog.transform((catalog) => {
         catalog.update(Provider.ID.openrouter, (provider) => {
-          provider.package = "@opencode/ai/providers/openrouter"
+          provider.package = "@xcoder/ai/providers/openrouter"
         })
         catalog.update(Provider.ID.openai, () => {})
         catalog.models.update(Provider.ID.openrouter, Model.ID.make("openai/gpt-5-chat"), () => {})

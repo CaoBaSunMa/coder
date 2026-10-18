@@ -6,15 +6,17 @@ import { useClipboard } from "../context/clipboard"
 import { useExit } from "../context/exit"
 import { useTuiApp } from "../context/runtime"
 import { describeOS, describeTerminal } from "../util/system"
+import { createTranslator, type Locale } from "../util/i18n"
 
-export function ErrorComponent(props: { error: Error; reset: () => void; mode?: "dark" | "light" }) {
+export function ErrorComponent(props: { error: Error; reset: () => void; mode?: "dark" | "light"; locale?: Locale }) {
   const term = useTerminalDimensions()
   const exit = useExit()
   const clipboard = useClipboard()
   const app = useTuiApp()
+  const i18n = createTranslator(props.locale ?? "en")
   const [copyState, setCopyState] = createSignal<"idle" | "copied" | "failed">("idle")
 
-  // Safe fallback palette per mode (mirrors theme/assets/opencode.json) since the
+  // Safe fallback palette per mode (mirrors theme/assets/coder.json) since the
   // theme context may be the thing that crashed.
   const isLight = props.mode === "light"
   const colors = isLight
@@ -41,8 +43,8 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
         success: "#7fd88f",
       }
 
-  const message = props.error.message || "An unknown error occurred."
-  const stack = props.error.stack || "No stack trace available."
+  const message = props.error.message || i18n.t("crash.unknownError")
+  const stack = props.error.stack || i18n.t("crash.noStack")
   const issueURL = buildIssueURL(message, stack, app.version)
 
   const copyReport = () => {
@@ -55,12 +57,15 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
   const actions = [
     {
       key: "c",
-      label: () => ({ idle: "Copy report", copied: "✓ Copied", failed: "Copy failed" })[copyState()],
+      label: () =>
+        ({ idle: i18n.t("crash.copy"), copied: i18n.t("crash.copied"), failed: i18n.t("crash.copyFailed") })[
+          copyState()
+        ],
       copy: true,
       onUse: copyReport,
     },
-    { key: "r", label: () => "Restart", onUse: props.reset },
-    { key: "q", label: () => "Quit", onUse: () => exit() },
+    { key: "r", label: () => i18n.t("crash.restart"), onUse: props.reset },
+    { key: "q", label: () => i18n.t("crash.quit"), onUse: () => exit() },
   ]
   const [selected, setSelected] = createSignal(0)
   const move = (delta: number) => setSelected((prev) => (prev + delta + actions.length) % actions.length)
@@ -117,10 +122,10 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
         {/* Headline */}
         <box flexDirection="column" alignItems="center" flexShrink={0}>
           <text attributes={TextAttributes.BOLD} fg={colors.text}>
-            OpenCode crashed
+            {i18n.t("crash.title")}
           </text>
           <Show when={showSubtext()}>
-            <text fg={colors.muted}>An unexpected error stopped the session.</text>
+            <text fg={colors.muted}>{i18n.t("crash.subtitle")}</text>
           </Show>
         </box>
 
@@ -130,7 +135,7 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
           border
           borderStyle="rounded"
           borderColor={colors.error}
-          title=" Error "
+          title={` ${i18n.t("crash.errorLabel")} `}
           titleColor={colors.error}
           paddingLeft={2}
           paddingRight={2}
@@ -184,9 +189,9 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
           border
           borderStyle="rounded"
           borderColor={colors.borderSubtle}
-          title=" Stack trace "
+          title={` ${i18n.t("crash.stackLabel")} `}
           titleColor={colors.muted}
-          bottomTitle=" ↑↓ scroll "
+          bottomTitle={` ${i18n.t("crash.scroll")} `}
           bottomTitleAlignment="right"
           paddingLeft={1}
           paddingRight={1}
@@ -205,12 +210,12 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
           <box flexDirection="column" alignItems="center" flexShrink={0}>
             <text fg={colors.muted}>
               {copyState() === "copied"
-                ? "Report copied — paste it into a new GitHub issue."
+                ? i18n.t("crash.footer.copied")
                 : copyState() === "failed"
-                  ? "Clipboard write failed. Try again or report the crash manually."
-                  : "Copy the report and open a GitHub issue to help us fix this."}
+                  ? i18n.t("crash.footer.failed")
+                  : i18n.t("crash.footer.copy")}
             </text>
-            <text fg={colors.muted}>OpenCode {app.version}</text>
+            <text fg={colors.muted}>{i18n.t("crash.version", { version: app.version })}</text>
           </box>
         </Show>
       </box>
@@ -222,14 +227,14 @@ function buildIssueURL(message: string, stack: string, version: string) {
   // Field keys match the ids in .github/ISSUE_TEMPLATE/bug-report.yml so the issue
   // form opens pre-filled. Populating os/terminal/reproduce keeps the report past
   // the contributing-guidelines compliance check, which pushes for system info.
-  const url = new URL("https://github.com/anomalyco/opencode/issues/new?template=bug-report.yml")
+  const url = new URL("https://github.com/coder-ai/coder/issues/new?template=bug-report.yml")
   url.searchParams.set("title", `TUI crash: ${message}`)
-  url.searchParams.set("opencode-version", version)
+  url.searchParams.set("coder-version", version)
   url.searchParams.set("os", describeOS())
   url.searchParams.set("terminal", describeTerminal())
   url.searchParams.set(
     "reproduce",
-    "Reported automatically from the OpenCode crash screen. If you can, describe what you were doing when it crashed.",
+    "Reported automatically from the Coder crash screen. If you can, describe what you were doing when it crashed.",
   )
 
   // Budget the stack against the fully URL-encoded length (not the raw length) so
@@ -238,7 +243,7 @@ function buildIssueURL(message: string, stack: string, version: string) {
   // so measuring url.toString() is both correct and safe on any input.
   const MAX_URL_LENGTH = 6000
   const marker = "\n… (truncated)"
-  const head = `The OpenCode TUI crashed with an unexpected error.\n\n**Error:** ${message}\n\n**Stack trace:**\n`
+  const head = `The Coder TUI crashed with an unexpected error.\n\n**Error:** ${message}\n\n**Stack trace:**\n`
   const setBody = (body: string) => url.searchParams.set("description", head + "```\n" + body + "\n```")
 
   setBody(stack)

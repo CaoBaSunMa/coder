@@ -9,13 +9,13 @@ import {
   type WebSocketChannelExecutor,
   type WebSocketConnection,
   type WebSocketConnector,
-} from "@opencode/ai/route"
-import { AIError, AIErrorReason, TransportError, type TransportOperation } from "@opencode/ai"
-import { Hash } from "@opencode/util/hash"
+} from "@xcoder/ai/route"
+import { AIError, AIErrorReason, TransportError, type TransportOperation } from "@xcoder/ai"
+import { Hash } from "@xcoder/util/hash"
 import { Cause, Clock, Context, Duration, Effect, Fiber, Layer, Metric, Queue, Scope, Semaphore, Stream } from "effect"
 import { Headers } from "effect/http"
 import { Socket } from "effect/socket"
-import { makeGlobalNode } from "@opencode/util/effect/app-node"
+import { makeGlobalNode } from "@xcoder/util/effect/app-node"
 import { SessionSchema } from "./schema.js"
 import { webSocketConstructor } from "../effect/app-node-platform.js"
 
@@ -82,7 +82,7 @@ export interface Interface {
   readonly closeAll: Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SessionModelTransport") {}
+export class Service extends Context.Service<Service, Interface>()("@xcoder/SessionModelTransport") {}
 
 const transportError = (
   message: string,

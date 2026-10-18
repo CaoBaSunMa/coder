@@ -1,7 +1,7 @@
-import { Global } from "@opencode/util/global"
-import { OPENCODE_CHANNEL, OPENCODE_VERSION } from "../version"
-import { Hash } from "@opencode/util/hash"
-import { Service } from "@opencode/client/effect/service"
+import { Global } from "@xcoder/util/global"
+import { CODER_CHANNEL, CODER_VERSION } from "../version"
+import { Hash } from "@xcoder/util/hash"
+import { Service } from "@xcoder/client/effect/service"
 import { Effect, FileSystem, Option, Schema } from "effect"
 import { randomBytes } from "crypto"
 import path from "path"
@@ -38,35 +38,36 @@ const decodeLegacy = Schema.decodeUnknownOption(
 )
 const decodeRegistration = Schema.decodeUnknownEffect(Schema.fromJsonString(Service.Info))
 
-export function filename(channel = OPENCODE_CHANNEL) {
+export function filename(channel = CODER_CHANNEL) {
   if (channel === "latest" || channel === "dev" || channel === "beta" || channel === "next") return "service.json"
   return `service-${channel.replace(/[^a-zA-Z0-9._-]/g, "-")}.json`
 }
 
-export function defaultPort(channel = OPENCODE_CHANNEL, platform = process.platform) {
+export function defaultPort(channel = CODER_CHANNEL, platform = process.platform) {
   const port = channelPort(channel)
   // Windows hands out 0xC000-0xFFFF for outgoing connections, and Hyper-V and WinNAT reserve blocks of that range at
   // boot, so a port there can fail as in use while nothing listens on it. Moving into the 0xB000 block keeps the low
-  // 12 bits: 0xC0DE becomes 0xB0DE, which is 0xC0DE - 4096, a nod to the v1 port.
+  // 12 bits: 0xC1DE becomes 0xB1DE.
   if (platform === "win32" && port >= 0xc000) return 0xb000 | (port & 0xfff)
   return port
 }
 
 function channelPort(channel: string) {
-  if (channel === "latest" || channel === "dev" || channel === "beta" || channel === "next") return 0xc0de
-  if (channel === "local") return 0xc0df
+  // Deliberately distinct from upstream OpenCode's 0xC0DE so a co-installed upstream service cannot collide.
+  if (channel === "latest" || channel === "dev" || channel === "beta" || channel === "next") return 0xc1de
+  if (channel === "local") return 0xc1df
   return 10_000 + (Number.parseInt(Hash.fast(channel).slice(0, 8), 16) % 50_000)
 }
 
-export function legacyFilename(channel = OPENCODE_CHANNEL) {
+export function legacyFilename(channel = CODER_CHANNEL) {
   if (channel === "latest" || channel === "local") return
   return `service-${Hash.fast(channel)}.json`
 }
 
 export function versionBelongsToChannel(
   version: string | undefined,
-  channel = OPENCODE_CHANNEL,
-  installedVersion = OPENCODE_VERSION,
+  channel = CODER_CHANNEL,
+  installedVersion = CODER_VERSION,
 ) {
   if (version === undefined) return false
   if (version === installedVersion) return true
@@ -78,8 +79,8 @@ export function versionBelongsToChannel(
 export const migrateRegistration = Effect.fnUntraced(function* (
   legacy: string,
   file: string,
-  channel = OPENCODE_CHANNEL,
-  installedVersion = OPENCODE_VERSION,
+  channel = CODER_CHANNEL,
+  installedVersion = CODER_VERSION,
 ) {
   const fs = yield* FileSystem.FileSystem
   const text = yield* fs.readFileString(legacy).pipe(Effect.option)
@@ -124,7 +125,7 @@ const paths = Effect.gen(function* () {
     legacyConfigFile: legacy ? path.join(global.config, legacy) : undefined,
     legacyRegistrationFiles: [
       ...(legacy ? [path.join(global.state, legacy)] : []),
-      ...(name !== "service.json" && OPENCODE_CHANNEL !== "local" ? [path.join(global.state, "service.json")] : []),
+      ...(name !== "service.json" && CODER_CHANNEL !== "local" ? [path.join(global.state, "service.json")] : []),
     ],
     configFile: path.join(global.config, name),
   }
@@ -135,7 +136,7 @@ export const options = Effect.fnUntraced(function* (input: { readonly checkVersi
   yield* Effect.forEach(legacyRegistrationFiles, (legacy) => migrateRegistration(legacy, file))
   return {
     file,
-    version: input.checkVersion ? OPENCODE_VERSION : undefined,
+    version: input.checkVersion ? CODER_VERSION : undefined,
     env: (yield* read()).env,
     command: [
       ...selfCommand(),

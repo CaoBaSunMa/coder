@@ -3,7 +3,7 @@
  *
  *   bun run script/benchmark-snapshot.ts [--fixtures small,medium,large,opencode] [--iterations 10] [--json out.json]
  *
- * Fixtures are generated once under $TMPDIR/opencode-snapshot-bench and reset before each run.
+ * Fixtures are generated once under $TMPDIR/coder-snapshot-bench and reset before each run.
  * Every timed scenario also reports how many git processes it spawned.
  */
 import { $ } from "bun"
@@ -16,8 +16,8 @@ import { Git } from "../src/git"
 import { Location } from "../src/location"
 import { AbsolutePath, RelativePath } from "../src/schema"
 import { Snapshot } from "../src/snapshot"
-import { Global } from "@opencode/util/global"
-import { AppProcess } from "@opencode/util/process"
+import { Global } from "@xcoder/util/global"
+import { AppProcess } from "@xcoder/util/process"
 
 const args = process.argv.slice(2)
 const flag = (name: string) => {
@@ -27,7 +27,7 @@ const flag = (name: string) => {
 const iterations = Number(flag("iterations") ?? 10)
 const selected = (flag("fixtures") ?? "small,medium,large,opencode").split(",")
 const jsonOut = flag("json")
-const root = path.join(process.env.SNAPSHOT_BENCH_ROOT ?? os.tmpdir(), "opencode-snapshot-bench")
+const root = path.join(process.env.SNAPSHOT_BENCH_ROOT ?? os.tmpdir(), "coder-snapshot-bench")
 
 type Fixture = { name: string; tracked: number; ignored: number; dirs: number }
 const fixtures: Record<string, Fixture> = {
@@ -64,8 +64,8 @@ async function generate(fixture: Fixture) {
   return dir
 }
 
-async function cloneOpencode() {
-  const dir = path.join(root, "fixtures", "opencode")
+async function cloneCoder() {
+  const dir = path.join(root, "fixtures", "coder")
   if (await Bun.file(path.join(dir, ".bench-ready")).exists()) return dir
   await fs.rm(dir, { recursive: true, force: true })
   const source = (await $`git rev-parse --show-toplevel`.cwd(import.meta.dir).text()).trim()
@@ -378,7 +378,7 @@ async function probes() {
 await fs.mkdir(root, { recursive: true })
 for (const name of selected) {
   if (name === "probes") continue
-  const dir = name === "opencode" ? await cloneOpencode() : await generate(fixtures[name]!)
+  const dir = name === "coder" ? await cloneCoder() : await generate(fixtures[name]!)
   await bench(name, dir)
 }
 if (selected.includes("probes") || !flag("fixtures")) await probes()

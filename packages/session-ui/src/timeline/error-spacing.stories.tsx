@@ -5,7 +5,7 @@ import { timelinePresets } from "./detail"
 import { SessionTimeline } from "./session-timeline"
 
 export default {
-  title: "OpenCode/Conversation/Error spacing",
+  title: "Coder/Conversation/Error spacing",
   id: "current-session-error-spacing",
   component: SessionTimeline,
   parameters: { layout: "fullscreen" },
@@ -42,7 +42,7 @@ const document = {
           time: { created: STORY_TIME + 100, ran: STORY_TIME + 150, completed: STORY_TIME + 300 },
         },
       ],
-      error: { type: "ProviderError", message: "getaddrinfo ENOTFOUND opencode.ai" },
+      error: { type: "ProviderError", message: "getaddrinfo ENOTFOUND coder.example.com" },
       time: { created: STORY_TIME + 50, completed: STORY_TIME + 400 },
     },
     {

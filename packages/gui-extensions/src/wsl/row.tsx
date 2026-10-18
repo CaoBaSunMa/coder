@@ -1,11 +1,11 @@
-import { Button } from "@opencode/ui/button"
-import { Icon } from "@opencode/ui/icon"
-import { IconButton } from "@opencode/ui/icon-button"
-import { Menu } from "@opencode/ui/menu"
+import { Button } from "@xcoder/ui/button"
+import { Icon } from "@xcoder/ui/icon"
+import { IconButton } from "@xcoder/ui/icon-button"
+import { Menu } from "@xcoder/ui/menu"
 import { Show } from "solid-js"
 import { useExtension, type IpcClient, type ServerRow } from "../sdk"
 import type { Wsl, WslServersState } from "./contract"
-import { wslOpencodeAction } from "./model"
+import { wslCoderAction } from "./model"
 
 export default function WslRow(props: {
   row: ServerRow
@@ -16,8 +16,8 @@ export default function WslRow(props: {
   request: <T>(key: string, action: () => Promise<T>) => void
 }) {
   const extension = useExtension()
-  const check = () => props.state()?.opencodeChecks[props.distro]
-  const opencodeAction = () => wslOpencodeAction(check())
+  const check = () => props.state()?.coderChecks[props.distro]
+  const opencodeAction = () => wslCoderAction(check())
 
   const busy = () => {
     const job = props.state()?.job
@@ -49,7 +49,7 @@ export default function WslRow(props: {
                 <Button
                   size="small"
                   disabled={busy() || props.pending(props.row.key)}
-                  onClick={() => props.request(props.row.key, () => api().installOpencode({ name: props.distro }))}
+                  onClick={() => props.request(props.row.key, () => api().installCoder({ name: props.distro }))}
                 >
                   {busy() ? extension.t("server.updating") : extension.t(label())}
                 </Button>

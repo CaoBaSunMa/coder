@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test"
-import type { SessionMessageAssistant, SessionMessageInfo, ShellInfo } from "@opencode/client/promise"
-import { timelinePresets } from "@opencode/session-ui/timeline/detail"
+import type { SessionMessageAssistant, SessionMessageInfo, ShellInfo } from "@xcoder/client/promise"
+import { timelinePresets } from "@xcoder/session-ui/timeline/detail"
 import { createTwoFilesPatch } from "diff"
 import {
   assistantID,
@@ -205,7 +205,7 @@ test.describe("static projection", () => {
       toolPart("prt_skill_second", "skill", "completed", { id: "effect" }),
       toolPart("prt_skill_third", "skill", "completed", { id: "ui-pr-screenshots" }),
       toolPart("prt_skill_break", "read", "completed", { path: "src/a.ts" }),
-      toolPart("prt_skill_last", "skill", "completed", { id: "opencode" }),
+      toolPart("prt_skill_last", "skill", "completed", { id: "coder" }),
     ]
 
     await setupTimeline(page, {

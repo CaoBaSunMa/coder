@@ -63,7 +63,7 @@ export const WslDistroProbe = Schema.Struct({
 
 export type WslDistroProbe = typeof WslDistroProbe.Type
 
-export const WslOpencodeCheck = Schema.Struct({
+export const WslCoderCheck = Schema.Struct({
   distro: Schema.String,
   resolvedPath: Schema.NullOr(Schema.String),
   version: Schema.NullOr(Schema.String),
@@ -72,7 +72,7 @@ export const WslOpencodeCheck = Schema.Struct({
   error: Schema.NullOr(Schema.String),
 })
 
-export type WslOpencodeCheck = typeof WslOpencodeCheck.Type
+export type WslCoderCheck = typeof WslCoderCheck.Type
 
 export const WslServerItem = Schema.Struct({ config: WslServerConfig, runtime: WslServerRuntime })
 
@@ -83,7 +83,7 @@ export const WslServersState = Schema.Struct({
   installed: Schema.Array(WslInstalledDistro),
   online: Schema.Array(WslOnlineDistro),
   distroProbes: Schema.Record(Schema.String, WslDistroProbe),
-  opencodeChecks: Schema.Record(Schema.String, WslOpencodeCheck),
+  opencodeChecks: Schema.Record(Schema.String, WslCoderCheck),
   pendingRestart: Schema.Boolean,
   servers: Schema.Array(WslServerItem),
   job: Schema.NullOr(WslJob),
@@ -95,7 +95,7 @@ const Name = Schema.Struct({ name: Schema.NonEmptyString })
 
 const Id = Schema.Struct({ id: Schema.NonEmptyString })
 
-/** WSL runtime, distros, and the OpenCode servers the main process runs inside them. */
+/** WSL runtime, distros, and the Coder servers the main process runs inside them. */
 export const Wsl = Ipc.define({
   id: "wsl",
   state: WslServersState,
@@ -105,7 +105,7 @@ export const Wsl = Ipc.define({
     installWsl: {},
     installDistro: { input: Name },
     probeAddable: { input: Schema.Struct({ distros: Schema.Array(Schema.NonEmptyString) }) },
-    installOpencode: { input: Name },
+    installCoder: { input: Name },
     addServer: { input: Schema.Struct({ distro: Schema.NonEmptyString }), output: WslServerConfig },
     removeServer: { input: Id },
     startServer: { input: Id },

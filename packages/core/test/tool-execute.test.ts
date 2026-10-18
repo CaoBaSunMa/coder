@@ -1,11 +1,11 @@
 import { expect, test } from "bun:test"
-import { CodeModeTool } from "@opencode/core/codemode/tool"
-import { Tool } from "@opencode/core/tool"
-import { execute } from "@opencode/core/tool/runtime"
-import { Agent } from "@opencode/schema/agent"
-import { Session } from "@opencode/schema/session"
-import { SessionMessage } from "@opencode/schema/session-message"
-import type { Info } from "@opencode/schema/tool"
+import { CodeModeTool } from "@xcoder/core/codemode/tool"
+import { Tool } from "@xcoder/core/tool"
+import { execute } from "@xcoder/core/tool/runtime"
+import { Agent } from "@xcoder/schema/agent"
+import { Session } from "@xcoder/schema/session"
+import { SessionMessage } from "@xcoder/schema/session-message"
+import type { Info } from "@xcoder/schema/tool"
 import { Effect, Schema } from "effect"
 
 const context = {

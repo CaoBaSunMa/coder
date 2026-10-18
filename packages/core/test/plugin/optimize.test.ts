@@ -1,15 +1,15 @@
 import { describe, expect, test } from "bun:test"
-import { SystemPart } from "@opencode/ai"
-import { Agent } from "@opencode/core/agent"
-import { Plugin } from "@opencode/core/plugin"
-import { PluginHooks } from "@opencode/core/plugin/hooks"
-import { PluginHost } from "@opencode/core/plugin/host"
-import { OptimizePlugin } from "@opencode/core/plugin/optimize"
-import { Session } from "@opencode/core/session"
-import { SessionSystemPrompt } from "@opencode/core/session/system-prompt"
-import type { SessionHooks } from "@opencode/plugin/effect/session"
-import { Model } from "@opencode/schema/model"
-import { Provider } from "@opencode/core/provider"
+import { SystemPart } from "@xcoder/ai"
+import { Agent } from "@xcoder/core/agent"
+import { Plugin } from "@xcoder/core/plugin"
+import { PluginHooks } from "@xcoder/core/plugin/hooks"
+import { PluginHost } from "@xcoder/core/plugin/host"
+import { OptimizePlugin } from "@xcoder/core/plugin/optimize"
+import { Session } from "@xcoder/core/session"
+import { SessionSystemPrompt } from "@xcoder/core/session/system-prompt"
+import type { SessionHooks } from "@xcoder/plugin/effect/session"
+import { Model } from "@xcoder/schema/model"
+import { Provider } from "@xcoder/core/provider"
 import { Effect } from "effect"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
@@ -127,7 +127,7 @@ describe("OptimizePlugin", () => {
         SessionSystemPrompt.render(PROMPT_GPT, Object.keys(event.tools)),
         "Project instructions",
       ])
-      expect(event.system[0]?.text).not.toContain("${OPENCODE_TOOL_GUIDANCE}")
+      expect(event.system[0]?.text).not.toContain("${CODER_TOOL_GUIDANCE}")
       expect(Object.keys(event.tools).sort()).toEqual(["edit", "glob", "grep", "patch", "read", "shell", "write"])
     }),
   )

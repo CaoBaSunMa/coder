@@ -9,8 +9,8 @@ import {
   Provider,
   Reference,
   Skill,
-} from "@opencode/plugin/effect"
-import { Tool } from "@opencode/schema/tool"
+} from "@xcoder/plugin/effect"
+import { Tool } from "@xcoder/schema/tool"
 
 const key = Symbol.for("opencode.plugin.v2.effect")
 ;(globalThis as typeof globalThis & { [key]?: unknown })[key] = {

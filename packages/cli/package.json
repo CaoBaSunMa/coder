@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode/cli",
+  "name": "@xcoder/cli",
   "version": "2.0.32",
   "type": "module",
   "license": "MIT",
   "bin": {
-    "opencode": "./bin/opencode.cjs",
-    "opencode2": "./bin/opencode2.cjs"
+    "coder": "./bin/coder.cjs",
+    "coder2": "./bin/coder2.cjs"
   },
   "files": [
     "bin"
@@ -28,13 +28,13 @@
     "@clack/core": "1.0.0-alpha.1",
     "@clack/prompts": "1.0.0-alpha.1",
     "@effect/platform-node": "catalog:",
-    "@opencode/client": "workspace:*",
-    "@opencode/plugin": "workspace:*",
+    "@xcoder/client": "workspace:*",
+    "@xcoder/plugin": "workspace:*",
     "@opencode-ai/pty": "0.2.0",
-    "@opencode/schema": "workspace:*",
-    "@opencode/server": "workspace:*",
-    "@opencode/tui": "workspace:*",
-    "@opencode/util": "workspace:*",
+    "@xcoder/schema": "workspace:*",
+    "@xcoder/server": "workspace:*",
+    "@xcoder/tui": "workspace:*",
+    "@xcoder/util": "workspace:*",
     "@opentui/core": "catalog:",
     "@opentui/solid": "catalog:",
     "@opentunnel/client": "0.4.0",
@@ -53,8 +53,8 @@
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@opencode/script": "workspace:*",
-    "@opencode/protocol": "workspace:*",
+    "@xcoder/script": "workspace:*",
+    "@xcoder/protocol": "workspace:*",
     "@tsconfig/bun": "catalog:",
     "@types/bun": "catalog:",
     "@typescript/native": "catalog:",

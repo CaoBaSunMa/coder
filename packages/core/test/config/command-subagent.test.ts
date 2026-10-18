@@ -1,21 +1,21 @@
 import { describe, expect } from "bun:test"
 import path from "path"
 import { Effect, Layer } from "effect"
-import { LanguageModel } from "@opencode/ai"
-import { OpenAIChat } from "@opencode/ai/protocols/openai-chat"
-import { TestLLM } from "@opencode/ai/testing"
-import { Agent } from "@opencode/core/agent"
-import { AppNodeBuilder } from "@opencode/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode/core/effect/app-node-platform"
-import { Watcher } from "@opencode/core/filesystem/watcher"
-import { LocationServiceMap } from "@opencode/core/location-service-map"
-import { Model } from "@opencode/core/model"
-import { Provider } from "@opencode/core/provider"
-import { AbsolutePath } from "@opencode/core/schema"
-import { Session } from "@opencode/core/session"
-import { SessionRunnerModel } from "@opencode/core/session/runner/model"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Global } from "@opencode/util/global"
+import { LanguageModel } from "@xcoder/ai"
+import { OpenAIChat } from "@xcoder/ai/protocols/openai-chat"
+import { TestLLM } from "@xcoder/ai/testing"
+import { Agent } from "@xcoder/core/agent"
+import { AppNodeBuilder } from "@xcoder/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@xcoder/core/effect/app-node-platform"
+import { Watcher } from "@xcoder/core/filesystem/watcher"
+import { LocationServiceMap } from "@xcoder/core/location-service-map"
+import { Model } from "@xcoder/core/model"
+import { Provider } from "@xcoder/core/provider"
+import { AbsolutePath } from "@xcoder/core/schema"
+import { Session } from "@xcoder/core/session"
+import { SessionRunnerModel } from "@xcoder/core/session/runner/model"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { Global } from "@xcoder/util/global"
 import { tempGlobalLayer } from "../fixture/global"
 import { offlineModels } from "../fixture/models"
 import { tmpdirScoped } from "../fixture/tmpdir"
@@ -133,7 +133,7 @@ function project(
     const definition = { description: "Review code", template: "Review $ARGUMENTS: !`printf ready`", ...command }
     yield* Effect.promise(() =>
       Bun.write(
-        path.join(tmp.path, "opencode.json"),
+        path.join(tmp.path, "coder.json"),
         JSON.stringify({
           agents: { reviewer: { mode: "subagent", model: "test/child" } },
           ...(format === "markdown" ? {} : { commands: { review: definition } }),
@@ -143,7 +143,7 @@ function project(
     if (format === "markdown")
       yield* Effect.promise(() =>
         Bun.write(
-          path.join(tmp.path, ".opencode/commands/review.md"),
+          path.join(tmp.path, ".coder/commands/review.md"),
           [
             "---",
             "description: Review code",

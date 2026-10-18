@@ -1,32 +1,32 @@
 import { expect, test } from "bun:test"
 import { Schema } from "effect"
-import { Agent } from "@opencode/core/agent"
-import { Session } from "@opencode/core/session"
-import { SessionStore } from "@opencode/core/session/store"
-import { Location } from "@opencode/schema/location"
-import { Model } from "@opencode/schema/model"
-import { Provider } from "@opencode/schema/provider"
-import { Project } from "@opencode/schema/project"
-import { Worktree } from "@opencode/schema/worktree"
-import { Prompt } from "@opencode/schema/prompt"
-import { SessionInbox } from "@opencode/schema/session-inbox"
-import { SessionMessage } from "@opencode/schema/session-message"
-import { Workspace } from "@opencode/schema/workspace"
-import { Command } from "@opencode/schema/command"
-import { Connection } from "@opencode/schema/connection"
-import { Credential } from "@opencode/schema/credential"
-import { FileSystem } from "@opencode/schema/filesystem"
-import { Integration } from "@opencode/schema/integration"
-import { LLM } from "@opencode/schema/llm"
-import { Permission } from "@opencode/schema/permission"
-import { Pty } from "@opencode/schema/pty"
-import { Reference } from "@opencode/schema/reference"
-import { Skill } from "@opencode/schema/skill"
-import { AbsolutePath, optional, statics } from "@opencode/schema/schema"
+import { Agent } from "@xcoder/core/agent"
+import { Session } from "@xcoder/core/session"
+import { SessionStore } from "@xcoder/core/session/store"
+import { Location } from "@xcoder/schema/location"
+import { Model } from "@xcoder/schema/model"
+import { Provider } from "@xcoder/schema/provider"
+import { Project } from "@xcoder/schema/project"
+import { Worktree } from "@xcoder/schema/worktree"
+import { Prompt } from "@xcoder/schema/prompt"
+import { SessionInbox } from "@xcoder/schema/session-inbox"
+import { SessionMessage } from "@xcoder/schema/session-message"
+import { Workspace } from "@xcoder/schema/workspace"
+import { Command } from "@xcoder/schema/command"
+import { Connection } from "@xcoder/schema/connection"
+import { Credential } from "@xcoder/schema/credential"
+import { FileSystem } from "@xcoder/schema/filesystem"
+import { Integration } from "@xcoder/schema/integration"
+import { LLM } from "@xcoder/schema/llm"
+import { Permission } from "@xcoder/schema/permission"
+import { Pty } from "@xcoder/schema/pty"
+import { Reference } from "@xcoder/schema/reference"
+import { Skill } from "@xcoder/schema/skill"
+import { AbsolutePath, optional, statics } from "@xcoder/schema/schema"
 
 test("Core reuses the canonical shared schemas", async () => {
-  const schemaAgent = await import("@opencode/schema/agent")
-  const schemaSession = await import("@opencode/schema/session")
+  const schemaAgent = await import("@xcoder/schema/agent")
+  const schemaSession = await import("@xcoder/schema/session")
   const [
     coreCommand,
     coreConnection,
@@ -48,25 +48,25 @@ test("Core reuses the canonical shared schemas", async () => {
     coreSchema,
     coreWorkspace,
   ] = await Promise.all([
-    import("@opencode/core/command"),
-    import("@opencode/core/integration/connection"),
-    import("@opencode/core/credential"),
-    import("@opencode/core/filesystem"),
-    import("@opencode/core/integration"),
-    import("@opencode/core/location"),
-    import("@opencode/ai"),
-    import("@opencode/core/model"),
-    import("@opencode/core/permission"),
-    import("@opencode/core/worktree"),
-    import("@opencode/core/pty"),
-    import("@opencode/core/project/schema"),
-    import("@opencode/core/provider"),
-    import("@opencode/core/reference"),
-    import("@opencode/core/session/inbox"),
-    import("@opencode/core/session/message"),
-    import("@opencode/core/skill"),
-    import("@opencode/core/schema"),
-    import("@opencode/core/workspace"),
+    import("@xcoder/core/command"),
+    import("@xcoder/core/integration/connection"),
+    import("@xcoder/core/credential"),
+    import("@xcoder/core/filesystem"),
+    import("@xcoder/core/integration"),
+    import("@xcoder/core/location"),
+    import("@xcoder/ai"),
+    import("@xcoder/core/model"),
+    import("@xcoder/core/permission"),
+    import("@xcoder/core/worktree"),
+    import("@xcoder/core/pty"),
+    import("@xcoder/core/project/schema"),
+    import("@xcoder/core/provider"),
+    import("@xcoder/core/reference"),
+    import("@xcoder/core/session/inbox"),
+    import("@xcoder/core/session/message"),
+    import("@xcoder/core/skill"),
+    import("@xcoder/core/schema"),
+    import("@xcoder/core/workspace"),
   ])
 
   const schemas = [

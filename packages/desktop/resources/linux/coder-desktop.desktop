@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Coder
+Exec=/opt/Coder/ai.coder.desktop %U
+Terminal=false
+Type=Application
+Icon=ai.coder.desktop
+StartupWMClass=ai.coder.desktop
+NoDisplay=true
+Comment=Open source AI coding agent
+Categories=Development;

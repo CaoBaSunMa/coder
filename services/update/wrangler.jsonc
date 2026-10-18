@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "opencode-update",
+  "name": "coder-update",
   "main": "src/index.ts",
   "compatibility_date": "2026-07-21",
   "workers_dev": false,
@@ -14,22 +14,22 @@
   ],
   "routes": [
     {
-      "pattern": "update.opencode.ai",
+      "pattern": "releases.coder.example.com",
       "custom_domain": true,
     },
     {
-      "pattern": "opencode.ai/update",
-      "zone_name": "opencode.ai",
+      "pattern": "coder.example.com/update",
+      "zone_name": "coder.example.com",
     },
     {
-      "pattern": "opencode.ai/update/*",
-      "zone_name": "opencode.ai",
+      "pattern": "coder.example.com/update/*",
+      "zone_name": "coder.example.com",
     },
   ],
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "opencode-update",
+      "database_name": "coder-update",
       "database_id": "2c010a96-811f-43d5-804d-7188534e5858",
       "migrations_dir": "migrations",
     },

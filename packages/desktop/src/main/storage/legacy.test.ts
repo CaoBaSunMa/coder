@@ -23,7 +23,7 @@ afterEach(() => {
 })
 
 function tempRoot() {
-  const root = mkdtempSync(path.join(tmpdir(), "opencode-legacy-store-"))
+  const root = mkdtempSync(path.join(tmpdir(), "coder-legacy-store-"))
   roots.push(root)
 
   return root

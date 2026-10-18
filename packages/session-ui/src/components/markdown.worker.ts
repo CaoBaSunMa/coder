@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 
 import { ShikiStreamTokenizer } from "@shikijs/stream"
-import { createMarkdownParser } from "@opencode/ui/context/marked-parser"
-import { OpenCodeTheme } from "@opencode/ui/context/marked-theme"
+import { createMarkdownParser } from "@xcoder/ui/context/marked-parser"
+import { CoderTheme } from "@xcoder/ui/context/marked-theme"
 import {
   bundledLanguages,
   createHighlighter,
@@ -47,7 +47,7 @@ const parser = createMarkdownParser(async (code, language) => {
     await instance.loadLanguage(bundledLanguages[name as BundledLanguage])
 
   return instance
-    .codeToHtml(code, { lang: name as BundledLanguage, theme: "OpenCode", tabindex: false })
+    .codeToHtml(code, { lang: name as BundledLanguage, theme: "Coder", tabindex: false })
     .replace("<code>", `<code class="language-${name}">`)
 })
 
@@ -106,7 +106,7 @@ async function highlight(request: Extract<MarkdownWorkerRequest, { type: "highli
       await instance.loadLanguage(bundledLanguages[language as BundledLanguage])
 
     if (request.complete) {
-      const result = instance.codeToTokens(request.text, { lang: language as BundledLanguage, theme: "OpenCode" })
+      const result = instance.codeToTokens(request.text, { lang: language as BundledLanguage, theme: "Coder" })
       streams.delete(request.key)
       post({
         type: "highlight",
@@ -132,7 +132,7 @@ async function highlight(request: Extract<MarkdownWorkerRequest, { type: "highli
       ? {
           language,
           source: "",
-          tokenizer: new ShikiStreamTokenizer({ highlighter: instance, lang: language, theme: "OpenCode" }),
+          tokenizer: new ShikiStreamTokenizer({ highlighter: instance, lang: language, theme: "Coder" }),
         }
       : previous
 
@@ -159,7 +159,7 @@ async function highlight(request: Extract<MarkdownWorkerRequest, { type: "highli
 }
 
 function getHighlighter() {
-  return (highlighter ??= createHighlighter({ themes: [OpenCodeTheme], langs: [] }))
+  return (highlighter ??= createHighlighter({ themes: [CoderTheme], langs: [] }))
 }
 
 function post(response: MarkdownWorkerResponse) {

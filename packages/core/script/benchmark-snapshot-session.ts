@@ -11,13 +11,13 @@ import { $ } from "bun"
 import fs from "fs/promises"
 import os from "os"
 import path from "path"
-import { LanguageModel, LLM, LLMEvent } from "@opencode/ai"
-import { OpenAIChat } from "@opencode/ai/protocols/openai-chat"
-import { TestLLM } from "@opencode/ai/testing"
-import { Global } from "@opencode/util/global"
-import { AppProcess } from "@opencode/util/process"
-import { LayerNode } from "@opencode/util/effect/layer-node"
-import { Money } from "@opencode/schema/money"
+import { LanguageModel, LLM, LLMEvent } from "@xcoder/ai"
+import { OpenAIChat } from "@xcoder/ai/protocols/openai-chat"
+import { TestLLM } from "@xcoder/ai/testing"
+import { Global } from "@xcoder/util/global"
+import { AppProcess } from "@xcoder/util/process"
+import { LayerNode } from "@xcoder/util/effect/layer-node"
+import { Money } from "@xcoder/schema/money"
 import { Effect, Layer, Logger, Stream } from "effect"
 import { Agent } from "../src/agent"
 import { Bus } from "../src/bus"
@@ -41,10 +41,10 @@ const flag = (name: string) => {
   const index = args.indexOf(`--${name}`)
   return index === -1 ? undefined : args[index + 1]
 }
-const fixture = flag("fixture") ?? "opencode"
+const fixture = flag("fixture") ?? "coder"
 const ttft = Number(flag("ttft") ?? 400)
 const rounds = Number(flag("rounds") ?? 2)
-const root = path.join(process.env.SNAPSHOT_BENCH_ROOT ?? os.tmpdir(), "opencode-snapshot-bench")
+const root = path.join(process.env.SNAPSHOT_BENCH_ROOT ?? os.tmpdir(), "coder-snapshot-bench")
 const directory = path.join(root, "fixtures", fixture)
 
 // A read-heavy coding loop: explore, edit, run checks, answer.

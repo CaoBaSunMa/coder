@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import path from "node:path"
 
-export type OpencodePtyAsset = {
+export type CoderPtyAsset = {
   readonly source: string
   readonly version: string
   readonly sha256: string
@@ -18,7 +18,7 @@ type Target = {
 const core = createRequire(path.resolve(import.meta.dirname, "../../core/package.json"))
 const pty = createRequire(core.resolve("@opencode-ai/pty/package.json"))
 
-export async function resolveOpencodePty(target: Target): Promise<OpencodePtyAsset | undefined> {
+export async function resolveCoderPty(target: Target): Promise<CoderPtyAsset | undefined> {
   if (target.platform !== "darwin" && target.platform !== "linux") return undefined
   if (target.arch !== "arm64" && target.arch !== "x64") return undefined
 
@@ -27,10 +27,10 @@ export async function resolveOpencodePty(target: Target): Promise<OpencodePtyAss
     .map((value) => (value === "glibc" ? "gnu" : value))
     .join("-")
   const name = `@opencode-ai/pty-${suffix}`
-  const local = process.env.OPENCODE_PTY_BIN
+  const local = process.env.CODER_PTY_BIN
   if (local && (target.platform !== process.platform || target.arch !== process.arch))
-    throw new Error("OPENCODE_PTY_BIN can only be embedded in a build for the current platform and architecture")
-  const source = local ? path.resolve(local) : pty.resolve(`${name}/bin/opencode-pty`)
+    throw new Error("CODER_PTY_BIN can only be embedded in a build for the current platform and architecture")
+  const source = local ? path.resolve(local) : pty.resolve(`${name}/bin/coder-pty`)
   const manifest: unknown = local
     ? { version: "local" }
     : JSON.parse(await readFile(pty.resolve(`${name}/package.json`), "utf8"))

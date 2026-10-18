@@ -1,8 +1,8 @@
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs"
-import type { SessionMessageInfo } from "@opencode/client/promise"
-import { base64Encode } from "@opencode/util/encode"
-import { timelineCategories, timelinePresets } from "@opencode/session-ui/timeline/detail"
-import { mockOpenCodeServer } from "../../utils/mock-server"
+import type { SessionMessageInfo } from "@xcoder/client/promise"
+import { base64Encode } from "@xcoder/util/encode"
+import { timelineCategories, timelinePresets } from "@xcoder/session-ui/timeline/detail"
+import { mockCoderServer } from "../../utils/mock-server"
 import { expectSessionTitle } from "../../utils/waits"
 import { benchmark, expect } from "../benchmark"
 import { measureSessionSwitch, waitForStableTimeline } from "./session-tab-switch-probe"
@@ -74,7 +74,7 @@ for (const mode of ["compact", "ungrouped"] as const) {
     const directory = session.info.location.directory
 
     if (process.env.LAGGY_HTTP !== "1")
-      await mockOpenCodeServer(page, {
+      await mockCoderServer(page, {
         directory,
         project: {
           id: session.info.projectID,

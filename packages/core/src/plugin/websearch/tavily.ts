@@ -1,6 +1,6 @@
 export * as WebSearchTavily from "./tavily.js"
 
-import { define } from "@opencode/plugin/effect/plugin"
+import { define } from "@xcoder/plugin/effect/plugin"
 import { Duration, Effect, Schema, Scope } from "effect"
 import { HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 import { App } from "../../app.js"
@@ -51,7 +51,7 @@ export const Plugin = define<HttpClient.HttpClient | Scope.Scope>({
               HttpClientRequest.acceptJson,
               HttpClientRequest.setHeaders({
                 "User-Agent": App.useragent(ctx.app),
-                "X-Client-Name": "opencode2",
+                "X-Client-Name": "coder2",
                 ...(credential?.type === "key"
                   ? { Authorization: `Bearer ${credential.key}` }
                   : { "X-Tavily-Access-Mode": "keyless" }),

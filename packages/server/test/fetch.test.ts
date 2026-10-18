@@ -2,11 +2,11 @@ import { expect } from "bun:test"
 import fs from "node:fs/promises"
 import { createServer } from "node:http"
 import path from "node:path"
-import { Agent } from "@opencode/schema/agent"
-import { Integration } from "@opencode/schema/integration"
-import { ServerInfo } from "@opencode/protocol/groups/server"
+import { Agent } from "@xcoder/schema/agent"
+import { Integration } from "@xcoder/schema/integration"
+import { ServerInfo } from "@xcoder/protocol/groups/server"
 import { Effect, Schedule, Schema } from "effect"
-import { Session } from "@opencode/schema/session"
+import { Session } from "@xcoder/schema/session"
 import { tmpdir } from "../../core/test/fixture/tmpdir"
 import { it } from "../../core/test/lib/effect"
 import { ServerFetch } from "../src/fetch"
@@ -21,7 +21,7 @@ const options = {
 
 it.live("returns LocationNotFoundError for a missing folder and recovers once it exists", () =>
   Effect.gen(function* () {
-    const config = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-directory-errors-")))
+    const config = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("coder-directory-errors-")))
     const directory = path.join(config.path, "project")
     const handler = yield* ServerFetch.make({ ...options, config: { directory: config.path } })
     // Session creation only resolves its placement; it does not boot the Location graph.
@@ -29,7 +29,7 @@ it.live("returns LocationNotFoundError for a missing folder and recovers once it
       handler(
         new Request("http://opencode.local/api/session", {
           method: "POST",
-          headers: { "content-type": "application/json", "x-opencode-directory": encodeURIComponent(directory) },
+          headers: { "content-type": "application/json", "x-coder-directory": encodeURIComponent(directory) },
           body: JSON.stringify({ location: { directory } }),
         }),
       ),
@@ -50,7 +50,7 @@ it.live("returns LocationNotFoundError for a missing folder and recovers once it
       const response = yield* Effect.promise(() =>
         handler(
           new Request(`http://opencode.local${endpoint}`, {
-            headers: { "x-opencode-directory": encodeURIComponent(directory) },
+            headers: { "x-coder-directory": encodeURIComponent(directory) },
           }),
         ),
       )
@@ -65,7 +65,7 @@ it.live("returns LocationNotFoundError for a missing folder and recovers once it
     const recovered = yield* Effect.promise(() =>
       handler(
         new Request("http://opencode.local/api/model", {
-          headers: { "x-opencode-directory": encodeURIComponent(directory) },
+          headers: { "x-coder-directory": encodeURIComponent(directory) },
         }),
       ),
     )
@@ -164,7 +164,7 @@ it.live("serves the HttpApi and enforces Basic auth like the Node server", () =>
       Effect.flatMap(Schema.decodeUnknownEffect(ServerInfo)),
     )
     expect(body.version).toBe("test-version")
-    expect(body.paths.tmp).toEndWith("opencode")
+    expect(body.paths.tmp).toEndWith("coder")
     expect(body.capabilities?.persistentPty).toBe(process.platform !== "win32")
   }),
 )
@@ -243,7 +243,7 @@ it.live("applies custom CORS origins to HTTP responses and PTY ticket checks", (
             handler(
               new Request("http://opencode.local/api/experimental/persistent-pty/pty_missing/connect-token", {
                 method: "POST",
-                headers: { origin, authorization: `Basic ${btoa("opencode:secret")}`, "x-opencode-ticket": "1" },
+                headers: { origin, authorization: `Basic ${btoa("opencode:secret")}`, "x-coder-ticket": "1" },
               }),
             ),
           )
@@ -306,7 +306,7 @@ it.live("applies custom CORS origins to HTTP responses and PTY ticket checks", (
           method: "POST",
           headers: {
             authorization: `Basic ${btoa("opencode:secret")}`,
-            "x-opencode-ticket": "1",
+            "x-coder-ticket": "1",
           },
         }),
       ).then((response) => response.json()),
@@ -334,7 +334,7 @@ it.live("applies custom CORS origins to HTTP responses and PTY ticket checks", (
 
 it.live("returns 404 when a previously readable file is deleted", () =>
   Effect.acquireUseRelease(
-    Effect.promise(() => tmpdir("opencode-fs-read-endpoint-")),
+    Effect.promise(() => tmpdir("coder-fs-read-endpoint-")),
     (tmp) =>
       Effect.gen(function* () {
         const handler = yield* ServerFetch.make(options)
@@ -456,7 +456,7 @@ it.live("serves the session view operation and missing-session error", () =>
 
 it.live("routes pending requests through the Session's instance", () =>
   Effect.gen(function* () {
-    const config = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("opencode-pending-read-")))
+    const config = yield* Effect.acquireDisposable(Effect.promise(() => tmpdir("coder-pending-read-")))
     const handler = yield* ServerFetch.make({
       ...options,
       config: {
@@ -483,7 +483,7 @@ it.live("routes pending requests through the Session's instance", () =>
       )
 
     // Session routing must ignore the caller's unrelated Location.
-    const headers = { "x-opencode-directory": encodeURIComponent(config.path) }
+    const headers = { "x-coder-directory": encodeURIComponent(config.path) }
     expect(yield* loaded()).toEqual([])
     for (const resource of ["permission", "form"]) {
       const response = yield* Effect.promise(() =>
@@ -500,7 +500,7 @@ it.live("routes pending requests through the Session's instance", () =>
     const global = yield* Effect.promise(() =>
       handler(
         new Request("http://opencode.local/api/session/global/form", {
-          headers: { "x-opencode-directory": encodeURIComponent(process.cwd()) },
+          headers: { "x-coder-directory": encodeURIComponent(process.cwd()) },
         }),
       ),
     )
@@ -534,7 +534,7 @@ it.live("routes pending requests through the Session's instance", () =>
           method: "POST",
           headers: {
             "content-type": "application/json",
-            "x-opencode-directory": encodeURIComponent(process.cwd()),
+            "x-coder-directory": encodeURIComponent(process.cwd()),
           },
           body: JSON.stringify({ title: "Global form", fields: [{ key: "answer", type: "string" }] }),
         }),
@@ -545,7 +545,7 @@ it.live("routes pending requests through the Session's instance", () =>
     const globalForms = yield* Effect.promise(() =>
       handler(
         new Request("http://opencode.local/api/session/global/form", {
-          headers: { "x-opencode-directory": encodeURIComponent(process.cwd()) },
+          headers: { "x-coder-directory": encodeURIComponent(process.cwd()) },
         }),
       ),
     )

@@ -7,7 +7,7 @@ const module = pathToFileURL(path.join(import.meta.dir, "../src/global-roots.ts"
 
 describe("global roots", () => {
   test("uses XDG overrides", () => {
-    const root = path.join(os.tmpdir(), "opencode-xdg-overrides")
+    const root = path.join(os.tmpdir(), "coder-xdg-overrides")
     const env = {
       XDG_DATA_HOME: path.join(root, "data"),
       XDG_CACHE_HOME: path.join(root, "cache"),
@@ -16,16 +16,16 @@ describe("global roots", () => {
     }
 
     expect(run(env)).toEqual({
-      data: path.join(env.XDG_DATA_HOME, "opencode"),
-      cache: path.join(env.XDG_CACHE_HOME, "opencode"),
-      config: path.join(env.XDG_CONFIG_HOME, "opencode"),
-      state: path.join(env.XDG_STATE_HOME, "opencode"),
-      tmp: path.join(os.tmpdir(), "opencode"),
+      data: path.join(env.XDG_DATA_HOME, "coder"),
+      cache: path.join(env.XDG_CACHE_HOME, "coder"),
+      config: path.join(env.XDG_CONFIG_HOME, "coder"),
+      state: path.join(env.XDG_STATE_HOME, "coder"),
+      tmp: path.join(os.tmpdir(), "coder"),
     })
   })
 
   test("empty XDG overrides use home directory defaults", () => {
-    const home = path.join(os.tmpdir(), "opencode-xdg-home")
+    const home = path.join(os.tmpdir(), "coder-xdg-home")
 
     expect(
       run({
@@ -36,11 +36,11 @@ describe("global roots", () => {
         ...(process.platform === "win32" ? { USERPROFILE: home } : { HOME: home }),
       }),
     ).toEqual({
-      data: path.join(home, ".local", "share", "opencode"),
-      cache: path.join(home, ".cache", "opencode"),
-      config: path.join(home, ".config", "opencode"),
-      state: path.join(home, ".local", "state", "opencode"),
-      tmp: path.join(os.tmpdir(), "opencode"),
+      data: path.join(home, ".local", "share", "coder"),
+      cache: path.join(home, ".cache", "coder"),
+      config: path.join(home, ".config", "coder"),
+      state: path.join(home, ".local", "state", "coder"),
+      tmp: path.join(os.tmpdir(), "coder"),
     })
   })
 })
@@ -50,7 +50,7 @@ function run(env: Record<string, string>) {
     cmd: [
       process.execPath,
       "-e",
-      `const { roots } = await import(${JSON.stringify(module)}); console.log(JSON.stringify(roots("opencode")))`,
+      `const { roots } = await import(${JSON.stringify(module)}); console.log(JSON.stringify(roots("coder")))`,
     ],
     env: { ...process.env, ...env },
     stdout: "pipe",

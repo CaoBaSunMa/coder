@@ -4,18 +4,18 @@ Each environment has one R2 bucket, a Worker, and a `/files/*` route on its doma
 
 | Environment | Bucket and Worker           | Public URL                       |
 | ----------- | --------------------------- | -------------------------------- |
-| Development | `opencode-dev-files`        | `https://dev.opencode.ai/files/` |
-| Production  | `opencode-production-files` | `https://opencode.ai/files/`     |
+| Development | `coder-dev-files`        | `https://dev.coder.example.com/files/` |
+| Production  | `coder-production-files` | `https://coder.example.com/files/`     |
 
 The Worker removes `/files/` and URL-decodes the remaining path to obtain the R2
 object key. For example:
 
 ```text
-R2 key: releases/1.0.0/opencode-linux-x64.tar.gz
-URL:    https://opencode.ai/files/releases/1.0.0/opencode-linux-x64.tar.gz
+R2 key: releases/1.0.0/coder-linux-x64.tar.gz
+URL:    https://coder.example.com/files/releases/1.0.0/coder-linux-x64.tar.gz
 
 R2 key: videos/demo.mp4
-URL:    https://opencode.ai/files/videos/demo.mp4
+URL:    https://coder.example.com/files/videos/demo.mp4
 ```
 
 ## Deployment
@@ -33,7 +33,7 @@ bun run deploy --env production
 ```
 
 The existing buckets are reused. For a fresh environment, create its bucket once
-with `bunx wrangler r2 bucket create opencode-<stage>-files` and add the matching
+with `bunx wrangler r2 bucket create coder-<stage>-files` and add the matching
 environment to `wrangler.jsonc`.
 
 `.github/workflows/deploy-files.yml` deploys development on every push to `dev`
@@ -77,11 +77,11 @@ Both publishers upload signed/packaged outputs to the production bucket for
 every release channel:
 
 ```text
-R2 key: bin/0.0.0-dev-123/opencode-linux-x64.tar.gz
-URL:    https://opencode.ai/files/bin/0.0.0-dev-123/opencode-linux-x64.tar.gz
+R2 key: bin/0.0.0-dev-123/coder-linux-x64.tar.gz
+URL:    https://releases.coder.example.com/files/bin/0.0.0-dev-123/coder-linux-x64.tar.gz
 
-R2 key: bin/2.0.0/opencode-desktop-mac-arm64.dmg
-URL:    https://opencode.ai/files/bin/2.0.0/opencode-desktop-mac-arm64.dmg
+R2 key: bin/2.0.0/coder-desktop-mac-arm64.dmg
+URL:    https://releases.coder.example.com/files/bin/2.0.0/coder-desktop-mac-arm64.dmg
 ```
 
 CLI and Node CLI archives contain the standalone executable at their root, with
@@ -102,8 +102,8 @@ and byte size. Desktop `metadata.manifests` also use those CDN URLs and retain
 the original SHA-512 and blockmap metadata.
 
 For local verification, each package publisher accepts `--dry-run` with
-`OPENCODE_VERSION` and `OPENCODE_CHANNEL` matching the build. CLI reads its own
-`dist/` directory (or `OPENCODE_CLI_DIST`). Desktop reads `OPENCODE_DESKTOP_DIST`;
+`CODER_VERSION` and `CODER_CHANNEL` matching the build. CLI reads its own
+`dist/` directory (or `CODER_CLI_DIST`). Desktop reads `CODER_DESKTOP_DIST`;
 its dry run expects already-finalized manifests in `RUNNER_TEMP`.
 
 ## Caching
@@ -125,9 +125,9 @@ no-cache` bypasses the cache for revalidation.
 After uploading an object, check its full response, metadata, and byte ranges:
 
 ```bash
-curl -I https://opencode.ai/files/videos/demo.mp4
+curl -I https://coder.example.com/files/videos/demo.mp4
 curl --fail -H 'Range: bytes=0-31' -D - \
-  https://opencode.ai/files/videos/demo.mp4 -o /dev/null
+  https://coder.example.com/files/videos/demo.mp4 -o /dev/null
 ```
 
 Expect `200` for HEAD and `206` with `Content-Range` for the range request. A

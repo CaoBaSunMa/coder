@@ -15,9 +15,9 @@ export type Info = {
 
 export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60
 
-export class Config extends Context.Service<Config, Info>()("@opencode/ServerAuthConfig") {
+export class Config extends Context.Service<Config, Info>()("@xcoder/ServerAuthConfig") {
   static configLayer(input: Pick<Info, "password">) {
-    return Layer.succeed(this, this.of({ ...input, username: "opencode" }))
+    return Layer.succeed(this, this.of({ ...input, username: "coder" }))
   }
 
   static get layer() {
@@ -61,6 +61,6 @@ export function sessionCookieName(host: string | undefined) {
 }
 
 function sign(password: string, payload: string) {
-  const key = createHmac("sha256", password).update("opencode-session-v1").digest()
+  const key = createHmac("sha256", password).update("coder-session-v1").digest()
   return createHmac("sha256", key).update(payload).digest("base64url")
 }

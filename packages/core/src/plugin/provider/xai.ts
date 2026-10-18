@@ -1,5 +1,5 @@
-import type { IntegrationOAuthMethodRegistration } from "@opencode/plugin/effect/integration"
-import { define } from "@opencode/plugin/effect/plugin"
+import type { IntegrationOAuthMethodRegistration } from "@xcoder/plugin/effect/integration"
+import { define } from "@xcoder/plugin/effect/plugin"
 import { Clock, Effect, Option, Schema } from "effect"
 import { App } from "../../app.js"
 import { Credential } from "../../credential.js"
@@ -51,7 +51,7 @@ const device = (app: App.Info) =>
         {
           method: "POST",
           headers: headers(app),
-          body: new URLSearchParams({ client_id: clientID, scope, referrer: "opencode" }).toString(),
+          body: new URLSearchParams({ client_id: clientID, scope, referrer: "coder" }).toString(),
         },
         Device,
       ).pipe(

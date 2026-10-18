@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import path from "node:path"
 import { createSettingsStore } from "./store"
 
-const dir = () => mkdtempSync(path.join(tmpdir(), "opencode-settings-"))
+const dir = () => mkdtempSync(path.join(tmpdir(), "coder-settings-"))
 
 describe("settings store", () => {
   test("reads the tab-indented file electron-store wrote and rewrites it in the same shape", () => {
