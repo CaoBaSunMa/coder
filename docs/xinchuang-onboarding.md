@@ -203,8 +203,10 @@ export CODER_MODELS_PATH=/etc/coder/models.json
 bun install
 
 # 2. CLI（--skip-web-ui 跳过 Web UI 打包；--skip-install 跳过跨平台二进制拉取）
+#    注意：CODER_VERSION 必须与后续桌面端期望的版本一致，见下方说明
 cd packages/cli
-bun run script/build.ts --target=coder-windows-x64-baseline --skip-install --skip-web-ui
+CODER_VERSION=2.0.32 CODER_CHANNEL=latest \
+  bun run script/build.ts --target=coder-windows-x64-baseline --skip-install --skip-web-ui
 
 # 3. 桌面端：prod 渠道 + 本地 CLI 产物（注意目录名须为 cli-windows-x64-baseline）
 cd ../desktop
@@ -215,6 +217,11 @@ CODER_CHANNEL=prod CODER_CLI_DIST="$(pwd)/../cli/dist" bun run package:win
 
 > `prebuild` 会把 CLI 复制到 `resources/coder-cli` 并写入 `coder-cli.version`（避免首次启动 spawn 200 MB 二进制）。
 > dev 渠道会改为从 npm 下载 `@xcoder/cli-<target>`，在占位包发布前不可用。
+
+> ⚠️ **版本必须一致**：桌面端启动侧车时会用 `coder-cli.version` 与 CLI 自报版本做**精确比对**
+> （`packages/client/src/service-version.ts`）。若 CLI 是在未设 `CODER_VERSION` 的情况下构建的，
+> 它会自报 `0.0.0-dev-<时间戳>`，与 `2.0.32` 不符 → 侧车被判为不兼容 → 窗口显示
+> 「出了点问题 / 启动本地服务器时发生错误」。构建 CLI 时务必设置 `CODER_VERSION`。
 
 ---
 
