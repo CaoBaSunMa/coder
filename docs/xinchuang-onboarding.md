@@ -189,7 +189,32 @@ export CODER_MODELS_PATH=/etc/coder/models.json
 
 ---
 
-## 9. 部署前检查清单
+## 9. 从源码构建（内网/离线）
+
+公网 npm 上不存在 `@xcoder/*` 占位包，因此**不要**走 dev/beta 渠道的默认流程（会
+`bun add @xcoder/cli-<target>` 并 404）。离线构建用 `CODER_CLI_DIST` 指向本地产物：
+
+```bash
+# 1. 依赖（内网可用 CODER_NPM_REGISTRY 指向镜像）
+bun install
+
+# 2. CLI（--skip-web-ui 跳过 Web UI 打包；--skip-install 跳过跨平台二进制拉取）
+cd packages/cli
+bun run script/build.ts --target=coder-windows-x64-baseline --skip-install --skip-web-ui
+
+# 3. 桌面端：prod 渠道 + 本地 CLI 产物（注意目录名须为 cli-windows-x64-baseline）
+cd ../desktop
+CODER_CHANNEL=prod CODER_CLI_DIST="$(pwd)/../cli/dist" bun run prebuild
+CODER_CHANNEL=prod CODER_CLI_DIST="$(pwd)/../cli/dist" bun run build
+CODER_CHANNEL=prod CODER_CLI_DIST="$(pwd)/../cli/dist" bun run package:win
+```
+
+> `prebuild` 会把 CLI 复制到 `resources/coder-cli` 并写入 `coder-cli.version`（避免首次启动 spawn 200 MB 二进制）。
+> dev 渠道会改为从 npm 下载 `@xcoder/cli-<target>`，在占位包发布前不可用。
+
+---
+
+## 10. 部署前检查清单
 
 1. 按 [`BRAND.md`](../BRAND.md) 第 3 节替换全部占位符域名、仓库、存储桶与 CI 密钥。
 2. 内网环境设置 `CODER_NPM_REGISTRY`（安装）与 `CODER_MODELS_URL` / `CODER_MODELS_PATH`（模型目录）。

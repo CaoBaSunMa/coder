@@ -91,6 +91,7 @@
 | 占位符 | 用途 |
 | --- | --- |
 | `coder-ai/coder` | Git 仓库（`github/` 集成、文档链接、CI 守卫 `if: github.repository == 'coder-ai/coder'`） |
+| `raw.githubusercontent.com/coder-ai/coder/<commit>/…` | AppStream 元数据与文档里的截图直链（`packages/desktop/scripts/copy-metainfo.ts`）；该 commit 属上游，需换成真实仓库中的提交 |
 | `coder-ai/homebrew-tap` | Homebrew tap 仓库（`packages/cli/script/publish-homebrew.ts`） |
 | `coder-production-files` | S3/R2 存储桶名（`script/update-artifact.ts`） |
 | npm registry | 默认 `https://registry.npmjs.org`；内网可在安装脚本用 `CODER_NPM_REGISTRY` 覆盖，发布侧在 CI 配置 |
