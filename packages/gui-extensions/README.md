@@ -254,7 +254,7 @@ SDK icon fields use `IconName` from `@xcoder/ui/icons/catalog`, a dependency-fre
 | `ctx.serverEndpoints` (main) | `ServerEndpoints`                                              | URL and credentials of a server the windows use                   |
 | `ctx.windows` (main)         | `Windows`                                                      | The app's main windows                                            |
 | `ctx.embeds` (main)          | `Embeds`                                                       | `create(view, window)` places a web page                          |
-| `ctx.cli` (main)             | `Cli`                                                          | The opencode CLI the app runs                                     |
+| `ctx.cli` (main)             | `Cli`                                                          | The coder CLI the app runs                                     |
 
 ## Ipc: main ↔ window
 
@@ -489,13 +489,13 @@ export default Extension.define({
   provides: { pairing: Pairing },
   stores: {
     // Whether main keeps the display awake; stored before in the desktop's own settings namespace.
-    keepScreenActive: Store.main(Schema.Boolean, false, { state: ["opencode.settings", "keepScreenActive"] }),
+    keepScreenActive: Store.main(Schema.Boolean, false, { state: ["coder.settings", "keepScreenActive"] }),
   },
   i18n: { en },
 })
 ```
 
-3. **Provide it from main.** `MainSetup<typeof definition>` types `ctx.stores`, which main reads synchronously. Remote access runs `opencode service` through `ctx.cli`, with the caller's signal for a read and `ctx.scope.signal` for a change a closing window must not cancel. A finalizer releases the blocker when the instance goes away.
+3. **Provide it from main.** `MainSetup<typeof definition>` types `ctx.stores`, which main reads synchronously. Remote access runs `coder service` through `ctx.cli`, with the caller's signal for a read and `ctx.scope.signal` for a change a closing window must not cancel. A finalizer releases the blocker when the instance goes away.
 
 <!-- source: src/pairing/main.ts -->
 
@@ -509,7 +509,7 @@ import type definition from "./index"
 /** The display sleep blocker this instance holds, if any. */
 type Blocker = { id?: number }
 
-/** The last `opencode service` command; the next one starts after it settles. */
+/** The last `coder service` command; the next one starts after it settles. */
 type Queue = { tail: Promise<unknown> }
 
 const setup: MainSetup<typeof definition> = (ctx) => {
@@ -533,7 +533,7 @@ const setup: MainSetup<typeof definition> = (ctx) => {
   }
 
   // Remote access is a setting of the background service, so it changes through the CLI the app runs, as with
-  // `opencode pair --remote`. A change restarts the service, so commands run one at a time.
+  // `coder pair --remote`. A change restarts the service, so commands run one at a time.
   const service = (args: readonly string[], signal: AbortSignal) => {
     const run = queue.tail.then(
       () =>

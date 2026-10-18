@@ -1,4 +1,4 @@
-export * as Coder from "./opencode"
+export * as Coder from "./coder"
 export * as Tool from "./tool"
 export { EnvironmentDriver } from "@xcoder/core/environment/driver"
 export { EnvironmentFiles } from "@xcoder/core/environment/files"

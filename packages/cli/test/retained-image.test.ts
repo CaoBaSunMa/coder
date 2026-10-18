@@ -66,8 +66,8 @@ windows("installed accepts package-manager and curl binaries only", () =>
     const original = process.execPath
     yield* Effect.addFinalizer(() => Effect.sync(() => (process.execPath = original)))
     const cases = [
-      [path.join(home, ".bun", "install", "global", "node_modules", "@opencode", "cli", "bin", "opencode.exe"), true],
-      [path.join(home, ".coder", "bin", "opencode.exe"), true],
+      [path.join(home, ".bun", "install", "global", "node_modules", "@coder", "cli", "bin", "coder.exe"), true],
+      [path.join(home, ".coder", "bin", "coder.exe"), true],
       [
         path.join(
           home,
@@ -76,8 +76,8 @@ windows("installed accepts package-manager and curl binaries only", () =>
           "Microsoft",
           "WinGet",
           "Packages",
-          "Anomaly.Coder_Microsoft.Winget.Source_8wekyb3d8bbwe",
-          "opencode.exe",
+          "Coder.Coder_Microsoft.Winget.Source_8wekyb3d8bbwe",
+          "coder.exe",
         ),
         true,
       ],

@@ -20,7 +20,7 @@ const manifestVersion = "1.12.0"
 
 const packages = [
   {
-    identifier: "Anomaly.Coder",
+    identifier: "Coder.Coder",
     name: "Coder CLI",
     moniker: "coder",
     description: "The open source AI coding agent for the terminal.",
@@ -28,10 +28,10 @@ const packages = [
       "InstallerType: zip",
       "NestedInstallerType: portable",
       "NestedInstallerFiles:",
-      "- RelativeFilePath: opencode.exe",
-      "  PortableCommandAlias: opencode",
+      "- RelativeFilePath: coder.exe",
+      "  PortableCommandAlias: coder",
       "Commands:",
-      "- opencode",
+      "- coder",
     ],
     files: [
       { architecture: "x64", file: path.join(cli, "coder-windows-x64-baseline.zip") },
@@ -39,7 +39,7 @@ const packages = [
     ],
   },
   {
-    identifier: "Anomaly.Coder.Desktop",
+    identifier: "Coder.Coder.Desktop",
     // Matches the display name the installer registers with Windows, without its version suffix.
     name: "Coder",
     moniker: "coder-desktop",
@@ -51,7 +51,7 @@ const packages = [
       // electron-builder derives the NSIS uninstall key from the production app ID, ai.coder.desktop.
       "ProductCode: d074f30d-5f88-5885-b075-be1348cc7676",
       "Protocols:",
-      "- opencode",
+      "- coder",
     ],
     files: [
       { architecture: "x64", file: path.join(desktop, "coder-desktop-win-x64.exe") },
@@ -107,7 +107,7 @@ async function prepare(input: (typeof packages)[number]) {
       "PackageLocale: en-US",
       // Matches the publisher the desktop installer registers with Windows.
       "Publisher: Coder",
-      "PublisherUrl: https://anoma.ly/",
+      "PublisherUrl: https://coder.example.com/",
       "PublisherSupportUrl: https://github.com/coder-ai/coder/issues",
       "PrivacyUrl: https://coder.example.com/legal/privacy-policy",
       `PackageName: ${input.name}`,

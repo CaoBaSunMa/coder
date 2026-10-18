@@ -11,7 +11,7 @@ const evict = process.env.DEMO_EVICT !== "false"
 // Dynamic tools avoid the static adapter issue: coder-ai/coder-drive#116.
 export default CoderDriver.use(
   {
-    opencode: { dev: process.env.CODER_DEV ?? process.cwd() },
+    coder: { dev: process.env.CODER_DEV ?? process.cwd() },
     keepArtifacts: true,
     tui: { recording: true, viewport: { cols: 100, rows: 30 } },
     config: {
@@ -22,7 +22,7 @@ export default CoderDriver.use(
     tuiConfig: { theme: { name: "coder", mode: "dark" }, animations: false, tabs: { mode: "off" } },
     project: { git: true, files: { "README.md": "# Parent fixture\n", "child/README.md": "# Child fixture\n" } },
   },
-  ({ ui, llm, tui, opencode, artifacts, tools }) =>
+  ({ ui, llm, tui, coder, artifacts, tools }) =>
     Effect.gen(function* () {
       const release = yield* Deferred.make<void>()
       const held = yield* Deferred.make<void>()
@@ -76,32 +76,32 @@ export default CoderDriver.use(
       yield* ui.waitFor("Simulated Model", { timeout: 30000 })
       yield* ui.submit("Run the fixture review in the background.")
       yield* ui.waitFor("Review is running in the background.", { timeout: 30000 })
-      const parent = (yield* opencode.session.list({ limit: 20 })).data.find((session) => !session.parentID)
+      const parent = (yield* coder.session.list({ limit: 20 })).data.find((session) => !session.parentID)
       if (!parent) return yield* Effect.fail(new Error("Parent missing"))
-      const child = (yield* opencode.session.list({ parentID: parent.id })).data[0]
+      const child = (yield* coder.session.list({ parentID: parent.id })).data[0]
       if (!child) return yield* Effect.fail(new Error("Child missing"))
       const hold = yield* tools.take("call_hold")
-      yield* opencode.session.move({ sessionID: child.id, directory: AbsolutePath.make(`${artifacts}/files/child`) })
+      yield* coder.session.move({ sessionID: child.id, directory: AbsolutePath.make(`${artifacts}/files/child`) })
       yield* hold.finish({ structured: {}, content: [{ type: "text", text: "Fixture ready" }] })
       yield* Deferred.await(held).pipe(Effect.timeout("30 seconds"))
-      const moved = yield* opencode.session.get({ sessionID: child.id })
+      const moved = yield* coder.session.get({ sessionID: child.id })
       if (moved.location.directory !== `${artifacts}/files/child`)
         return yield* Effect.fail(new Error("Child did not move"))
-      yield* opencode.session.wait({ sessionID: parent.id })
+      yield* coder.session.wait({ sessionID: parent.id })
       if (evict) {
-        yield* opencode.debug.location.evict({ location: { directory: parent.location.directory } })
-        yield* opencode.location.get({ location: { directory: parent.location.directory } })
+        yield* coder.debug.location.evict({ location: { directory: parent.location.directory } })
+        yield* coder.location.get({ location: { directory: parent.location.directory } })
       }
       if (tui.recording)
         yield* tui.recording.mark(`${label}: parent idle${evict ? ", original location evicted" : " (control)"}`)
       yield* Deferred.succeed(release, undefined)
-      yield* opencode.session.wait({ sessionID: child.id })
+      yield* coder.session.wait({ sessionID: child.id })
       const resumed = yield* ui.waitFor("Review received. All checks passed.", { timeout: 5000 }).pipe(
         Effect.as(true),
         Effect.catchTag("UiWaitTimeoutError", () => Effect.succeed(false)),
       )
-      const messages = yield* opencode.message.list({ sessionID: parent.id })
-      const childMessages = yield* opencode.message.list({ sessionID: child.id })
+      const messages = yield* coder.message.list({ sessionID: parent.id })
+      const childMessages = yield* coder.message.list({ sessionID: child.id })
       const completed = childMessages.data.some(
         (message) =>
           message.type === "assistant" &&
@@ -112,7 +112,7 @@ export default CoderDriver.use(
         (message) => message.type === "synthetic" && message.metadata?.source === "subagent",
       ).length
       const marker = yield* Effect.acquireUseRelease(
-        Effect.sync(() => new Database(`${artifacts}/logs/opencode/proof.sqlite`, { readonly: true })),
+        Effect.sync(() => new Database(`${artifacts}/logs/coder/proof.sqlite`, { readonly: true })),
         (database) =>
           Effect.sync(() =>
             database
@@ -134,9 +134,9 @@ export default CoderDriver.use(
       )
         return yield* Effect.fail(new Error("Inconsistent completion evidence"))
       if (evict) {
-        yield* opencode.debug.location.evict({ location: { directory: parent.location.directory } })
-        yield* opencode.location.get({ location: { directory: parent.location.directory } })
-        const rebuilt = yield* opencode.message.list({ sessionID: parent.id })
+        yield* coder.debug.location.evict({ location: { directory: parent.location.directory } })
+        yield* coder.location.get({ location: { directory: parent.location.directory } })
+        const rebuilt = yield* coder.message.list({ sessionID: parent.id })
         if (rebuilt.data.filter((message) => message.type === "synthetic").length !== notifications)
           return yield* Effect.fail(new Error("Location rebuild duplicated notification"))
       }

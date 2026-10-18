@@ -138,7 +138,7 @@ test("open file tab browses, searches, and tracks missing files", async ({ page 
     },
     seed: {
       panes: { ses_reviewopenfile: { review: true } },
-      storage: { "opencode.global.dat:review-panel-v2": { sidebarOpened: false } },
+      storage: { "coder.global.dat:review-panel-v2": { sidebarOpened: false } },
     },
   })
 
@@ -298,7 +298,7 @@ test("context closes the side region only when its button opened it", async ({ p
     name: "ReviewContextOpener",
     seed: {
       storage: {
-        "opencode.global.dat:layout": {
+        "coder.global.dat:layout": {
           sessionTabs: {
             [`local\u0000${base64Encode("C:/Coder/ReviewContextOpener")}/ses_reviewcontextopener`]: {
               all: ["btw"],
@@ -446,7 +446,7 @@ test("file tree expands Windows paths and scrolls long names in both directions"
     fileContent: (path) => ({ type: "text", content: `contents:${path}` }),
     seed: {
       panes: { ses_openfileexpand: { review: true } },
-      storage: { "opencode.global.dat:review-panel-v2": { sidebarOpened: true } },
+      storage: { "coder.global.dat:review-panel-v2": { sidebarOpened: true } },
     },
   })
 
@@ -511,7 +511,7 @@ test("a restored file tab keeps the file tree on Files Changed", async ({ page }
     seed: {
       panes: { ses_treerestore: { review: true } },
       settings: { general: { showFileTree: true } },
-      storage: { "opencode.global.dat:layout": { fileTree: { opened: true, width: 240, tab: "changes" } } },
+      storage: { "coder.global.dat:layout": { fileTree: { opened: true, width: 240, tab: "changes" } } },
     },
   })
   const panel = page.locator("#review-panel")
@@ -1031,7 +1031,7 @@ test("keeps the review state a session stored before extensions", async ({ page 
       mode === "branch" ? [fileDiff("alpha.ts"), fileDiff("beta.ts")] : [fileDiff("alpha.ts"), fileDiff("gamma.ts")],
     seed: {
       storage: {
-        "opencode.global.dat:layout": {
+        "coder.global.dat:layout": {
           sessionView: {
             [`local\u0000${base64Encode(directory)}/ses_reviewlegacy`]: {
               scroll: {},

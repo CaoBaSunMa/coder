@@ -24,12 +24,12 @@ export function requireVersion(version: string) {
 }
 
 export function discoverScript(options: { fromPath?: boolean; cache?: { directory: string; prefix: string } } = {}) {
-  return `cli=${options.fromPath ? "$(command -v opencode || true)" : '""'}
+  return `cli=${options.fromPath ? "$(command -v coder || true)" : '""'}
 if [ -z "$cli" ] && [ -x "$HOME/.coder/bin/coder" ]; then cli="$HOME/.coder/bin/coder"; fi
 ${
   options.cache
     ? `if [ -z "$cli" ]; then
-  for binary in "$HOME"/${quote(options.cache.directory)}/${quote(options.cache.prefix)}*/opencode; do
+  for binary in "$HOME"/${quote(options.cache.directory)}/${quote(options.cache.prefix)}*/coder; do
     if [ -x "$binary" ]; then cli="$binary"; fi
   done
 fi
@@ -94,7 +94,7 @@ ${verifyScript('"$HOME/.coder/bin/coder"', version)}
 
   return `set -eu
 umask 077
-destination="$HOME"/${quote(`${input.directory ?? ".coder/bin"}/opencode`)}
+destination="$HOME"/${quote(`${input.directory ?? ".coder/bin"}/coder`)}
 mkdir -p "$(dirname "$destination")"
 stage=$(mktemp -d "$(dirname "$destination")/.install-XXXXXX")
 trap 'rm -rf "$stage"' EXIT
@@ -126,11 +126,11 @@ const Beta = Schema.Struct({ version: Schema.String.check(Schema.isPattern(/^0\.
 export const latestBeta = Effect.fn("RemoteCli.latestBeta")(function* () {
   const http = yield* HttpClient.HttpClient
 
-  const metadata = yield* http.get("https://registry.npmjs.org/@opencode%2fcli/beta").pipe(
+  const metadata = yield* http.get("https://registry.npmjs.org/@coder%2fcli/beta").pipe(
     Effect.flatMap(HttpClientResponse.filterStatusOk),
     Effect.flatMap(HttpClientResponse.schemaBodyJson(Beta)),
     Effect.timeout("30 seconds"),
-    Effect.mapError(() => new Failure({ code: "install", detail: "https://registry.npmjs.org/@opencode%2fcli/beta" })),
+    Effect.mapError(() => new Failure({ code: "install", detail: "https://registry.npmjs.org/@coder%2fcli/beta" })),
   )
 
   return metadata.version

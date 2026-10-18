@@ -24,7 +24,7 @@ export interface Interface {
   readonly install: Effect.Effect<string, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("opencode/desktop/DesktopCli") {}
+export class Service extends Context.Service<Service, Interface>()("coder/desktop/DesktopCli") {}
 
 export const layer = Layer.effect(
   Service,

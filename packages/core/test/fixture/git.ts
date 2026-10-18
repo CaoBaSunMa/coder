@@ -17,7 +17,7 @@ const repositoryConfig = `[core]
 [commit]
 	gpgsign = false
 [user]
-	email = test@opencode.test
+	email = test@coder.test
 	name = Test
 `
 

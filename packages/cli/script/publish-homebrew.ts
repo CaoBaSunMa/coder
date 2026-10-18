@@ -116,5 +116,5 @@ await UpdateArtifact.publish({
   name: "cli",
   distribution: "homebrew",
   version: Script.version,
-  metadata: { package: `anomalyco/tap/${name}` },
+  metadata: { package: `coder-ai/tap/${name}` },
 })

@@ -160,13 +160,13 @@ const appBindingCommands = [
   "variant.cycle",
   "variant.list",
   "provider.connect",
-  "opencode.settings",
-  "opencode.status",
-  "opencode.update",
+  "coder.settings",
+  "coder.status",
+  "coder.update",
   "server.pair",
   "service.restart",
   "location.reload",
-  "opencode.debug",
+  "coder.debug",
   "theme.switch",
   "theme.switch_mode",
   "theme.mode.lock",
@@ -344,7 +344,7 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
                                   initialRoute: process.env.CODER_STORY
                                     ? {
                                         type: "plugin",
-                                        id: "opencode.storybook",
+                                        id: "coder.storybook",
                                         name: "storybook",
                                         // CODER_STORY=1 opens the index; any other value opens that story.
                                         data:
@@ -999,7 +999,7 @@ function App() {
       ...(app.highlights?.length
         ? [
             {
-              name: "opencode.highlights",
+              name: "coder.highlights",
               title: "Show release highlights",
               slash: { name: "highlights" },
               run: () => dialog.replace(() => <DialogHighlights version={app.version} items={app.highlights ?? []} />),
@@ -1008,7 +1008,7 @@ function App() {
           ]
         : []),
       {
-        name: "opencode.settings",
+        name: "coder.settings",
         title: i18n.t("command.settings"),
         suggested: true,
         slash: { name: "settings" },
@@ -1018,7 +1018,7 @@ function App() {
         category: "System",
       },
       {
-        name: "opencode.status",
+        name: "coder.status",
         title: i18n.t("command.status"),
         slash: { name: "status" },
         run: () => {
@@ -1029,7 +1029,7 @@ function App() {
       ...(updater.open
         ? [
             {
-              name: "opencode.update",
+              name: "coder.update",
               title: i18n.t("command.update"),
               slash: { name: "update" },
               run: () => updater.open?.("manual"),
@@ -1084,7 +1084,7 @@ function App() {
         category: "System",
       },
       {
-        name: "opencode.debug",
+        name: "coder.debug",
         title: "View debug info",
         slash: { name: "debug" },
         run: () => {
@@ -1436,7 +1436,7 @@ function App() {
           <PaneResizeHandle resize={tabsResize} left={tabsResize.size() - 1} />
         </Show>
       </box>
-      <Show when={devtools() && !(route.data.type === "plugin" && route.data.id === "opencode.stats")}>
+      <Show when={devtools() && !(route.data.type === "plugin" && route.data.id === "coder.stats")}>
         <DevToolsBar />
       </Show>
       <Show when={!startup.skipInitialLoading}>

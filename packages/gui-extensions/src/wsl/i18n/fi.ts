@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Jakelun asentaminen epäonnistui: {{distro}}",
   "error.installCoder": "Codern asennus epäonnistui",
   "error.alreadyAdded": "{{distro}} on jo lisätty",
-  "error.coderMissing": "opencodea ei ole asennettu tähän jakeluun",
-  "error.coderCannotRun": "opencode on asennettu, mutta sitä ei voitu suorittaa",
+  "error.coderMissing": "codera ei ole asennettu tähän jakeluun",
+  "error.coderCannotRun": "coder on asennettu, mutta sitä ei voitu suorittaa",
   "error.coderNotInstalled": "Codera ei ole asennettu jakeluun {{distro}}",
   "error.updateVersion":
     "Codern päivitys valmistui, mutta {{distro}} ilmoittaa yhä version {{installed}}; odotettu versio on {{expected}}",

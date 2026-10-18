@@ -17,7 +17,7 @@ export type AddServerPrimaryButton = {
   variant: "neutral" | "contrast"
   label: AddServerText
   disabled: boolean
-  action: "install-opencode" | "add" | null
+  action: "install-coder" | "add" | null
   loading: boolean
   width: string | null
 }
@@ -75,7 +75,7 @@ export function addServerViewModel(input: {
   const existingServerDistros = new Set((state?.servers ?? []).map((item) => item.config.distro))
   const addableInstalledDistros = visibleInstalledDistros.filter((item) => !existingServerDistros.has(item.name))
   const selectedDistro = addServerSelectedDistro(input.selectedDistro, visibleInstalledDistros, addableInstalledDistros)
-  const opencodeCheck = selectedDistro ? (state?.coderChecks[selectedDistro] ?? null) : null
+  const coderCheck = selectedDistro ? (state?.coderChecks[selectedDistro] ?? null) : null
   const installableDistros = addServerInstallableDistros(visibleInstalledDistros, visibleOnlineDistros)
   const filteredInstallableDistros = addServerFilteredInstallableDistros(installableDistros, input.catalogSearch)
   const catalogTarget = addServerCatalogTarget(input.catalogTarget, filteredInstallableDistros)
@@ -88,7 +88,7 @@ export function addServerViewModel(input: {
     visibleOnlineDistros,
     addableInstalledDistros,
     selectedDistro,
-    opencodeCheck,
+    coderCheck,
     wslReady: !!state?.runtime?.available && !state?.pendingRestart,
     distroStatuses: Object.fromEntries(
       addableInstalledDistros.flatMap((item) => {
@@ -102,7 +102,7 @@ export function addServerViewModel(input: {
     primaryButton: addServerPrimaryButton({
       state,
       selectedDistro,
-      opencodeCheck,
+      coderCheck,
       adding: input.adding,
       probingAddable: input.probingAddable,
     }),
@@ -201,7 +201,7 @@ function checkingStatus(): DistroStatus {
 function addServerPrimaryButton(input: {
   state: WslServersState | undefined
   selectedDistro: string | null
-  opencodeCheck: WslCoderCheck | null
+  coderCheck: WslCoderCheck | null
   adding: boolean
   probingAddable: boolean
 }): AddServerPrimaryButton {
@@ -217,7 +217,7 @@ function addServerPrimaryButton(input: {
           input.state.job.distros.includes(input.selectedDistro))))
 
   const installingCoder =
-    input.state?.job?.kind === "install-opencode" && input.state.job.distro === input.selectedDistro
+    input.state?.job?.kind === "install-coder" && input.state.job.distro === input.selectedDistro
 
   if (!ready || probingCoder) {
     return {
@@ -241,7 +241,7 @@ function addServerPrimaryButton(input: {
           ? { key: "onboarding.updateCoder" }
           : { key: "onboarding.installCoder" },
       disabled: !!input.state?.job || input.adding,
-      action: "install-opencode",
+      action: "install-coder",
       loading: installingCoder,
       width: update ? "138px" : "129px",
     }
@@ -322,7 +322,7 @@ export function addableProbePlan(input: {
 
     if (!state.distroProbes[item.name]) return [`distro:${item.name}`]
 
-    if (wslDistroReady(state, item.name) && !state.coderChecks[item.name]) return [`opencode:${item.name}`]
+    if (wslDistroReady(state, item.name) && !state.coderChecks[item.name]) return [`coder:${item.name}`]
 
     return []
   })

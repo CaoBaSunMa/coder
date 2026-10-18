@@ -18,7 +18,7 @@ function SessionLocationMissingStory(props: { context: Plugin.Context }) {
       <DialogWorkspaces
         projectID="fixture-project"
         initialDirectories={[
-          { directory: "/Users/kit/code/open-source/opencode" },
+          { directory: "/Users/kit/code/open-source/coder" },
           {
             directory: "/Users/kit/code/open-source/coder-instruction-rename",
             strategy: "git_worktree",

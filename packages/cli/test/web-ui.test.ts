@@ -65,7 +65,7 @@ describe("web UI", () => {
         }),
       )
       const response = yield* Effect.promise(() =>
-        fetch(new URL("/api/info", origin), { headers: { authorization: `Basic ${btoa("opencode:secret")}` } }),
+        fetch(new URL("/api/info", origin), { headers: { authorization: `Basic ${btoa("coder:secret")}` } }),
       )
       expect(response.status).toBe(200)
       expect(yield* Effect.promise(() => response.json())).toHaveProperty("pid")
@@ -73,7 +73,7 @@ describe("web UI", () => {
       const pairing = yield* Effect.promise(() =>
         fetch(new URL("/api/pair", origin), {
           method: "POST",
-          headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+          headers: { authorization: `Basic ${btoa("coder:secret")}` },
         }).then((response) => response.json() as Promise<{ code: string }>),
       )
       const redirect = yield* Effect.promise(() =>
@@ -162,7 +162,7 @@ describe("web UI", () => {
                     version: "test",
                     pid: 1,
                     urls: [origin],
-                    paths: { tmp: "/tmp/opencode" },
+                    paths: { tmp: "/tmp/coder" },
                   })
                 return yield* Effect.fail(
                   new HttpServerError.HttpServerError({
@@ -179,7 +179,7 @@ describe("web UI", () => {
             version: "test",
             pid: 1,
             urls: [origin],
-            paths: { tmp: "/tmp/opencode" },
+            paths: { tmp: "/tmp/coder" },
           })
 
           const missing = yield* Effect.promise(() => fetch(`${origin}/api/missing`))

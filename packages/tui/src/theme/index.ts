@@ -1,7 +1,7 @@
 import { migrateV1, parseThemeDocument, type ThemeDocument, type ModeDefinition } from "@xcoder/theme/tui"
 import { resolveThemeColors } from "./resolve"
 import { DEFAULT_THEMES, type Theme, type ThemeV1Json } from "./v1"
-import opencode from "./assets/v2/coder.json" with { type: "json" }
+import coder from "./assets/v2/coder.json" with { type: "json" }
 import coder2 from "./assets/v2/coder2.json" with { type: "json" }
 
 export { DEFAULT_THEMES, type Theme, type ThemeV1Json } from "./v1"
@@ -12,15 +12,15 @@ let customThemes: Record<string, ThemeDocumentSource> = {}
 let systemTheme: ThemeDocumentSource | undefined
 const listeners = new Set<(themes: Record<string, ThemeDocumentSource>) => void>()
 const parsed = new WeakMap<object, ThemeDocument>()
-let opencodeTheme: (ThemeDocument & {
+let coderTheme: (ThemeDocument & {
   readonly light: ModeDefinition
   readonly dark: ModeDefinition
 }) | undefined
 
 export function getCoderTheme() {
-  if (opencodeTheme) return opencodeTheme
-  const document = parseThemeDocument(opencode, "coder") as NonNullable<typeof opencodeTheme>
-  opencodeTheme = document
+  if (coderTheme) return coderTheme
+  const document = parseThemeDocument(coder, "coder") as NonNullable<typeof coderTheme>
+  coderTheme = document
   return document
 }
 
@@ -37,7 +37,7 @@ function listThemes(): Record<string, ThemeDocumentSource> {
   // Priority: defaults < custom files < generated system.
   const themes: Record<string, ThemeDocumentSource> = {
     ...DEFAULT_THEMES,
-    opencode: getCoderTheme(),
+    coder: getCoderTheme(),
     ...customThemes,
   }
   return {

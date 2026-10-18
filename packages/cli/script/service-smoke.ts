@@ -22,7 +22,7 @@ const env = {
   ...process.env,
   HOME: root,
   USERPROFILE: root,
-  CODER_DB: path.join(root, "opencode.db"),
+  CODER_DB: path.join(root, "coder.db"),
   CODER_TEST_HOME: root,
   XDG_CACHE_HOME: path.join(root, "cache"),
   XDG_CONFIG_HOME: path.join(root, "config"),
@@ -39,7 +39,7 @@ try {
   const registration = await waitForRegistration()
   const info = await Schema.decodeUnknownPromise(Service.Info)(await Bun.file(registration).json())
   if (info.id === undefined || info.password === undefined) throw new Error("Registration is missing service identity")
-  const credential = btoa(`opencode:${info.password}`)
+  const credential = btoa(`coder:${info.password}`)
   const headers = { authorization: "Basic " + credential }
   const token = encodeURIComponent(credential)
   const serverInfo = await waitForReady(info.url, headers)
@@ -90,7 +90,7 @@ try {
   processes.forEach((process) => process.kill())
   await Promise.all(processes.map((process) => process.exited))
   if (failure)
-    errors.push(fs.readFile(path.join(root, "data", "coder", "log", "opencode.log"), "utf8").catch(() => ""))
+    errors.push(fs.readFile(path.join(root, "data", "coder", "log", "coder.log"), "utf8").catch(() => ""))
 }
 
 const output = await Promise.all(errors)

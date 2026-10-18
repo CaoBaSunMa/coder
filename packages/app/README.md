@@ -31,7 +31,7 @@ Your app is ready to be deployed!
 
 ## E2E Testing
 
-Locally, Playwright starts the Vite dev server automatically via `webServer`, or reuses one already running at the configured address. The browser suite uses isolated API fixtures rather than a live opencode backend.
+Locally, Playwright starts the Vite dev server automatically via `webServer`, or reuses one already running at the configured address. The browser suite uses isolated API fixtures rather than a live coder backend.
 
 ```bash
 bunx playwright install chromium
@@ -87,14 +87,14 @@ infrastructure.
 | Mode               | Initial server                                                                       |
 | ------------------ | ------------------------------------------------------------------------------------ |
 | `none`             | No initial server. The beta deployment uses this mode.                               |
-| `origin` (default) | The current page's origin. CLI builds explicitly use this mode for `opencode serve`. |
+| `origin` (default) | The current page's origin. CLI builds explicitly use this mode for `coder serve`. |
 
 In Vite development mode, `origin` uses `VITE_CODER_SERVER_HOST` / `VITE_CODER_SERVER_PORT`
 (default: `http://localhost:4096`) instead of the frontend origin. Both modes restore user-added servers
 from storage. Desktop provides the local server it discovers or starts through native initialization.
 
 With no configured servers, or when the only server rejects the saved credentials, the app shows a full-screen
-connection form. Enter a server address and password, paste a link from `opencode pair`, or choose
+connection form. Enter a server address and password, paste a link from `coder pair`, or choose
 **Scan QR code** to read its QR code. Pairing links are single-use; the app exchanges them for a session token
 and immediately attempts to connect. Failed connections leave the details available
 to edit and retry with **Connect**. Credentials are checked before saving the server. Camera access requires
@@ -103,7 +103,7 @@ HTTPS (or localhost) and browser permission. Saved offline servers continue to u
 When the service is exposed through an HTTPS reverse proxy, advertise its external address at runtime:
 
 ```bash
-opencode pair --url https://opencode.example.com
+coder pair --url https://coder.example.com
 ```
 
 This replaces the addresses in the printed links and QR code.

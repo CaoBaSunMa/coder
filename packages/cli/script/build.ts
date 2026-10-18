@@ -112,19 +112,19 @@ const pluginRuntimePlugin: BunPlugin = {
 }
 
 for (const item of targets) {
-  const opencodePty = await resolveCoderPty({
+  const coderPty = await resolveCoderPty({
     platform: item.os,
     arch: item.arch,
     ...(item.os === "linux" ? { libc: item.abi ?? "glibc" } : {}),
   })
-  const opencodePtyPlugin: BunPlugin = {
+  const coderPtyPlugin: BunPlugin = {
     name: "coder-pty-binary",
     setup(build) {
       build.onLoad({ filter: /persistent-pty[/\\]pty-binding\.ts$/ }, () => ({
         loader: "js",
-        contents: opencodePty
-          ? `import file from ${JSON.stringify(opencodePty.source)} with { type: "file" }
-export default { path: file, version: ${JSON.stringify(opencodePty.version)}, sha256: ${JSON.stringify(opencodePty.sha256)} }`
+        contents: coderPty
+          ? `import file from ${JSON.stringify(coderPty.source)} with { type: "file" }
+export default { path: file, version: ${JSON.stringify(coderPty.version)}, sha256: ${JSON.stringify(coderPty.sha256)} }`
           : "export default undefined",
       }))
     },
@@ -160,7 +160,7 @@ export default { path: file, version: ${JSON.stringify(opencodePty.version)}, sh
       appAssetsPlugin,
       solidPlugin,
       parcelWatcherPlugin,
-      opencodePtyPlugin,
+      coderPtyPlugin,
       pluginRuntimePlugin,
       simulationGraphPlugin,
     ],
@@ -180,7 +180,7 @@ export default { path: file, version: ${JSON.stringify(opencodePty.version)}, sh
       outfile: path.join(outdir, name, "bin", binary),
       execArgv: [
         "--smol",
-        `--user-agent=opencode/${Script.channel}/${Script.version}/cli`,
+        `--user-agent=coder/${Script.channel}/${Script.version}/cli`,
         "--use-system-ca",
         "--no-warnings",
         "--",

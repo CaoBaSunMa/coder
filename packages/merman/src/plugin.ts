@@ -3,7 +3,7 @@ import { createMermaidCodeBlockRenderer } from "./markdown.js"
 import { resolveCoderDiagramPalette } from "./palette.js"
 
 export default Plugin.define({
-  id: "opencode.merman",
+  id: "coder.merman",
   setup(context) {
     context.markdown.registerCodeBlockRenderer(
       "mermaid",

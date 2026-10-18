@@ -74,7 +74,7 @@ test("review and terminal follow the session tab and stay mounted", async ({ pag
   await expect
     .poll(() =>
       page.evaluate(
-        (key) => JSON.parse(localStorage.getItem("opencode.window.browser.dat:tabs.panes") ?? "{}")[key]?.review,
+        (key) => JSON.parse(localStorage.getItem("coder.window.browser.dat:tabs.panes") ?? "{}")[key]?.review,
         tabKey(a.id),
       ),
     )
@@ -174,7 +174,7 @@ test("terminal stacks under review by default and spans the bottom when configur
   await expect
     .poll(() =>
       page.evaluate(
-        (key) => JSON.parse(localStorage.getItem("opencode.window.browser.dat:tabs.panes") ?? "{}")[key],
+        (key) => JSON.parse(localStorage.getItem("coder.window.browser.dat:tabs.panes") ?? "{}")[key],
         tabKey(session.id),
       ),
     )

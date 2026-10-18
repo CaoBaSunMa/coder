@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "Không cài đặt được bản phân phối: {{distro}}",
   "error.installCoder": "Không cài đặt được Coder",
   "error.alreadyAdded": "{{distro}} đã được thêm",
-  "error.coderMissing": "opencode chưa được cài đặt trong bản phân phối này",
-  "error.coderCannotRun": "opencode đã được cài đặt nhưng không thể chạy",
+  "error.coderMissing": "coder chưa được cài đặt trong bản phân phối này",
+  "error.coderCannotRun": "coder đã được cài đặt nhưng không thể chạy",
   "error.coderNotInstalled": "Coder chưa được cài đặt trong {{distro}}",
   "error.updateVersion":
     "Đã cập nhật Coder nhưng {{distro}} vẫn báo phiên bản {{installed}}; phiên bản dự kiến là {{expected}}",

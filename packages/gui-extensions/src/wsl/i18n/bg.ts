@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Неуспешно инсталиране на дистрибуция: {{distro}}",
   "error.installCoder": "Инсталирането на Coder е неуспешно",
   "error.alreadyAdded": "{{distro}} вече е добавен",
-  "error.coderMissing": "opencode не е инсталиран в тази дистрибуция",
-  "error.coderCannotRun": "opencode е инсталиран, но не може да стартира",
+  "error.coderMissing": "coder не е инсталиран в тази дистрибуция",
+  "error.coderCannotRun": "coder е инсталиран, но не може да стартира",
   "error.coderNotInstalled": "Coder не е инсталиран в {{distro}}",
   "error.updateVersion":
     "Coder актуализацията приключи, но {{distro}} все още съобщава {{installed}}; очаквано {{expected}}",

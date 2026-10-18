@@ -8,7 +8,7 @@ const dir = () => mkdtempSync(path.join(tmpdir(), "coder-settings-"))
 
 describe("settings store", () => {
   test("reads the tab-indented file electron-store wrote and rewrites it in the same shape", () => {
-    const file = path.join(dir(), "opencode.settings")
+    const file = path.join(dir(), "coder.settings")
     writeFileSync(file, JSON.stringify({ windowIds: ["a"], backgroundColor: "#121212" }, null, "\t"))
     const store = createSettingsStore(file)
     expect(store.get("windowIds")).toEqual(["a"])
@@ -20,7 +20,7 @@ describe("settings store", () => {
   })
 
   test("starts empty without a file, creates it on the first write, and refuses undefined", () => {
-    const file = path.join(dir(), "nested", "opencode.updater")
+    const file = path.join(dir(), "nested", "coder.updater")
     const store = createSettingsStore(file)
     expect(store.get("ready")).toBeUndefined()
     expect(existsSync(file)).toBe(false)
@@ -35,7 +35,7 @@ describe("settings store", () => {
   })
 
   test("sets an unreadable file aside instead of failing", () => {
-    const file = path.join(dir(), "opencode.settings")
+    const file = path.join(dir(), "coder.settings")
     writeFileSync(file, "{ not json")
     const store = createSettingsStore(file)
     expect(store.get("anything")).toBeUndefined()

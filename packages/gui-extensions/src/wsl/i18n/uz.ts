@@ -41,7 +41,7 @@ export default {
   "error.installCoder": "Coder oʻrnatilmadi",
   "error.alreadyAdded": "{{distro}} allaqachon qo'shilgan",
   "error.coderMissing": "Coder ushbu tarqatishda o'rnatilmagan",
-  "error.coderCannotRun": "opencode o'rnatilgan, lekin ishga tushirilmadi",
+  "error.coderCannotRun": "coder o'rnatilgan, lekin ishga tushirilmadi",
   "error.coderNotInstalled": "Coder {{distro}} da o'rnatilmagan",
   "error.updateVersion":
     "Coder yangilanishi tugallandi, lekin {{distro}} hali ham {{installed}} haqida xabar beradi; kutilgan {{expected}}",

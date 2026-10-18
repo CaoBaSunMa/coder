@@ -35,7 +35,7 @@ const document = {
           name: "shell",
           state: {
             status: "completed",
-            input: { command: "cd ~/Documents/Local/opencode && ls packages/tui" },
+            input: { command: "cd ~/Documents/Local/coder && ls packages/tui" },
             content: [{ type: "text", text: "AGENTS.md\nbunfig.toml\nnode_modules\npackage.json\nsrc" }],
             metadata: {},
           },

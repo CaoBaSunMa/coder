@@ -5,7 +5,7 @@ import { NO_PROVIDER, REMOTE_SERVER, project, type SeedInput } from "../utils/ap
 import { mockCoderServer } from "../utils/mock-server"
 import { openSettings } from "../utils/workspace"
 
-const directory = "/projects/opencode"
+const directory = "/projects/coder"
 
 test.use({ viewport: { width: 1280, height: 900 }, serviceWorkers: "block" })
 
@@ -338,8 +338,8 @@ test("IME confirmation does not activate a search result", async ({ page }) => {
 test("multi-server results navigate to the named server and keep the query on return", async ({ page }) => {
   await mockCoderServer(page, {
     server: REMOTE_SERVER,
-    directory: "/remote/opencode",
-    project: project({ id: "proj_search_remote", directory: "/remote/opencode", name: "Coder" }),
+    directory: "/remote/coder",
+    project: project({ id: "proj_search_remote", directory: "/remote/coder", name: "Coder" }),
     provider: NO_PROVIDER,
     sessions: [],
     pageMessages: () => ({ items: [] }),
@@ -350,7 +350,7 @@ test("multi-server results navigate to the named server and keep the query on re
       servers: [{ url: REMOTE_SERVER, name: "Build server" }],
       projects: {
         local: [{ worktree: directory, expanded: true }],
-        [REMOTE_SERVER]: [{ worktree: "/remote/opencode", expanded: true }],
+        [REMOTE_SERVER]: [{ worktree: "/remote/coder", expanded: true }],
       },
     },
   })

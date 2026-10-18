@@ -230,7 +230,7 @@ async function setup(page: Page, fixture: HomeIndexFixture) {
   await page.addInitScript(
     ({ projects }) => {
       localStorage.setItem(
-        "opencode.global.dat:server",
+        "coder.global.dat:server",
         JSON.stringify({
           projects: { local: projects.map((worktree, index) => ({ worktree, expanded: index === 0 })) },
           lastProject: { local: projects[0] },

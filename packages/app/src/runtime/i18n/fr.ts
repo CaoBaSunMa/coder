@@ -24,9 +24,9 @@ export const dict = {
   "server.connect.failed":
     "Impossible de se connecter. Vérifiez l'adresse et le mot de passe du serveur, puis réessayez.",
   "server.connect.scan": "Scanner le code QR",
-  "server.connect.scan.description": "Pointez votre appareil photo vers le code QR affiché par opencode pair.",
+  "server.connect.scan.description": "Pointez votre appareil photo vers le code QR affiché par coder pair.",
   "server.connect.scan.invalid":
-    "Il ne s'agit pas d'un code d'appairage Coder. Scannez le code affiché par opencode pair.",
+    "Il ne s'agit pas d'un code d'appairage Coder. Scannez le code affiché par coder pair.",
   "server.connect.camera": "Caméra de couplage",
   "server.connect.camera.starting": "Ouverture de la caméra…",
   "server.connect.mixedContent":
@@ -161,10 +161,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Illustré pour la première fois à Londres, en Angleterre",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, l’agent de programmation open source",
-  "settings.about.trademark": "Coder est une marque déposée d’Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder est une marque déposée d’Coder Project",
   "settings.about.typeset": "Composé en Inter et IBM Plex Mono",
   "settings.about.tagline": "L’IA ne peut pas créer d’excellents logiciels sans vous",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Modifier le projet",
   "settings.timeline.title": "Chronologie",
   "settings.timeline.detail": "Niveau de détail de la chronologie",

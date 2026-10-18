@@ -32,7 +32,7 @@ const typesafe = recordedTests({
   metadata: { model: "jev-latest" },
 })
 
-const opencode = recordedTests({
+const coder = recordedTests({
   prefix: "coder-evaluation",
   provider: "coder",
   protocol: "system-one",
@@ -55,7 +55,7 @@ describe("experimental Evaluation recorded", () => {
     ),
   )
 
-  opencode.effect("evaluates choice score and boolean questions", () =>
+  coder.effect("evaluates choice score and boolean questions", () =>
     assertEvaluation(
       Coder.configure({ apiKey: process.env.CODER_API_KEY ?? "fixture" }).experimental.evaluation(
         "jev-1.13-free",

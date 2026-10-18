@@ -41,7 +41,7 @@ const fetchLog = (request: Request) => Effect.promise(() => handler(request))
 
 it.live("encodes a mid-stream session log failure as the reserved SSE failure event", () =>
   Effect.gen(function* () {
-    const response = yield* fetchLog(new Request("http://opencode.local/api/experimental/session/ses_test/log"))
+    const response = yield* fetchLog(new Request("http://coder.local/api/experimental/session/ses_test/log"))
     const body = yield* Effect.promise(() => response.text())
     expect(response.headers.get("content-type")).toContain("text/event-stream")
     expect(body).toContain("event: effect/http-api/stream/failure")
@@ -57,7 +57,7 @@ it.live("the generated Effect client fails the session log stream with the serve
     )
     const received: unknown[] = []
     const exit = yield* Effect.gen(function* () {
-      const client = yield* Coder.make({ baseUrl: "http://opencode.local" })
+      const client = yield* Coder.make({ baseUrl: "http://coder.local" })
       return yield* client.session
         .log({ sessionID: Session.ID.make("ses_test") })
         .pipe(Stream.runForEach((item) => Effect.sync(() => received.push(item))))

@@ -79,9 +79,24 @@ function isTextFile(name: string) {
   return TEXT_EXT.has(ext)
 }
 
+const args = process.argv.slice(2)
+const skipArg = args.indexOf("--skip")
+if (skipArg !== -1) {
+  for (const item of args.slice(skipArg + 1)) EXCLUDE_PREFIXES.push(item.endsWith("/") ? item : item + "/")
+}
+const onlyArg = args.indexOf("--only")
+const ONLY = onlyArg === -1 ? undefined : args.slice(onlyArg + 1)
+
 function excluded(rel: string) {
   if (EXCLUDE_FILES.has(rel)) return true
   const posix = rel.split(path.sep).join("/")
+  if (ONLY) {
+    const keep = ONLY.some((prefix) => {
+      const p = prefix.endsWith("/") ? prefix : prefix + "/"
+      return posix === prefix || posix.startsWith(p) || p.startsWith(posix + "/")
+    })
+    if (!keep) return true
+  }
   if (EXCLUDE_PREFIXES.some((prefix) => posix.startsWith(prefix))) return true
   for (const part of rel.split(path.sep)) if (EXCLUDE_PARTS.has(part)) return true
   return false

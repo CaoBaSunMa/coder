@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Neizdevās instalēt distribūciju: {{distro}}",
   "error.installCoder": "Coder instalēšana neizdevās",
   "error.alreadyAdded": "{{distro}} jau ir pievienota",
-  "error.coderMissing": "opencode nav instalēts šajā distribūcijā",
-  "error.coderCannotRun": "opencode ir instalēts, bet to nevar palaist",
+  "error.coderMissing": "coder nav instalēts šajā distribūcijā",
+  "error.coderCannotRun": "coder ir instalēts, bet to nevar palaist",
   "error.coderNotInstalled": "Coder nav instalēts {{distro}}",
   "error.updateVersion":
     "Coder atjaunināšana pabeigta, bet {{distro}} joprojām rāda {{installed}}; gaidīts {{expected}}",

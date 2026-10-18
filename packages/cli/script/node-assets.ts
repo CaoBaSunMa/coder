@@ -19,7 +19,7 @@ export type NodeAsset = {
 }
 
 export async function collectNodeAssets(target: NodeTarget) {
-  const opencodePty = await resolveCoderPty({
+  const coderPty = await resolveCoderPty({
     platform: target.platform,
     arch: target.arch,
     ...(target.platform === "linux" ? { libc: "glibc" as const } : {}),
@@ -47,7 +47,7 @@ export async function collectNodeAssets(target: NodeTarget) {
       key,
       source: path.resolve(dir, "../ui/src/assets/audio", path.basename(key)),
     })),
-    ...(opencodePty && target.coderPtyAsset ? [{ key: target.coderPtyAsset, source: opencodePty.source }] : []),
+    ...(coderPty && target.coderPtyAsset ? [{ key: target.coderPtyAsset, source: coderPty.source }] : []),
     ...(await collectFiles(ptyRoot))
       .filter((relative) => !relative.endsWith(".map") && !relative.endsWith(".pdb"))
       .map((relative) => ({

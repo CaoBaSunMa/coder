@@ -490,7 +490,7 @@ const MovedLocation = {
           {
             id: "msg_story_location",
             type: "location-switched",
-            location: { directory: `/Users/usrnk1/Developer/opencode/${"nested-directory/".repeat(24)}session` },
+            location: { directory: `/Users/usrnk1/Developer/coder/${"nested-directory/".repeat(24)}session` },
             time: { created: 1_735_689_633_000 },
           },
         ],

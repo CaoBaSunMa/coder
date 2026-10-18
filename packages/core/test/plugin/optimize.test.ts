@@ -48,11 +48,11 @@ const context = (id: string, system = fallback): SessionHooks["context"] => ({
 describe("OptimizePlugin", () => {
   test("enables prompt plugins without model-specific tool optimization", () => {
     expect(OptimizePlugin.Plugins.map((plugin) => plugin.id)).toEqual([
-      "opencode.prompt.openai",
-      "opencode.prompt.anthropic",
-      "opencode.prompt.kimi",
-      "opencode.prompt.arcee",
-      "opencode.prompt.meta",
+      "coder.prompt.openai",
+      "coder.prompt.anthropic",
+      "coder.prompt.kimi",
+      "coder.prompt.arcee",
+      "coder.prompt.meta",
     ])
   })
 

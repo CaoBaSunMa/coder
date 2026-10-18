@@ -41,7 +41,7 @@ export default {
   "error.installCoder": "Coder स्थापना असफल भयो",
   "error.alreadyAdded": "{{distro}} पहिले नै थपिएको छ",
   "error.coderMissing": "Coder यस distro मा स्थापित छैन",
-  "error.coderCannotRun": "opencode स्थापित छ तर चलाउन सकिएन",
+  "error.coderCannotRun": "coder स्थापित छ तर चलाउन सकिएन",
   "error.coderNotInstalled": "Coder {{distro}} मा स्थापित छैन",
   "error.updateVersion":
     "Coder अद्यावधिक समाप्त भयो तर {{distro}} ले अझै पनि रिपोर्ट गर्छ {{installed}}; अपेक्षित {{expected}}",

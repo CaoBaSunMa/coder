@@ -25,8 +25,8 @@ function open(page: Page, input: Partial<WorkspaceInput> = {}) {
     project: { icon: { color: "orange", override }, commands: { start: "echo setup" }, sandboxes },
     provider: NO_PROVIDER,
     configEntries: [
-      { type: "document", path: "/home/test/.config/opencode/coder.jsonc", info: { shell: "/bin/zsh" } },
-      { type: "directory", path: "/home/test/.config/opencode" },
+      { type: "document", path: "/home/test/.config/coder/coder.jsonc", info: { shell: "/bin/zsh" } },
+      { type: "directory", path: "/home/test/.config/coder" },
     ],
     shells: [
       { path: "/bin/zsh", name: "zsh", acceptable: true },
@@ -721,7 +721,7 @@ for (const row of ["configured", "disabled", "failure"] as const) {
   })
 }
 
-// Zen and the Console account share the id `opencode`: the provider comes from models.dev, the
+// Zen and the Console account share the id `coder`: the provider comes from models.dev, the
 // integration carries the account sign-in.
 for (const row of [
   { name: "a fresh install offers the Console sign-in", paid: false, connections: [], console: true },
@@ -808,7 +808,7 @@ for (const row of [
     const { settings } = await open(page, { integrations: consoleIntegrations, onIntegrationOAuth: () => ({ url }) })
 
     // Registered after the mock server so it sees the sign-in request first.
-    const start = await holdRoute(page, (url) => url.pathname === "/api/integration/opencode/connect/oauth", {
+    const start = await holdRoute(page, (url) => url.pathname === "/api/integration/coder/connect/oauth", {
       method: "POST",
     })
 
@@ -1039,7 +1039,7 @@ test("providers: the account options rename and remove the active account", asyn
 
 test("providers: switching to a Zen API key does not wait for a Console workspace", async ({ page }) => {
   const accounts = [
-    { type: "credential", id: "cred_console", label: "Anomaly", method: "oauth" },
+    { type: "credential", id: "cred_console", label: "Example", method: "oauth" },
     { type: "credential", id: "cred_zen", label: "Zen key", method: "key" },
   ]
 
@@ -1050,8 +1050,8 @@ test("providers: switching to a Zen API key does not wait for a Console workspac
       state.active === "cred_console"
         ? {
             all: [
-              { id: "coder", integrationID: "coder", name: "Anomaly / Coder", models: {} },
-              { id: "console-google", integrationID: "coder", name: "Anomaly / Google", models: {} },
+              { id: "coder", integrationID: "coder", name: "Example / Coder", models: {} },
+              { id: "console-google", integrationID: "coder", name: "Example / Google", models: {} },
             ],
             connected: ["coder", "console-google"],
             default: {},
@@ -1082,7 +1082,7 @@ test("providers: switching to a Zen API key does not wait for a Console workspac
 
   await settings.getByRole("tab", { name: "Providers", exact: true }).click()
   const trigger = settings.getByRole("button", { name: "Manage Coder Console accounts", exact: true })
-  await expect(trigger).toHaveText("Anomaly")
+  await expect(trigger).toHaveText("Example")
   await trigger.click()
 
   const catalogReads: string[] = []
@@ -1105,8 +1105,8 @@ test("providers: connecting Coder Go keeps the Console row in place", async ({ p
 
   const workspace = {
     all: [
-      { id: "coder", integrationID: "coder", name: "Anomaly / Coder", models: {} },
-      { id: "console-google", integrationID: "coder", name: "Anomaly / Google", models: {} },
+      { id: "coder", integrationID: "coder", name: "Example / Coder", models: {} },
+      { id: "console-google", integrationID: "coder", name: "Example / Google", models: {} },
     ],
     connected: ["coder", "console-google"],
     default: {},
@@ -1135,13 +1135,13 @@ test("providers: connecting Coder Go keeps the Console row in place", async ({ p
         id: "coder",
         name: "Coder Console",
         methods: [{ id: "device", type: "oauth", label: "Coder Console account" }],
-        connections: [{ type: "credential", id: "cred_console", label: "Anomaly", method: "oauth" }],
+        connections: [{ type: "credential", id: "cred_console", label: "Example", method: "oauth" }],
       },
       {
         id: "coder-go",
         name: "Coder Go",
         methods: [{ type: "key" }],
-        connections: state.authorized ? [{ type: "credential", id: "cred_go", label: "Anomaly", method: "oauth" }] : [],
+        connections: state.authorized ? [{ type: "credential", id: "cred_go", label: "Example", method: "oauth" }] : [],
       },
     ],
     onIntegrationOAuth: () => ({ url: "https://auth.example.test/device?user_code=GOGO-1234" }),
@@ -1182,7 +1182,7 @@ test("providers: connecting Coder Go keeps the Console row in place", async ({ p
 test("providers: switching Console accounts keeps the list until the new workspace loads", async ({ page }) => {
   const accounts = [
     { type: "credential", id: "cred_clara", label: "Clara", method: "oauth" },
-    { type: "credential", id: "cred_anomaly", label: "Anomaly", method: "oauth" },
+    { type: "credential", id: "cred_example", label: "Example", method: "oauth" },
   ]
 
   // The server loads the new workspace's providers a few catalog reads after the switch.
@@ -1237,9 +1237,9 @@ test("providers: switching Console accounts keeps the list until the new workspa
   })
 
   await trigger.click()
-  await page.getByRole("menuitemradio", { name: "Anomaly", exact: true }).click()
+  await page.getByRole("menuitemradio", { name: "Example", exact: true }).click()
   await expect(page.getByText("Coder Console account switched")).toBeVisible()
-  await expect(trigger).toHaveText("Anomaly")
+  await expect(trigger).toHaveText("Example")
   await expect(connected).not.toHaveAttribute("data-flashed")
 })
 
@@ -1298,7 +1298,7 @@ test("the add server dialog pairs from a one-time link and explains a spent one"
 
   const spent = await addServer()
   await expect(spent.getByRole("alert")).toHaveText(
-    "This pairing link expired or was already used. Run opencode pair to get a new one.",
+    "This pairing link expired or was already used. Run coder pair to get a new one.",
   )
 })
 

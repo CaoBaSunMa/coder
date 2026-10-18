@@ -12,5 +12,5 @@ COPY dist/cli-linux-arm64-musl/bin/coder /usr/local/bin/coder
 
 ARG TARGETARCH
 FROM build-${TARGETARCH}
-RUN ln -s opencode /usr/local/bin/coder2 && opencode --version && coder2 --version
+RUN ln -s coder /usr/local/bin/coder2 && coder --version && coder2 --version
 ENTRYPOINT ["coder"]

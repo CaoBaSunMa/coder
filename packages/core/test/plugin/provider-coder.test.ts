@@ -19,7 +19,7 @@ import { ModelResolver } from "@xcoder/core/model-resolver"
 import { Plugin } from "@xcoder/core/plugin"
 import { PluginHooks } from "@xcoder/core/plugin/hooks"
 import { PluginHost } from "@xcoder/core/plugin/host"
-import { CoderPlugin } from "@xcoder/core/plugin/provider/opencode"
+import { CoderPlugin } from "@xcoder/core/plugin/provider/coder"
 import { Provider } from "@xcoder/core/provider"
 import { Session } from "@xcoder/core/session"
 import { WebSearch } from "@xcoder/core/websearch"
@@ -351,7 +351,7 @@ describe("CoderPlugin", () => {
               ).toEqual(stored.value)
               expect(requests).toEqual(["/auth/device/token", "/api/v2/config"])
               // The refresh and the config fetch both say which Coder is asking.
-              expect(agents).toEqual(["opencode/beta/1.2.3/test", "opencode/beta/1.2.3/test"])
+              expect(agents).toEqual(["coder/beta/1.2.3/test", "coder/beta/1.2.3/test"])
             }).pipe(Effect.provideService(App.Metadata, App.make({ name: "test", version: "1.2.3", channel: "beta" }))),
           ({ server }) => Effect.promise(() => server.stop(true)),
         ),
@@ -726,14 +726,14 @@ describe("CoderPlugin", () => {
                 ? {
                     mcp: {
                       servers: {
-                        opencode_console: {
+                        coder_console: {
                           type: "remote",
                           url: `${new URL(request.url).origin}/console/mcp`,
                           headers: { "x-client": "coder", authorization: "Bearer forged" },
                           oauth: false,
                           auth: "console",
                         },
-                        opencode_console_oauth: {
+                        coder_console_oauth: {
                           type: "remote",
                           url: `${new URL(request.url).origin}/console/oauth/mcp`,
                           oauth: { scope: "workspace" },
@@ -794,13 +794,13 @@ describe("CoderPlugin", () => {
           yield* drain
 
           expect(servers()).toEqual({
-            opencode_console: {
+            coder_console: {
               type: "remote",
               url: `${server.url.origin}/console/mcp`,
               headers: { "x-client": "coder", authorization: "Bearer secret", "x-org-id": "org-a" },
               oauth: false,
             },
-            opencode_console_oauth: {
+            coder_console_oauth: {
               type: "remote",
               url: `${server.url.origin}/console/oauth/mcp`,
               oauth: { scope: "workspace" },
@@ -825,7 +825,7 @@ describe("CoderPlugin", () => {
           port: 0,
           fetch: () =>
             Response.json({
-              providers: { opencode: {} },
+              providers: { coder: {} },
               experimental: {
                 policies: [
                   { action: "future.use", resource: { names: ["anything"] }, effect: "future-effect", future: true },
@@ -906,7 +906,7 @@ describe("CoderPlugin", () => {
         }
         const server = Bun.serve({
           port: 0,
-          fetch: () => Response.json({ providers: { opencode: {} }, experimental: { policies: state.policies } }),
+          fetch: () => Response.json({ providers: { coder: {} }, experimental: { policies: state.policies } }),
         })
         return { server, state }
       }),
@@ -1931,7 +1931,7 @@ describe("CoderPlugin", () => {
     ),
   )
 
-  it.effect("ignores non-opencode providers and models", () =>
+  it.effect("ignores non-coder providers and models", () =>
     withEnv({ CODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Provider.Service

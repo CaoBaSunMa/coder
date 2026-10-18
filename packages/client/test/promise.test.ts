@@ -297,7 +297,7 @@ test("server.info uses the public HTTP contract", async () => {
         version: "2.0.0",
         pid: 1,
         urls: ["http://192.168.1.10:4096"],
-        paths: { tmp: "/tmp/opencode" },
+        paths: { tmp: "/tmp/coder" },
       })
     },
   })
@@ -306,7 +306,7 @@ test("server.info uses the public HTTP contract", async () => {
     version: "2.0.0",
     pid: 1,
     urls: ["http://192.168.1.10:4096"],
-    paths: { tmp: "/tmp/opencode" },
+    paths: { tmp: "/tmp/coder" },
   })
   expect(request?.method).toBe("GET")
   expect(request?.url).toBe("http://localhost:3000/api/info")
@@ -808,7 +808,7 @@ test("event transport passes through ordinary info requests", async () => {
         version: "2.0.0",
         pid: 1,
         urls: ["http://localhost:3000"],
-        paths: { tmp: "/tmp/opencode" },
+        paths: { tmp: "/tmp/coder" },
       })
     },
   })
@@ -817,7 +817,7 @@ test("event transport passes through ordinary info requests", async () => {
     version: "2.0.0",
     pid: 1,
     urls: ["http://localhost:3000"],
-    paths: { tmp: "/tmp/opencode" },
+    paths: { tmp: "/tmp/coder" },
   })
   expect(requests).toEqual(["/api/event", "/api/info"])
 })

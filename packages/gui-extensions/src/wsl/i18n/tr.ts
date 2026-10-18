@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Dağıtım kurulamadı: {{distro}}",
   "error.installCoder": "Coder kurulamadı",
   "error.alreadyAdded": "{{distro}} zaten eklendi",
-  "error.coderMissing": "opencode bu dağıtımda kurulu değil",
-  "error.coderCannotRun": "opencode kurulu ancak çalıştırılamadı",
+  "error.coderMissing": "coder bu dağıtımda kurulu değil",
+  "error.coderCannotRun": "coder kurulu ancak çalıştırılamadı",
   "error.coderNotInstalled": "Coder, {{distro}} içinde kurulu değil",
   "error.updateVersion":
     "Coder güncellemesi tamamlandı ancak {{distro}} hâlâ {{installed}} sürümünü bildiriyor; beklenen sürüm: {{expected}}",

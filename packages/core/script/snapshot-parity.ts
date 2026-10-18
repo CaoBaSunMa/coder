@@ -49,9 +49,9 @@ const env = {
   ...process.env,
   GIT_ALLOW_PROTOCOL: "file",
   GIT_AUTHOR_NAME: "Parity",
-  GIT_AUTHOR_EMAIL: "parity@opencode.test",
+  GIT_AUTHOR_EMAIL: "parity@coder.test",
   GIT_COMMITTER_NAME: "Parity",
-  GIT_COMMITTER_EMAIL: "parity@opencode.test",
+  GIT_COMMITTER_EMAIL: "parity@coder.test",
   GIT_AUTHOR_DATE: "2026-01-01T00:00:00Z",
   GIT_COMMITTER_DATE: "2026-01-01T00:00:00Z",
 }

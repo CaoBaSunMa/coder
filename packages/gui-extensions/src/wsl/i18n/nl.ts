@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Kan distributie niet installeren: {{distro}}",
   "error.installCoder": "Installatie van Coder is mislukt",
   "error.alreadyAdded": "{{distro}} is al toegevoegd",
-  "error.coderMissing": "opencode is niet geïnstalleerd in deze distributie",
-  "error.coderCannotRun": "opencode is geïnstalleerd, maar kan niet worden uitgevoerd",
+  "error.coderMissing": "coder is niet geïnstalleerd in deze distributie",
+  "error.coderCannotRun": "coder is geïnstalleerd, maar kan niet worden uitgevoerd",
   "error.coderNotInstalled": "Coder is niet geïnstalleerd in {{distro}}",
   "error.updateVersion":
     "De Coder-update is voltooid, maar {{distro}} meldt nog steeds {{installed}}; verwacht: {{expected}}",

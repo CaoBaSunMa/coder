@@ -7,7 +7,7 @@ import type definition from "./index"
 /** The display sleep blocker this instance holds, if any. */
 type Blocker = { id?: number }
 
-/** The last `opencode service` command; the next one starts after it settles. */
+/** The last `coder service` command; the next one starts after it settles. */
 type Queue = { tail: Promise<unknown> }
 
 const setup: MainSetup<typeof definition> = (ctx) => {
@@ -31,7 +31,7 @@ const setup: MainSetup<typeof definition> = (ctx) => {
   }
 
   // Remote access is a setting of the background service, so it changes through the CLI the app runs, as with
-  // `opencode pair --remote`. A change restarts the service, so commands run one at a time.
+  // `coder pair --remote`. A change restarts the service, so commands run one at a time.
   const service = (args: readonly string[], signal: AbortSignal) => {
     const run = queue.tail.then(
       () =>

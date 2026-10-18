@@ -170,7 +170,7 @@ for (const scenario of ["visible-output", "hidden-output", "full-scrollback-tear
         ({ server, sessionID }) => {
           localStorage.setItem("settings.v3", JSON.stringify({ general: { terminalPlacement: "bottom" } }))
           localStorage.setItem(
-            "opencode.window.browser.dat:tabs",
+            "coder.window.browser.dat:tabs",
             JSON.stringify([{ type: "session", server, sessionId: sessionID }]),
           )
         },

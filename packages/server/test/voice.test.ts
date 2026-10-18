@@ -51,7 +51,7 @@ it.live("routes POST /api/experimental/voice/session and maps errors", () =>
     const post = (body: unknown) =>
       Effect.promise(() =>
         handler(
-          new Request("http://opencode.local/api/experimental/voice/session", {
+          new Request("http://coder.local/api/experimental/voice/session", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(body),

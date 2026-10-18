@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "ไม่สามารถติดตั้งดิสโทรได้: {{distro}}",
   "error.installCoder": "การติดตั้ง Coder ล้มเหลว",
   "error.alreadyAdded": "เพิ่ม {{distro}} แล้ว",
-  "error.coderMissing": "ไม่ได้ติดตั้ง opencode ในดิสโทรนี้",
-  "error.coderCannotRun": "ติดตั้ง opencode แล้ว แต่ไม่สามารถเรียกใช้ได้",
+  "error.coderMissing": "ไม่ได้ติดตั้ง coder ในดิสโทรนี้",
+  "error.coderCannotRun": "ติดตั้ง coder แล้ว แต่ไม่สามารถเรียกใช้ได้",
   "error.coderNotInstalled": "ไม่ได้ติดตั้ง Coder ใน {{distro}}",
   "error.updateVersion":
     "อัปเดต Coder เสร็จแล้ว แต่ {{distro}} ยังคงรายงานเวอร์ชัน {{installed}} ทั้งที่ควรเป็น {{expected}}",

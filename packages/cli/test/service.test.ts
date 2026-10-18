@@ -357,7 +357,7 @@ test("concurrent service processes elect one server", async () => {
     expect(await Bun.file(registration + ".lock").exists()).toBe(false)
     expect(
       await fetch(new URL("/api/info", info.url), {
-        headers: { authorization: "Basic " + btoa(`opencode:${info.password}`) },
+        headers: { authorization: "Basic " + btoa(`coder:${info.password}`) },
       }).then((response) => response.json()),
     ).toEqual({
       version: info.version,
@@ -589,7 +589,7 @@ test("port contender recognizes an incumbent registered during the bind race", a
       requests.count += 1
       if (requests.count === 2) recognizing.resolve()
       return Response.json(
-        { version: CODER_VERSION, pid: process.pid, urls: [], paths: { tmp: "/tmp/opencode" } },
+        { version: CODER_VERSION, pid: process.pid, urls: [], paths: { tmp: "/tmp/coder" } },
         { status: 503 },
       )
     },
@@ -718,7 +718,7 @@ async function waitForInfo(file: string, accept: (info: Info) => boolean = () =>
 async function waitForFailed(info: Info) {
   for (let attempt = 0; attempt < 400; attempt++) {
     const status = await fetch(new URL("/api/info", info.url), {
-      headers: { authorization: "Basic " + btoa(`opencode:${info.password}`) },
+      headers: { authorization: "Basic " + btoa(`coder:${info.password}`) },
     })
       .then((response) => response.status)
       .catch(() => undefined)
@@ -767,7 +767,7 @@ function serviceEnv(root: string) {
     ...process.env,
     BUN_RUNTIME_TRANSPILER_CACHE_PATH: transpilerCache,
     HOME: root,
-    CODER_DB: path.join(root, "opencode.db"),
+    CODER_DB: path.join(root, "coder.db"),
     CODER_TEST_HOME: root,
     XDG_CACHE_HOME: path.join(root, "cache"),
     XDG_CONFIG_HOME: path.join(root, "config"),

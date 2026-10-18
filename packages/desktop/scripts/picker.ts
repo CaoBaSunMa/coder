@@ -8,7 +8,7 @@ const attribute = "data-coder-picker-source"
 
 export function pickerPlugin() {
   const plugin = picker()
-  const client = "/__vite_opencode_picker_client.js"
+  const client = "/__vite_coder_picker_client.js"
   let workspaceRoot = ""
 
   return {

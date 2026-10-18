@@ -3,7 +3,7 @@ import path from "node:path"
 import type { Permission } from "@xcoder/schema/permission"
 import { makeSession, rpcError, startWire, type Wire } from "./wire-fixture"
 
-const key = "opencode.acp.additionalDirectories"
+const key = "coder.acp.additionalDirectories"
 
 const grant = (directory: string): Permission.Rule => ({
   action: "external_directory",

@@ -53,7 +53,7 @@ export async function create(options: CreateOptions = {}, embed: EmbeddedHost.Em
       embed,
     ),
   )
-  const client = Coder.make({ baseUrl: "http://opencode.local", fetch: host.fetch })
+  const client = Coder.make({ baseUrl: "http://coder.local", fetch: host.fetch })
   const register = async (plugin: Plugin.Plugin) => {
     const { PluginPromise } = await import("@xcoder/core/plugin/promise")
     return host.runtime.runPromise(host.plugins.register(PluginPromise.fromPromise(plugin)))

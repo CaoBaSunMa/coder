@@ -1,4 +1,4 @@
-import opencodeWordmarkDark from "../asset/logo-ornate-dark.svg"
+import coderWordmarkDark from "../asset/logo-ornate-dark.svg"
 import { query } from "@solidjs/router"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { useI18n } from "../context/i18n"
@@ -13,7 +13,7 @@ export const githubLink = {
   fallbackStars: "208K",
 }
 export const themePreferences = ["dark", "light", "system"] as const
-export const themeStorageKey = "opencode:stats-theme"
+export const themeStorageKey = "coder:stats-theme"
 export type ThemePreference = (typeof themePreferences)[number]
 
 const compactNumberFormatter = new Intl.NumberFormat("en", {
@@ -240,9 +240,9 @@ export function Footer(props: {
   const connect = [
     { href: "mailto:hello@coder.example.com", label: i18n.t("footer.contact") },
     { href: "https://coder.example.com/discord", label: i18n.t("footer.community") },
-    { href: "https://x.com/opencode", label: "X" },
+    { href: "https://x.com/coder", label: "X" },
     { href: githubLink.href, label: i18n.t("header.github") },
-    { href: "https://www.youtube.com/@anomalyco", label: i18n.t("footer.youtube") },
+    { href: "https://www.youtube.com/@coder", label: i18n.t("footer.youtube") },
   ]
   const bridge = () =>
     props.bridge === undefined
@@ -435,7 +435,7 @@ function SubscribeModal(props: { onClose: () => void }) {
       <div data-slot="modal-scrim" aria-hidden="true" onClick={props.onClose} />
       <div data-slot="modal-panel">
         <div data-slot="modal-brand">
-          <img data-slot="modal-logo" src={opencodeWordmarkDark} alt="Coder" />
+          <img data-slot="modal-logo" src={coderWordmarkDark} alt="Coder" />
           <button
             data-slot="modal-close"
             type="button"

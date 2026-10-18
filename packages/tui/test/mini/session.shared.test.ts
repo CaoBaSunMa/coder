@@ -200,7 +200,7 @@ describe("run session shared", () => {
   })
 
   test("restores current prompt history from stored text and file references", async () => {
-    const client = Coder.make({ baseUrl: "https://opencode.test" })
+    const client = Coder.make({ baseUrl: "https://coder.test" })
     spyOn(client.message, "list").mockImplementation(() =>
       Promise.resolve({
         data: [

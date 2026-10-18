@@ -1,5 +1,6 @@
 import { createMemo, createSignal } from "solid-js"
 import { useLocal } from "../context/local"
+import { useI18n } from "../context/i18n"
 import { DialogSelect } from "../ui/dialog-select"
 import { useDialog } from "../ui/dialog"
 import { DialogIntegration } from "./dialog-integration"
@@ -17,6 +18,7 @@ export function DialogModel(props: { providerID?: string }) {
   const data = useData()
   const dialog = useDialog()
   const location = useLocation()
+  const i18n = useI18n()
   const [query, setQuery] = createSignal("")
   const favoritePriority = new Set(local.model.favorite().map(modelPreferenceKey))
 
@@ -48,7 +50,8 @@ export function DialogModel(props: { providerID?: string }) {
             releaseDate: model.time.released,
             description: provider?.name ?? model.providerID,
             category,
-            footer: free(model) ? "Free" : undefined,
+            free: free(model),
+            footer: free(model) ? i18n.t("model.free") : undefined,
             onSelect: () => {
               onSelect(model.providerID, model.id)
             },
@@ -57,12 +60,12 @@ export function DialogModel(props: { providerID?: string }) {
       })
     }
 
-    const favoriteOptions = toOptions(favorites, "Favorites")
+    const favoriteOptions = toOptions(favorites, i18n.t("model.favorites"))
     const recentOptions = toOptions(
       recents.filter(
         (item) => !favorites.some((fav) => fav.providerID === item.providerID && fav.modelID === item.modelID),
       ),
-      "Recent",
+      i18n.t("model.recent"),
     )
 
     const modelOptions = sortModelOptions(
@@ -79,9 +82,10 @@ export function DialogModel(props: { providerID?: string }) {
             providerName: provider?.name ?? model.providerID,
             title: model.name,
             releaseDate: model.time.released,
-            description: favorite ? "(Favorite)" : undefined,
+            description: favorite ? i18n.t("model.favoriteMarked") : undefined,
             category: connected() ? (provider?.name ?? model.providerID) : undefined,
-            footer: free(model) ? "Free" : undefined,
+            free: free(model),
+            footer: free(model) ? i18n.t("model.free") : undefined,
             onSelect() {
               onSelect(model.providerID, model.id)
             },
@@ -121,7 +125,7 @@ export function DialogModel(props: { providerID?: string }) {
 
   const title = createMemo(() => {
     const value = provider()
-    if (!value) return "Select model"
+    if (!value) return i18n.t("model.select")
     return value.name
   })
 
@@ -143,18 +147,18 @@ export function DialogModel(props: { providerID?: string }) {
   return (
     <DialogSelect<ReturnType<typeof options>[number]["value"]>
       searchInTitle
-      titlePlaceholder="Search models"
+      titlePlaceholder={i18n.t("model.search")}
       options={options()}
       actions={[
         {
           command: "model.dialog.provider",
           title: newDesigns()
             ? connected()
-              ? "connect integration"
-              : "view all integrations"
+              ? i18n.t("model.connectLower")
+              : i18n.t("model.integrationsLower")
             : connected()
-              ? "Connect an integration"
-              : "View all integrations",
+              ? i18n.t("model.connect")
+              : i18n.t("model.integrations"),
           selection: "none",
           onTrigger() {
             dialog.replace(() => (
@@ -166,7 +170,7 @@ export function DialogModel(props: { providerID?: string }) {
         },
         {
           command: "model.dialog.favorite",
-          title: newDesigns() ? "favorite" : "Favorite",
+          title: newDesigns() ? i18n.t("model.favoriteLower") : i18n.t("model.favorite"),
           hidden: !connected(),
           onTrigger: (option) => {
             local.model.toggleFavorite(option.value as { providerID: string; modelID: string })
@@ -198,6 +202,7 @@ export function sortModelOptions<
     providerName?: string
     releaseDate: string | number
     title: string
+    free?: boolean
     footer?: string
   },
 >(options: T[], grouped = true) {
@@ -211,7 +216,7 @@ export function sortModelOptions<
     const name = grouped ? (a.providerName ?? "").localeCompare(b.providerName ?? "") : 0
     if (name !== 0) return name
 
-    const free = Number(b.footer === "Free") - Number(a.footer === "Free")
+    const free = Number(b.free ?? b.footer === "Free") - Number(a.free ?? a.footer === "Free")
     if (free !== 0) return free
 
     const release = Number(b.releaseDate) - Number(a.releaseDate)

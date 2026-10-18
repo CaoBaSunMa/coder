@@ -24,8 +24,8 @@ export const dict = {
   "server.connect.failed":
     "Kunne ikke oprette forbindelse. Tjek serveradressen og adgangskoden, og prøv derefter igen.",
   "server.connect.scan": "Scan QR kode",
-  "server.connect.scan.description": "Ret dit kamera mod QR-koden vist af opencode pair.",
-  "server.connect.scan.invalid": "Dette er ikke en Coder-parringskode. Scan koden vist af opencode pair.",
+  "server.connect.scan.description": "Ret dit kamera mod QR-koden vist af coder pair.",
+  "server.connect.scan.invalid": "Dette er ikke en Coder-parringskode. Scan koden vist af coder pair.",
   "server.connect.camera": "Parring af kamera",
   "server.connect.camera.starting": "Åbner kamera...",
   "server.connect.mixedContent":
@@ -147,10 +147,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Først illustreret i London, England",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, open source-kodningsagenten",
-  "settings.about.trademark": "Coder er et registreret varemærke tilhørende Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder er et registreret varemærke tilhørende Coder Project",
   "settings.about.typeset": "Sat med Inter og IBM Plex Mono",
   "settings.about.tagline": "AI kan ikke bygge fantastisk software uden dig",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Rediger projekt",
   "settings.timeline.title": "Tidslinje",
   "settings.timeline.detail": "Tidslinjedetaljer",

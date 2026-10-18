@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Nepavyko įdiegti distributyvo: {{distro}}",
   "error.installCoder": "Coder įdiegti nepavyko",
   "error.alreadyAdded": "{{distro}} jau pridėtas",
-  "error.coderMissing": "opencode šiame distributyve neįdiegtas",
-  "error.coderCannotRun": "opencode įdiegtas, bet jo paleisti nepavyko",
+  "error.coderMissing": "coder šiame distributyve neįdiegtas",
+  "error.coderCannotRun": "coder įdiegtas, bet jo paleisti nepavyko",
   "error.coderNotInstalled": "Coder neįdiegtas distributyve {{distro}}",
   "error.updateVersion":
     "Coder naujinimas baigtas, bet {{distro}} vis dar praneša {{installed}}; tikėtasi {{expected}}",

@@ -171,8 +171,8 @@ async function initializeColdProfile(root: string) {
     ),
   )
   await Promise.all([
-    writeFile(join(root, "desktop", "opencode.settings"), JSON.stringify({ firstLaunchOnboardingComplete: true })),
-    writeFile(join(root, "desktop", "opencode.global.dat"), JSON.stringify({ language: '{"locale":"en"}' })),
+    writeFile(join(root, "desktop", "coder.settings"), JSON.stringify({ firstLaunchOnboardingComplete: true })),
+    writeFile(join(root, "desktop", "coder.global.dat"), JSON.stringify({ language: '{"locale":"en"}' })),
   ])
   const registration = join(root, "desktop", "coder", "service-local.json")
   await Service.stop({ file: registration })
@@ -189,7 +189,7 @@ function startDesktop(profile: Awaited<ReturnType<typeof createColdProfile>>) {
     env: {
       ...process.env,
       CODER_CONFIG_DIR: join(profile.root, "config"),
-      CODER_DB: join(profile.root, "data", "opencode.db"),
+      CODER_DB: join(profile.root, "data", "coder.db"),
       CODER_TEST_HOME: join(profile.root, "home"),
       CODER_TEST_ONBOARDING: "0",
       CODER_DESKTOP_TEST_ROOT: profile.root,

@@ -16,7 +16,7 @@ import {
   type ToolInput,
 } from "./tool"
 
-const RetryMeta = "opencode/retry"
+const RetryMeta = "coder/retry"
 
 export type TurnStart = { readonly type: "input" | "compaction"; readonly id: SessionMessage.ID }
 

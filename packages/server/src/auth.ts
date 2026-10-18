@@ -57,7 +57,7 @@ export function verifySession(token: string, config: Info, now = Date.now()) {
 // Browsers share cookies across ports on the same host, so the name carries the port to keep local servers apart.
 export function sessionCookieName(host: string | undefined) {
   const port = URL.parse(`http://${host ?? ""}`)?.port
-  return port ? `opencode_session_${port}` : "opencode_session"
+  return port ? `coder_session_${port}` : "coder_session"
 }
 
 function sign(password: string, payload: string) {

@@ -36,7 +36,7 @@ export async function mountMarkdown(options: {
   render(() => {
     const api = Coder.make({
       baseUrl: location.origin,
-      headers: { Authorization: `Basic ${btoa("opencode:fixture")}` },
+      headers: { Authorization: `Basic ${btoa("coder:fixture")}` },
     })
 
     const [text, setText] = createSignal(options.text)

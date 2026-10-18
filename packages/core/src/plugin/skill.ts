@@ -9,19 +9,19 @@ import { AbsolutePath } from "../schema.js"
 import { Skill } from "../skill.js"
 import { Config } from "../config.js"
 import os from "os"
-import opencodeContent from "./skill/opencode.md" with { type: "text" }
+import coderContent from "./skill/coder.md" with { type: "text" }
 import reportContent from "./skill/report.md" with { type: "text" }
 
-export const CoderContent = opencodeContent
+export const CoderContent = coderContent
 export const ReportContent = reportContent
 
 export const CoderDescription =
   "Use this skill for any question about Coder itself, including how Coder works, using or configuring it, migrating from V1 to V2, troubleshooting it, developing plugins or integrations, using the Coder SDK, clients, server, or API, and contributing to the Coder codebase. Also use it for Coder agents, commands, skills, tools, permissions, MCP servers, providers, models, themes, keybinds, formatters, the CLI, TUI, desktop app, and web app."
 const REPORT_DESCRIPTION =
-  "Use when the user wants to report an opencode issue or bug. Collect standard diagnostics, add user-specific reproduction context, and publish the issue with GitHub CLI."
+  "Use when the user wants to report an coder issue or bug. Collect standard diagnostics, add user-specific reproduction context, and publish the issue with GitHub CLI."
 
 export const Plugin = define({
-  id: "opencode.skill",
+  id: "coder.skill",
   effect: Effect.fn(function* (ctx) {
     const reportContent = yield* reportContentWithDiagnostics(ctx.app)
     yield* ctx.skill.transform((editor) => {
@@ -30,7 +30,7 @@ export const Plugin = define({
           id: Skill.ID.make("coder"),
           name: Skill.Name.make("Coder"),
           description: CoderDescription,
-          path: AbsolutePath.make("/builtin/opencode.md"),
+          path: AbsolutePath.make("/builtin/coder.md"),
           content: CoderContent,
         }),
       )
@@ -61,7 +61,7 @@ const reportContentWithDiagnostics = Effect.fn("SkillPlugin.reportContentWithDia
     "",
     "These values were captured when the built-in report skill was registered. Verify them before publishing.",
     "",
-    `- opencode version: ${app.version}`,
+    `- coder version: ${app.version}`,
     `- install/channel: ${app.channel}`,
     `- OS: ${os.type()} ${os.release()} (${os.platform()} ${os.arch()}${emulated ? ", emulated on ARM64" : ""})`,
     `- Terminal: ${terminal()}`,

@@ -1,6 +1,6 @@
 import { loadRuntimeModules, resolveHostPackageRoots, type RuntimeModuleLoader } from "./runtime-modules.js"
 
-const foreignPkgSuffix = String.raw`(?:node_modules[/\\](@opencode[/\\]plugin|effect)|(@opencode[/\\]plugin|effect)@[^/\\]+@@@\d+)`
+const foreignPkgSuffix = String.raw`(?:node_modules[/\\](@coder[/\\]plugin|effect)|(@coder[/\\]plugin|effect)@[^/\\]+@@@\d+)`
 const foreignPkgPattern = new RegExp(String.raw`^(.*[/\\]${foreignPkgSuffix})[/\\](.+)$`)
 
 let installed: Readonly<Record<string, RuntimeModuleLoader>> | undefined

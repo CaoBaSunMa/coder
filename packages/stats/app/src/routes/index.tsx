@@ -13,7 +13,7 @@ import {
 import { createAsync, query } from "@solidjs/router"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from "solid-js"
 import { getRequestEvent } from "solid-js/web"
-import { FormatLinks, JsonLd, LastModified, openCodeOrganization } from "../component/agent-meta"
+import { FormatLinks, JsonLd, LastModified, coderOrganization } from "../component/agent-meta"
 import { ChartDataTable } from "../component/chart-data-table"
 import { LocaleLinks } from "../component/locale-links"
 import { useI18n } from "../context/i18n"
@@ -1822,8 +1822,8 @@ function homeStructuredData(
         name: page.name,
         description: page.description,
         url: page.url,
-        creator: openCodeOrganization,
-        publisher: openCodeOrganization,
+        creator: coderOrganization,
+        publisher: coderOrganization,
         isAccessibleForFree: true,
         variableMeasured: ["Tokens", "Unique users", "Sessions", "Cost per session", "Cache ratio", "Weekly retention"],
         ...(data.updatedAt ? { dateModified: data.updatedAt } : {}),

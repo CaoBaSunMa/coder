@@ -57,9 +57,9 @@ test("creates a session in a new project and selects its model", async ({ page }
     fileList: (path) => (path === "C:/Coder" ? [{ path: "./", type: "directory", ignored: false }] : []),
   })
   await page.addInitScript(() => {
-    localStorage.setItem("opencode.global.dat:server", JSON.stringify({ projects: { local: [] } }))
+    localStorage.setItem("coder.global.dat:server", JSON.stringify({ projects: { local: [] } }))
     localStorage.setItem(
-      "opencode.global.dat:model",
+      "coder.global.dat:model",
       JSON.stringify({
         user: [
           { providerID: "coder", modelID: "free-model", visibility: "show" },

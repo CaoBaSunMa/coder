@@ -357,7 +357,7 @@ function useWslAddServerController(props: DialogWslServerProps) {
 
     if (!distro || !action) return
 
-    if (action === "install-opencode") {
+    if (action === "install-coder") {
       await run(() => api().installCoder({ name: distro }))
 
       return
@@ -483,7 +483,7 @@ function unavailable(error: string): WslServersState {
     installed: [],
     online: [],
     distroProbes: {},
-    opencodeChecks: {},
+    coderChecks: {},
     pendingRestart: false,
     servers: [],
     job: null,

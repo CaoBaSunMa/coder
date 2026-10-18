@@ -5,10 +5,10 @@ import { storedLocaleValue } from "./locale-value"
 // last answer in localStorage lets the shell mount without waiting for the port; the store is still
 // asked every launch and the copy refreshed, and the language provider hydrates from the store
 // itself, so a stale copy costs one visible switch, not a wrong language.
-const cacheKey = "opencode.desktop.language"
+const cacheKey = "coder.desktop.language"
 
 export async function preloadStoredLocale(platform: Platform) {
-  const fresh = Promise.resolve(platform.storage?.("opencode.global.dat").getItem("language")).then(
+  const fresh = Promise.resolve(platform.storage?.("coder.global.dat").getItem("language")).then(
     (raw) => {
       localStorage.setItem(cacheKey, raw ?? "")
 

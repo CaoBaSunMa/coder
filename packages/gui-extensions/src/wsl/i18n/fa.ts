@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "توزیع توزیع نصب نشد: {{distro}}",
   "error.installCoder": "نصب Coder انجام نشد",
   "error.alreadyAdded": "{{distro}} قبلاً اضافه شده است",
-  "error.coderMissing": "opencode در این توزیع نصب نشده است",
-  "error.coderCannotRun": "opencode نصب شده است اما اجرا نمی شود",
+  "error.coderMissing": "coder در این توزیع نصب نشده است",
+  "error.coderCannotRun": "coder نصب شده است اما اجرا نمی شود",
   "error.coderNotInstalled": "Coder در {{distro}} نصب نشده است",
   "error.updateVersion":
     "به‌روزرسانی Coder به پایان رسید، اما {{distro}} همچنان {{installed}} را گزارش می‌کند. مورد انتظار {{expected}}",

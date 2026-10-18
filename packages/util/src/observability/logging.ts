@@ -3,7 +3,7 @@ import path from "path"
 import { Global } from "../global.js"
 import { runID } from "./shared.js"
 
-// One log file is shared by every opencode process on the machine and only ever appended to, so it
+// One log file is shared by every coder process on the machine and only ever appended to, so it
 // is bounded by compacting in place instead of rotating: once it passes LOG_MAX_BYTES the head is
 // dropped so roughly LOG_KEEP_BYTES remain, rounded forward to the next line boundary.
 export const LOG_MAX_BYTES = 50 * 1024 * 1024
@@ -57,7 +57,7 @@ function format(input: unknown) {
 }
 
 export function file(local = true, channel = "local") {
-  if (!local) return path.join(Global.Path.log, "opencode.log")
+  if (!local) return path.join(Global.Path.log, "coder.log")
   return path.join(Global.Path.log, `coder-${channel.replace(/[^a-zA-Z0-9._-]/g, "-")}.log`)
 }
 
@@ -90,7 +90,7 @@ export const trim = Effect.fn("Logging.trim")(function* (
   const max = options.max ?? LOG_MAX_BYTES
   const keep = options.keep ?? LOG_KEEP_BYTES
   const fs = yield* FileSystem.FileSystem
-  // Every opencode process on the machine runs this against the same file. Two trimmers racing
+  // Every coder process on the machine runs this against the same file. Two trimmers racing
   // would have one compute its cut from a size the other already shrank, so only one may proceed
   // and the rest skip until the next interval. mkdir is the atomic primitive on every platform.
   // acquireRelease keeps the mkdir uninterruptible, so a scope closing mid-call cannot leave a lock

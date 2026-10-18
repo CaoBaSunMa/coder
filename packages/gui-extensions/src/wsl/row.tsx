@@ -17,12 +17,12 @@ export default function WslRow(props: {
 }) {
   const extension = useExtension()
   const check = () => props.state()?.coderChecks[props.distro]
-  const opencodeAction = () => wslCoderAction(check())
+  const coderAction = () => wslCoderAction(check())
 
   const busy = () => {
     const job = props.state()?.job
 
-    return job?.kind === "install-opencode" && job.distro === props.distro
+    return job?.kind === "install-coder" && job.distro === props.distro
   }
 
   return (
@@ -44,7 +44,7 @@ export default function WslRow(props: {
             </div>
           </div>
           <div class="settings-servers-actions">
-            <Show when={opencodeAction()}>
+            <Show when={coderAction()}>
               {(label) => (
                 <Button
                   size="small"

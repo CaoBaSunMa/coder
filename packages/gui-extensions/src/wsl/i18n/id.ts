@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Gagal menginstal distro: {{distro}}",
   "error.installCoder": "Instalasi Coder gagal",
   "error.alreadyAdded": "{{distro}} sudah ditambahkan",
-  "error.coderMissing": "opencode belum terinstal di distro ini",
-  "error.coderCannotRun": "opencode telah terinstal, tetapi tidak dapat dijalankan",
+  "error.coderMissing": "coder belum terinstal di distro ini",
+  "error.coderCannotRun": "coder telah terinstal, tetapi tidak dapat dijalankan",
   "error.coderNotInstalled": "Coder belum terinstal di {{distro}}",
   "error.updateVersion":
     "Pembaruan Coder selesai, tetapi {{distro}} masih melaporkan {{installed}}; seharusnya {{expected}}",

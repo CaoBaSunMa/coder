@@ -13,7 +13,7 @@ export interface CreateOptions extends WorkerdProfile.Options {
 }
 
 /**
- * Boots the embedded opencode SDK on the workerd runtime profile: the full
+ * Boots the embedded coder SDK on the workerd runtime profile: the full
  * application graph inside a Cloudflare Durable Object, with the database on
  * the injected `DurableObjectStorage` SQLite and every intentionally-local
  * service replaced or disabled (see `ServerWorkerd.replacements`).

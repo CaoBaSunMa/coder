@@ -1,4 +1,4 @@
-export * as CoderTools from "./opencode.js"
+export * as CoderTools from "./coder.js"
 
 import { SystemPart, ToolFailure } from "@xcoder/ai"
 import type { Context } from "@xcoder/plugin/effect/plugin"
@@ -85,7 +85,7 @@ const ModelsOutput = Schema.Struct({
 })
 
 export const Plugin = {
-  id: "opencode.tools",
+  id: "coder.tools",
   effect: Effect.fn("CoderTools.Plugin")(function* (ctx: Context) {
     const access = yield* FileAccess.Service
     const permission = yield* Permission.Service

@@ -1403,7 +1403,7 @@ it.live("discovers and reads MCP resources through Code Mode", () =>
       assertion = yield* Deferred.make<Permission.AssertInput>()
       const everywhere = yield* run("return await tools.coder.list_mcp_resources({})")
       expect(yield* Deferred.await(assertion)).toMatchObject({
-        action: "opencode_list_mcp_resources",
+        action: "coder_list_mcp_resources",
         resources: ["resources"],
         save: ["resources"],
       })
@@ -1440,14 +1440,14 @@ it.live("discovers and reads MCP resources through Code Mode", () =>
       ])
       expect(read.metadata?.toolCalls).toMatchObject([
         {
-          tool: "opencode.read_mcp_resource",
+          tool: "coder.read_mcp_resource",
           status: "completed",
           input: { server: "resources", uri: "docs://readme" },
         },
       ])
       expect(server.state.resourceReads).toEqual(["docs://readme"])
       expect(yield* Deferred.await(assertion)).toEqual({
-        action: "opencode_read_mcp_resource",
+        action: "coder_read_mcp_resource",
         resources: ["resources:docs://readme"],
         save: ["resources:*"],
         metadata: { server: "resources", uri: "docs://readme" },
@@ -1492,7 +1492,7 @@ it.live("discovers and reads MCP resources through Code Mode", () =>
 
       const reads = server.state.resourceReads.length
       decision = Effect.fail(
-        new Permission.BlockedError({ rules: [], permission: "opencode_read_mcp_resource", resources: ["*"] }),
+        new Permission.BlockedError({ rules: [], permission: "coder_read_mcp_resource", resources: ["*"] }),
       )
       const denied = yield* run(
         'return await tools.coder.read_mcp_resource({ server: "resources", uri: "docs://denied" })',

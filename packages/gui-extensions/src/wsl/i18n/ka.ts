@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "დისტროს დაყენება ვერ მოხერხდა: {{distro}}",
   "error.installCoder": "Coder ინსტალაცია ვერ მოხერხდა",
   "error.alreadyAdded": "{{distro}} უკვე დამატებულია",
-  "error.coderMissing": "opencode არ არის დაინსტალირებული ამ დისტროში",
-  "error.coderCannotRun": "opencode დაინსტალირებულია, მაგრამ ვერ გაშვება",
+  "error.coderMissing": "coder არ არის დაინსტალირებული ამ დისტროში",
+  "error.coderCannotRun": "coder დაინსტალირებულია, მაგრამ ვერ გაშვება",
   "error.coderNotInstalled": "Coder არ არის დაინსტალირებული {{distro}}",
   "error.updateVersion":
     "Coder განახლება დასრულდა, მაგრამ {{distro}} კვლავ იუწყება {{installed}}; მოსალოდნელია {{expected}}",

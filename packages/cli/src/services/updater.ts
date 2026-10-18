@@ -56,7 +56,7 @@ const installNames: Record<Method, string> = {
   winget: "WinGet",
 }
 
-const wingetPackage = "Anomaly.Coder"
+const wingetPackage = "Coder.Coder"
 const wingetArgs = [
   "--id",
   wingetPackage,
@@ -150,16 +150,16 @@ const make = Effect.gen(function* () {
       .readFileString(path.join(directory, "package.json"))
       .pipe(Effect.flatMap((text) => Effect.try(() => JSON.parse(text))))
     // Source invocations run inside Bun or Node, which may themselves be npm packages.
-    if (!/^@opencode(?:-ai)?\/cli(?:-node)?$/.test(manifest.name)) return
+    if (!/^@xcoder\/cli(?:-node)?$/.test(manifest.name)) return
     if (Object.values(manifest.bin ?? {}).some((bin) => path.resolve(directory, bin) === executable))
       return manifest.name
   }).pipe(Effect.orElseSucceed(() => undefined))
-  // "coder" is Homebrew Core's formula; the others are published to anomalyco/tap.
+  // "coder" is Homebrew Core's formula; the others are published to coder-ai/tap.
   const installedFormula = ["coder", "coder-beta", "coder-v2"].find((name) =>
     executable.includes(`${path.sep}Cellar${path.sep}${name}${path.sep}`),
   )
   // WinGet extracts portable packages into a directory named after the package identifier.
-  const installedWinget = /[\\/]winget[\\/]packages[\\/]anomaly\.coder_/i.test(executable)
+  const installedWinget = /[\\/]winget[\\/]packages[\\/]coder\.coder_/i.test(executable)
 
   const readPolicy = Effect.fnUntraced(function* () {
     const values = yield* Effect.forEach(["config.json", "coder.json", "coder.jsonc"], (name) =>
@@ -191,7 +191,7 @@ const make = Effect.gen(function* () {
     global.home,
     ".coder",
     "bin",
-    process.platform === "win32" ? "opencode.exe" : "coder",
+    process.platform === "win32" ? "coder.exe" : "coder",
   )
   const curlBinary = yield* fs.realPath(curlPath).pipe(Effect.orElseSucceed(() => curlPath))
 
@@ -206,7 +206,7 @@ const make = Effect.gen(function* () {
       new UpgradeError({
         title: "Git Bash is required to update Coder",
         detail: "The Coder installer runs with Git Bash on Windows, and it was not found.",
-        retry: "Install Git for Windows or set CODER_GIT_BASH_PATH, then run opencode upgrade again.",
+        retry: "Install Git for Windows or set CODER_GIT_BASH_PATH, then run coder upgrade again.",
       }),
     )
   })
@@ -291,7 +291,7 @@ const make = Effect.gen(function* () {
           {
             title: "Could not check for Coder updates",
             detail: errorDetail(cause),
-            retry: "Check your network, then run opencode upgrade again.",
+            retry: "Check your network, then run coder upgrade again.",
           },
           { cause },
         ),
@@ -338,7 +338,7 @@ const make = Effect.gen(function* () {
           title: "Could not check for Coder updates",
           detail,
           command: ["winget", "search", ...wingetArgs].join(" "),
-          retry: "Fix the issue above, then run opencode upgrade again.",
+          retry: "Fix the issue above, then run coder upgrade again.",
         },
         cause === undefined ? undefined : { cause },
       )
@@ -401,7 +401,7 @@ const make = Effect.gen(function* () {
           title: input.title ?? `${installNames[input.method]} could not install Coder`,
           detail,
           command: (input.displayCommand ?? input.command).join(" "),
-          retry: input.retry ?? "Fix the issue above, then run opencode upgrade again.",
+          retry: input.retry ?? "Fix the issue above, then run coder upgrade again.",
         },
         cause === undefined ? undefined : { cause },
       )
@@ -482,7 +482,7 @@ const make = Effect.gen(function* () {
             command: ["curl", "-fsSL", "-o", installer, "https://coder.example.com/install"],
             displayCommand: ["curl", "-fsSL", "https://coder.example.com/install"],
             title: "Could not download the Coder installer",
-            retry: "Check your network, then run opencode upgrade again.",
+            retry: "Check your network, then run coder upgrade again.",
           })
           return yield* retaining(
             method,
@@ -521,7 +521,7 @@ const make = Effect.gen(function* () {
               {
                 title: "Could not prepare the Coder upgrade",
                 detail: errorDetail(cause),
-                retry: "Fix the issue above, then run opencode upgrade again.",
+                retry: "Fix the issue above, then run coder upgrade again.",
               },
               { cause },
             ),

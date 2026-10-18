@@ -4,7 +4,7 @@ import { builtins } from "@xcoder/gui-extensions/renderer"
 export { builtins }
 
 /** Dispatched in development with the re-evaluated built-in list after an extension's files change. */
-export const BUILTINS_UPDATED = "opencode:gui-extensions-updated"
+export const BUILTINS_UPDATED = "coder:gui-extensions-updated"
 
 // Accepting the list here keeps an extension edit from reloading the window; hmr.tsx reloads that extension.
 if (import.meta.hot)

@@ -18,6 +18,7 @@ export function DialogUpdate(props: {
   const dialog = useDialog()
   const theme = useTheme().surface("dialog")
   const newDesigns = useNewDesigns()
+  const i18n = useI18n()
   const [error, setError] = createSignal<string>()
   const [active, setActive] = createSignal(0)
   const controller = new AbortController()
@@ -48,13 +49,13 @@ export function DialogUpdate(props: {
     if (type === "installing") return []
     const confirm =
       type === "available"
-        ? { label: "Update", run: props.install }
+        ? { label: i18n.t("update.action"), run: props.install }
         : type === "installed"
-          ? { label: "Restart", run: props.restart }
+          ? { label: i18n.t("update.restart"), run: props.restart }
           : undefined
     return [
       {
-        label: "Skip",
+        label: i18n.t("update.skip"),
         run: () => {
           props.skip()
           dialog.clear()
@@ -71,13 +72,13 @@ export function DialogUpdate(props: {
     commands: [
       {
         bind: "return",
-        title: "Confirm update action",
+        title: i18n.t("update.confirm"),
         group: "Dialog",
         run: () => void buttons()[newDesigns() ? buttons().length - 1 : active()]?.run(),
       },
       ...(newDesigns() ? [] : ["left", "right", "tab", "shift+tab"]).map((bind) => ({
         bind,
-        title: bind === "left" || bind === "shift+tab" ? "Previous update action" : "Next update action",
+        title: bind === "left" || bind === "shift+tab" ? i18n.t("update.previous") : i18n.t("update.next"),
         group: "Dialog",
         run: () => {
           const count = buttons().length
@@ -93,10 +94,10 @@ export function DialogUpdate(props: {
         <DialogHeader
           title={
             state().type === "installing"
-              ? "Updating Coder"
+              ? i18n.t("update.updating")
               : state().type === "available" || state().type === "failed"
-                ? "Update available"
-                : "Update"
+                ? i18n.t("update.available")
+                : i18n.t("update.title")
           }
         />
       }
@@ -134,25 +135,23 @@ export function DialogUpdate(props: {
         {(current) => (
           <Switch>
             <Match when={current.type === "checking"}>
-              <Spinner shimmer={theme.text.base}>Checking for updates…</Spinner>
+              <Spinner shimmer={theme.text.base}>{i18n.t("update.checking")}</Spinner>
             </Match>
             <Match when={current.type === "available"}>
-              <text fg={theme.text.muted}>
-                An update is available. After installing, you'll be prompted to restart Coder.
-              </text>
+              <text fg={theme.text.muted}>{i18n.t("update.message")}</text>
             </Match>
             <Match when={current.type === "installing"}>
               <Spinner shimmer={theme.text.base}>
-                {current.type === "installing" ? `Installing Coder ${current.version}…` : ""}
+                {current.type === "installing" ? i18n.t("update.installing", { version: current.version }) : ""}
               </Spinner>
             </Match>
             <Match when={current.type === "installed"}>
               <text fg={theme.text.muted} wrapMode="word">
-                Update successful! A restart is required. Any active sessions will be resumed automatically.
+                {i18n.t("update.installed")}
               </text>
             </Match>
             <Match when={current.type === "current"}>
-              <text fg={theme.text.muted}>Coder is already up to date.</text>
+              <text fg={theme.text.muted}>{i18n.t("update.current")}</text>
             </Match>
             <Match when={current.type === "unavailable"}>
               <text fg={theme.text.muted} wrapMode="word">

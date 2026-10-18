@@ -968,15 +968,15 @@ describe("ShellTool", () => {
               const sessions = yield* Session.Service
               yield* sessions.environment({
                 sessionID,
-                variables: { AGENT: "0", OPENCODE: "0", AI_AGENT: "", CODER_SESSION_ID: "stale" },
+                variables: { AGENT: "0", CODER: "0", AI_AGENT: "", CODER_SESSION_ID: "stale" },
               })
               const command = isWindows
-                ? '[Console]::Out.Write("$env:AGENT|$env:OPENCODE|$env:AI_AGENT|$env:CODER_SESSION_ID")'
-                : 'printf %s "$AGENT|$OPENCODE|$AI_AGENT|$CODER_SESSION_ID"'
+                ? '[Console]::Out.Write("$env:AGENT|$env:CODER|$env:AI_AGENT|$env:CODER_SESSION_ID")'
+                : 'printf %s "$AGENT|$CODER|$AI_AGENT|$CODER_SESSION_ID"'
               const settled = yield* executeTool(registry, call({ command }))
 
               expect(settled.status).toBe("completed")
-              expect(settled.content?.[0]).toEqual({ type: "text", text: `1|1|opencode|${sessionID}` })
+              expect(settled.content?.[0]).toEqual({ type: "text", text: `1|1|coder|${sessionID}` })
             }),
           )
         },

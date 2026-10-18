@@ -375,16 +375,16 @@ it.live("discovers exported specifiers from the resolved tree even when dist/ ex
     expect(res1).toBe(res2)
 
     const winFilter = createForeignPackageFilter([
-      "C:\\runner\\_work\\opencode\\node_modules\\.bun\\effect@4.0.0-rc.112\\node_modules\\effect",
+      "C:\\runner\\_work\\coder\\node_modules\\.bun\\effect@4.0.0-rc.112\\node_modules\\effect",
     ])
     expect(
       winFilter.test(
-        "C:\\runner\\_work\\opencode\\node_modules\\.bun\\effect@4.0.0-rc.112\\node_modules\\effect\\dist\\index.js",
+        "C:\\runner\\_work\\coder\\node_modules\\.bun\\effect@4.0.0-rc.112\\node_modules\\effect\\dist\\index.js",
       ),
     ).toBe(false)
     expect(
       winFilter.test(
-        "C:/runner/_work/opencode/node_modules/.bun/effect@4.0.0-rc.112/node_modules/effect/dist/index.js",
+        "C:/runner/_work/coder/node_modules/.bun/effect@4.0.0-rc.112/node_modules/effect/dist/index.js",
       ),
     ).toBe(false)
     expect(winFilter.test("C:\\Users\\plugin\\node_modules\\effect\\dist\\index.js")).toBe(true)

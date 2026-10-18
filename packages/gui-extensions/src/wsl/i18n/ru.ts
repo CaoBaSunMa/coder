@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Не удалось установить дистрибутив: {{distro}}",
   "error.installCoder": "Не удалось установить Coder",
   "error.alreadyAdded": "Дистрибутив {{distro}} уже добавлен",
-  "error.coderMissing": "opencode не установлен в этом дистрибутиве",
-  "error.coderCannotRun": "opencode установлен, но его не удалось запустить",
+  "error.coderMissing": "coder не установлен в этом дистрибутиве",
+  "error.coderCannotRun": "coder установлен, но его не удалось запустить",
   "error.coderNotInstalled": "Coder не установлен в {{distro}}",
   "error.updateVersion":
     "Обновление Coder завершено, но {{distro}} по-прежнему сообщает версию {{installed}}; ожидалась {{expected}}",

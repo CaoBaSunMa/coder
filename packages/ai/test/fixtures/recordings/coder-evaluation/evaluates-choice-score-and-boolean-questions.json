@@ -4,7 +4,7 @@
     "model": "jev-1.13-free",
     "tags": [
       "prefix:coder-evaluation",
-      "provider:opencode",
+      "provider:coder",
       "protocol:system-one"
     ],
     "name": "coder-evaluation/evaluates-choice-score-and-boolean-questions",

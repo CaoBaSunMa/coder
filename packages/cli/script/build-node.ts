@@ -103,14 +103,14 @@ for (const target of targets) {
   await copyNodeAssets(assets)
   await writeFile(path.join("dist-node", "assets", appArchiveAsset), appArchive)
   await build(mainConfig(input))
-  await assertTextImportsInlined("dist-node/opencode.mjs")
-  if (bundleOnly) await verifyArtifact("dist-node/opencode.mjs")
+  await assertTextImportsInlined("dist-node/coder.mjs")
+  if (bundleOnly) await verifyArtifact("dist-node/coder.mjs")
 
   const host = target.platform === process.platform && target.arch === process.arch
   if (host) {
     if (!builder) throw new Error("Node SEA builder is unavailable")
-    run(builder, [...nodeExecArgv, "dist-node/opencode.mjs", "--version"])
-    run(builder, [...nodeExecArgv, "dist-node/opencode.mjs", "--help"])
+    run(builder, [...nodeExecArgv, "dist-node/coder.mjs", "--version"])
+    run(builder, [...nodeExecArgv, "dist-node/coder.mjs", "--help"])
   }
   if (bundleOnly) continue
 
@@ -120,7 +120,7 @@ for (const target of targets) {
   if (!builder) throw new Error("Node SEA builder is unavailable")
   await mkdir(path.dirname(output), { recursive: true })
   const config = {
-    main: "dist-node/opencode.mjs",
+    main: "dist-node/coder.mjs",
     mainFormat: "module",
     executable: await resolveTargetNode(target, builder),
     output: path.relative(dir, output),

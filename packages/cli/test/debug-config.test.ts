@@ -13,7 +13,7 @@ describe("debug config command", () => {
     expect(debug.stdout).toContain("config")
     expect(debug.stdout).toContain("List configuration sources")
     expect(config.exitCode).toBe(0)
-    expect(config.stdout).toContain("opencode debug config [flags]")
+    expect(config.stdout).toContain("coder debug config [flags]")
     expect(config.stdout).toContain("List configuration sources")
     expect(config.stdout).not.toContain("--reveal-secrets")
   })
@@ -55,7 +55,7 @@ describe("debug config command", () => {
             version: CODER_VERSION,
             pid: process.pid,
             urls: [],
-            paths: { tmp: "/tmp/opencode" },
+            paths: { tmp: "/tmp/coder" },
           })
         }
         requested = url
@@ -87,7 +87,7 @@ describe("debug config command", () => {
       expect(result.stdout).not.toContain("Bearer example")
       expect(requested?.pathname).toBe("/api/config")
       expect(requested?.searchParams.get("location[directory]")).toBe(project)
-      expect(authorization).toEqual([`Basic ${btoa("opencode:secret")}`])
+      expect(authorization).toEqual([`Basic ${btoa("coder:secret")}`])
       expect(healthProbes).toBe(1)
     } finally {
       server.stop(true)

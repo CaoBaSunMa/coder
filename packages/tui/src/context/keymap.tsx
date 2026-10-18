@@ -29,7 +29,7 @@ import { resolveInteractivity, useInteractivity } from "./interactivity"
 
 declare module "@opentui/keymap" {
   interface Command {
-    opencode?: KeymapCommand
+    coder?: KeymapCommand
     slash?: {
       name: string
       aliases?: string[]
@@ -38,7 +38,7 @@ declare module "@opentui/keymap" {
   }
 }
 
-const MODE = { key: "opencode.mode", base: "base" } as const
+const MODE = { key: "coder.mode", base: "base" } as const
 
 type OpenTuiKeymap = Parameters<typeof KeymapProvider>[0]["keymap"]
 type Mode = ReturnType<typeof createMode>
@@ -217,7 +217,7 @@ function createLayer(input: () => KeymapLayer) {
         return {
           ...definition,
           name: id,
-          opencode: command,
+          coder: command,
           run: (context: CommandContext<Renderable, KeyEvent>) => run(value.input(id), context.event),
           ...(description === undefined ? {} : { desc: description }),
           ...(group === undefined ? {} : { category: group }),

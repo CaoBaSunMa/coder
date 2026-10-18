@@ -43,7 +43,7 @@ export const toModelContent = (entries: EncodedOutput, truncated = false) => {
 
 /** Glob leaf that defaults its filesystem root to the active Location. */
 export const Plugin = {
-  id: "opencode.tool.glob",
+  id: "coder.tool.glob",
   effect: Effect.fn("GlobTool.Plugin")(function* (ctx: Context) {
     const environment = yield* Environment.Service
     const ripgrep = yield* Ripgrep.Service

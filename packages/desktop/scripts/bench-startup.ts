@@ -101,7 +101,7 @@ const paths = {
   appData: join(home, "AppData", "Roaming"),
   localAppData: join(home, "AppData", "Local"),
   temp: join(home, "AppData", "Local", "Temp"),
-  db: join(home, ".local", "share", "coder", "opencode.db"),
+  db: join(home, ".local", "share", "coder", "coder.db"),
   config: join(home, ".config", "coder"),
   registration: join(home, ".local", "state", "coder", "service.json"),
   logs: join(userData, "logs"),
@@ -586,7 +586,7 @@ function prepareHome() {
     // Seed only the app's own state (tabs, drafts, settings, window placement); Chromium profile
     // data, caches, logs and the staged CLI are recreated by the app.
     const seed = resolve(args.values.seed)
-    const keep = /^(drafts\.sqlite(-wal|-shm)?|opencode\.[a-z]+|\.?window-state.*\.json|opencode)$/
+    const keep = /^(drafts\.sqlite(-wal|-shm)?|coder\.[a-z]+|\.?window-state.*\.json|coder)$/
     cpSync(seed, userData, {
       recursive: true,
       filter: (source) => source === seed || keep.test(relative(seed, source).split(/[\\/]/)[0] ?? ""),

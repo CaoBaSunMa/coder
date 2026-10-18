@@ -6,7 +6,7 @@ import { Global } from "@xcoder/util/global"
 import { Provider } from "../../provider.js"
 
 // Ambient inputs the AWS default credential chain can turn into credentials
-// without any key stored in opencode. Mirrors the presence checks the AWS CLI
+// without any key stored in coder. Mirrors the presence checks the AWS CLI
 // and SDK use before consulting shared config.
 const CHAIN_ENV = [
   "AWS_PROFILE",
@@ -20,7 +20,7 @@ const isBedrock = (item: { readonly package: string }) =>
   item.package.startsWith("@xcoder/ai/providers/amazon-bedrock")
 
 export const AmazonBedrockPlugin = define({
-  id: "opencode.provider.amazon.bedrock",
+  id: "coder.provider.amazon.bedrock",
   effect: Effect.fn(function* (ctx) {
     const fs = yield* FSUtil.Service
     const paths = [

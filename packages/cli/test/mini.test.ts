@@ -35,7 +35,7 @@ describe("mini command", () => {
           version: CODER_VERSION,
           pid: process.pid,
           urls: [],
-          paths: { tmp: "/tmp/opencode" },
+          paths: { tmp: "/tmp/coder" },
         })
       },
     })
@@ -47,7 +47,7 @@ describe("mini command", () => {
           version: CODER_VERSION,
           pid: process.pid,
           urls: [],
-          paths: { tmp: "/tmp/opencode" },
+          paths: { tmp: "/tmp/coder" },
         })
       },
     })
@@ -162,7 +162,7 @@ describe("mini command", () => {
             version: CODER_VERSION,
             pid: process.pid,
             urls: [],
-            paths: { tmp: "/tmp/opencode" },
+            paths: { tmp: "/tmp/coder" },
           })
         if (url.pathname === "/api/location")
           return Response.json({ directory: process.cwd(), project: { id: "global", directory: process.cwd() } })
@@ -209,7 +209,7 @@ describe("mini command", () => {
           version: "incompatible",
           pid: process.pid,
           urls: [],
-          paths: { tmp: "/tmp/opencode" },
+          paths: { tmp: "/tmp/coder" },
         })
       },
     })
@@ -246,7 +246,7 @@ describe("mini command", () => {
       const result = await cli(args)
 
       expect(result.exitCode).toBe(1)
-      expect(result.stderr).toContain("opencode mini requires a TTY stdout")
+      expect(result.stderr).toContain("coder mini requires a TTY stdout")
     }
   })
 })

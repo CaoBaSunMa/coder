@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "បរាជ័យក្នុងការដំឡើង distro៖ {{distro}}",
   "error.installCoder": "ការដំឡើង Coder បានបរាជ័យ",
   "error.alreadyAdded": "{{distro}} ត្រូវបានបន្ថែមរួចហើយ",
-  "error.coderMissing": "opencode មិនត្រូវបានដំឡើងនៅក្នុង distro នេះទេ។",
-  "error.coderCannotRun": "opencode ត្រូវបានដំឡើង ប៉ុន្តែមិនអាចដំណើរការបានទេ។",
+  "error.coderMissing": "coder មិនត្រូវបានដំឡើងនៅក្នុង distro នេះទេ។",
+  "error.coderCannotRun": "coder ត្រូវបានដំឡើង ប៉ុន្តែមិនអាចដំណើរការបានទេ។",
   "error.coderNotInstalled": "Coder មិនត្រូវបានដំឡើងនៅក្នុង {{distro}} ទេ។",
   "error.updateVersion":
     "ការធ្វើបច្ចុប្បន្នភាព Coder បានបញ្ចប់ ប៉ុន្តែ {{distro}} នៅតែរាយការណ៍ {{installed}}; {{expected}} រំពឹងទុក",

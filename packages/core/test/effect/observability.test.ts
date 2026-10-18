@@ -17,10 +17,10 @@ afterEach(() => {
 describe("resource", () => {
   test("parses and decodes OTEL resource attributes", () => {
     process.env.OTEL_RESOURCE_ATTRIBUTES =
-      "service.namespace=anomalyco,team=platform%2Cobservability,label=hello%3Dworld,key%2Fname=value%20here"
+      "service.namespace=coder,team=platform%2Cobservability,label=hello%3Dworld,key%2Fname=value%20here"
 
     expect(resource().attributes).toMatchObject({
-      "service.namespace": "anomalyco",
+      "service.namespace": "coder",
       team: "platform,observability",
       label: "hello=world",
       "key/name": "value here",
@@ -28,23 +28,23 @@ describe("resource", () => {
   })
 
   test("drops OTEL resource attributes when any entry is invalid", () => {
-    process.env.OTEL_RESOURCE_ATTRIBUTES = "service.namespace=anomalyco,broken"
+    process.env.OTEL_RESOURCE_ATTRIBUTES = "service.namespace=coder,broken"
 
     expect(resource().attributes["service.namespace"]).toBeUndefined()
-    expect(resource().attributes["opencode.client"]).toBeDefined()
+    expect(resource().attributes["coder.client"]).toBeDefined()
   })
 
   test("keeps built-in attributes when env values conflict", () => {
     process.env.OTEL_RESOURCE_ATTRIBUTES =
-      "opencode.client=web,service.instance.id=override,service.namespace=anomalyco"
+      "coder.client=web,service.instance.id=override,service.namespace=coder"
 
     const app = { client: "cli", version: "1.2.3", channel: "beta" }
     expect(resource(app).attributes).toMatchObject({
-      "opencode.client": "cli",
-      "service.namespace": "anomalyco",
+      "coder.client": "cli",
+      "service.namespace": "coder",
     })
     expect(resource(app).attributes["service.instance.id"]).not.toBe("override")
-    expect(resource(app).attributes["opencode.run"]).toMatch(/^[0-9a-f]{8}$/)
+    expect(resource(app).attributes["coder.run"]).toMatch(/^[0-9a-f]{8}$/)
   })
 })
 
@@ -91,7 +91,7 @@ test("file logger appends concurrent runs with a run on every line", async () =>
       await fs.rm(dir, { recursive: true, force: true })
     },
   }
-  const file = path.join(dir, "opencode.log")
+  const file = path.join(dir, "coder.log")
   const write = (runID: string) =>
     Effect.forEach(
       Array.from({ length: 50 }, (_, index) => index),
@@ -119,7 +119,7 @@ test("file logger flattens nested objects", async () => {
       await fs.rm(dir, { recursive: true, force: true })
     },
   }
-  const file = path.join(dir, "opencode.log")
+  const file = path.join(dir, "coder.log")
 
   await Effect.logInfo("request complete", {
     request: { method: "GET", timing: { duration: 42 } },

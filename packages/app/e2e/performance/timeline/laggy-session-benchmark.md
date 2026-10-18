@@ -8,7 +8,7 @@ From `packages/app` in PowerShell:
 $env:PLAYWRIGHT_BUILD = '1'
 $env:PLAYWRIGHT_BASE_URL = 'http://127.0.0.1:4398' # Existing production preview
 $env:LAGGY_SESSION_FILE = 'C:\path\session.json'
-$env:LAGGY_SESSION_OUTPUT = 'C:\tmp\opencode\session-load'
+$env:LAGGY_SESSION_OUTPUT = 'C:\tmp\coder\session-load'
 $env:LAGGY_SESSION_HISTORY = 'paged' # Or 'full' to supply all exported history
 bun x playwright test --config e2e/performance/playwright.config.ts timeline/laggy-session-benchmark.spec.ts --repeat-each=20 --workers=1 --retries=0
 bun e2e/performance/timeline/laggy-session-report.ts $env:LAGGY_SESSION_OUTPUT

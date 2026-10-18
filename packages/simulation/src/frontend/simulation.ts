@@ -24,7 +24,7 @@ export const create = Effect.fn("Drive.create")(function* (options: CliRendererC
     manifest.endpoints.ui,
     version,
   )
-  yield* Effect.sync(() => process.stderr.write(`opencode drive ui websocket: ${server.url}\n`))
+  yield* Effect.sync(() => process.stderr.write(`coder drive ui websocket: ${server.url}\n`))
   return renderer
 })
 

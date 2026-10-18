@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "ޑިސްޓްރޯ: ⁨{{distro}}⁩ އިންސްޓޯލް ކުރަން ނާކާމިޔާބު",
   "error.installCoder": "Coder އިންސްޓޯލް ކުރުން ނާކާމިޔާބުވެއްޖެ",
   "error.alreadyAdded": "⁨{{distro}}⁩ މިހާރުވެސް އިތުރުކޮށްފައިވެއެވެ",
-  "error.coderMissing": "މި ޑިސްޓްރޯގައި opencode އިންސްޓޯލްކޮށްފައެއް ނުވެއެވެ",
-  "error.coderCannotRun": "opencode އިންސްޓޯލް ކޮށްފައި އޮތް ނަމަވެސް ހިންގޭ ގޮތެއް ނުވިއެވެ",
+  "error.coderMissing": "މި ޑިސްޓްރޯގައި coder އިންސްޓޯލްކޮށްފައެއް ނުވެއެވެ",
+  "error.coderCannotRun": "coder އިންސްޓޯލް ކޮށްފައި އޮތް ނަމަވެސް ހިންގޭ ގޮތެއް ނުވިއެވެ",
   "error.coderNotInstalled": "Coder އަކީ ⁨{{distro}}⁩ ގައި އިންސްޓޯލް ކުރެވިފައިވާ އެއްޗެއް ނޫނެވެ",
   "error.updateVersion":
     "Coder އަޕްޑޭޓް ނިމުނު ނަމަވެސް ⁨{{distro}}⁩ އަދިވެސް ރިޕޯޓް ކުރަނީ ⁨{{installed}}⁩؛ ލަފާކުރެވޭ ގޮތުގައި ⁨{{expected}}⁩",

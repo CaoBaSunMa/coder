@@ -362,7 +362,7 @@ function setup(override?: (request: Request) => Promise<Response | undefined>) {
   const pending: SessionInboxInfo[] = []
   const listeners = new Set<Parameters<CreateDataInput["event"]["listen"]>[0]>()
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       const overridden = await override?.(request)

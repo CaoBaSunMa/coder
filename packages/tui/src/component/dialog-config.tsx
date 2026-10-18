@@ -35,6 +35,15 @@ export const settings: Setting[] = [
     keywords: ["dark mode", "light mode", "system theme"],
   },
   {
+    title: "Language",
+    category: "Appearance",
+    path: ["locale"],
+    default: "en",
+    values: ["en", "zh"],
+    labels: ["English", "简体中文"],
+    keywords: ["locale", "language", "语言", "中文"],
+  },
+  {
     title: "Animations",
     category: "Appearance",
     path: ["animations"],

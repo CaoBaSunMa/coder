@@ -4,7 +4,7 @@ import { expect, test } from "bun:test"
 import { RGBA } from "@opentui/core"
 import { createTuiResolvedConfig } from "../../fixture/tui-runtime"
 import { getCoderTheme } from "../../../src/theme"
-import opencodeSource from "../../../src/theme/assets/coder.json" with { type: "json" }
+import coderSource from "../../../src/theme/assets/coder.json" with { type: "json" }
 import type { ThemeV1Json } from "@xcoder/theme/tui/v1"
 import { ConfigProvider } from "../../../src/config"
 import { ThemeContextProvider, ThemeProvider, type ThemeError, useTheme, useThemes } from "../../../src/context/theme"
@@ -18,14 +18,14 @@ async function wait(fn: () => boolean) {
 }
 
 test("uses an available mode while retaining the pinned preference", async () => {
-  const opencodeV1 = opencodeSource as ThemeV1Json
-  const lightOnly = structuredClone(opencodeV1)
+  const coderV1 = coderSource as ThemeV1Json
+  const lightOnly = structuredClone(coderV1)
   lightOnly.theme.background = "#eeeeee"
   lightOnly.theme.text = "#111111"
-  const dual = structuredClone(opencodeV1)
+  const dual = structuredClone(coderV1)
   dual.theme.background = { light: "#eeeeee", dark: "#111111" }
   dual.theme.text = { light: "#111111", dark: "#eeeeee" }
-  const darkOnly = structuredClone(opencodeV1)
+  const darkOnly = structuredClone(coderV1)
   darkOnly.theme.background = "#111111"
   darkOnly.theme.text = "#eeeeee"
   const native = {

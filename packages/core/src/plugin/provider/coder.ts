@@ -183,7 +183,7 @@ function oauth(http: HttpClient.HttpClient) {
 }
 
 export const CoderPlugin = define<HttpClient.HttpClient | Bus.Service | ManagedPolicy.Service | Scope.Scope>({
-  id: "opencode.provider.coder",
+  id: "coder.provider.coder",
   effect: Effect.fn(function* (ctx) {
     const bus = yield* Bus.Service
     const client = yield* HttpClient.HttpClient

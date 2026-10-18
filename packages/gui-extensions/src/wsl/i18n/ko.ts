@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "배포판 설치 실패: {{distro}}",
   "error.installCoder": "Coder 설치 실패",
   "error.alreadyAdded": "{{distro}} 배포판은 이미 추가되었습니다",
-  "error.coderMissing": "이 배포판에 opencode가 설치되어 있지 않습니다",
-  "error.coderCannotRun": "opencode가 설치되어 있지만 실행할 수 없습니다",
+  "error.coderMissing": "이 배포판에 coder가 설치되어 있지 않습니다",
+  "error.coderCannotRun": "coder가 설치되어 있지만 실행할 수 없습니다",
   "error.coderNotInstalled": "{{distro}}에 Coder가 설치되어 있지 않습니다",
   "error.updateVersion":
     "Coder 업데이트가 완료되었지만 {{distro}}에서 여전히 {{installed}} 버전으로 표시됩니다. 예상 버전: {{expected}}",

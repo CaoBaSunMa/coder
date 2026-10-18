@@ -2,14 +2,14 @@ import { describe, expect, test } from "bun:test"
 import { bareServerAddress, legacyPairingLink, pairingLink } from "./pairing"
 
 describe("pairing link", () => {
-  test("reads the server address and code from opencode pair links", () => {
+  test("reads the server address and code from coder pair links", () => {
     expect(pairingLink(" http://192.168.1.2:49374/auth/connect/abc_DEF-123 ")).toEqual({
       urls: ["http://192.168.1.2:49374"],
       code: "abc_DEF-123",
     })
   })
 
-  test("reads every server address from opencode pair QR codes", () => {
+  test("reads every server address from coder pair QR codes", () => {
     expect(
       pairingLink(
         JSON.stringify({ code: "abc_DEF-123", urls: ["http://192.168.1.2:49374", "http://100.64.0.3:49374"] }),
@@ -38,7 +38,7 @@ describe("pairing link", () => {
 
   test("treats only a host without a path as a server address typed into the pairing link field", () => {
     expect(bareServerAddress("192.168.1.2:4096")).toBe("http://192.168.1.2:4096")
-    expect(bareServerAddress("https://opencode.example.com/")).toBe("https://opencode.example.com")
+    expect(bareServerAddress("https://coder.example.com/")).toBe("https://coder.example.com")
     expect(bareServerAddress("localhost")).toBe("http://localhost")
     expect(bareServerAddress("devbox:4096")).toBe("http://devbox:4096")
     expect(bareServerAddress("[::1]:4096")).toBe("http://[::1]:4096")

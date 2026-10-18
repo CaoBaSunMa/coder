@@ -53,8 +53,8 @@ export function resource(app: App = { client: "coder", version: "unknown", chann
     attributes: {
       ...resourceAttributes(),
       "deployment.environment.name": app.channel,
-      "opencode.client": app.client,
-      "opencode.run": runID(),
+      "coder.client": app.client,
+      "coder.run": runID(),
       "service.instance.id": runID(),
     },
   }

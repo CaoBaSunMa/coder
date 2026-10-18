@@ -31,14 +31,14 @@ smoke(
         fs: { filewatcher: false },
       })
       const base = HttpServer.formatAddress(server.address)
-      const client = Coder.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("opencode:secret")}` } })
+      const client = Coder.make({ baseUrl: base, headers: { authorization: `Basic ${btoa("coder:secret")}` } })
       const sessionID = "ses_terminal_read"
       expect(yield* Effect.promise(() => client.experimental.persistentPty.read({ sessionID }))).toBeNull()
       expect(existsSync(fixture.directory)).toBeFalse()
       yield* Effect.promise(async () => {
         for (const lines of ["0", "-1", "1.5", "65536", "nope"]) {
           const response = await fetch(`${base}/api/experimental/session/${sessionID}/terminal/read?lines=${lines}`, {
-            headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+            headers: { authorization: `Basic ${btoa("coder:secret")}` },
           })
           expect(response.status).toBe(400)
           await response.arrayBuffer()
@@ -473,7 +473,7 @@ function testDirectory() {
       process.env.CODER_PTY_BIN = binary
       process.env.SHELL = "/bin/sh"
       return {
-        database: path.join(root, "opencode.db"),
+        database: path.join(root, "coder.db"),
         directory: path.join(root, "runtime"),
         environment,
         root,
@@ -509,7 +509,7 @@ function request(base: string, method: string, pathname: string, body?: unknown,
       const response = await fetch(new URL(pathname, base), {
         method,
         headers: {
-          authorization: `Basic ${btoa("opencode:secret")}`,
+          authorization: `Basic ${btoa("coder:secret")}`,
           ...headers,
           ...(body === undefined ? {} : { "content-type": "application/json" }),
         },
@@ -527,7 +527,7 @@ function request(base: string, method: string, pathname: string, body?: unknown,
 
 async function openEventStream(base: string) {
   const response = await fetch(new URL("/api/event", base), {
-    headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+    headers: { authorization: `Basic ${btoa("coder:secret")}` },
   })
   if (!response.ok || !response.body) throw new Error(`Persistent PTY event stream failed (${response.status})`)
   const reader = response.body.getReader()

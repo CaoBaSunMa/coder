@@ -414,7 +414,7 @@ for (const row of [
   { name: "a managed worktree", directory: accentWorkspace, accent: true },
   {
     name: "the main root written with Windows case and separators",
-    directory: "c:\\OPENCODE\\workspaceaccent\\",
+    directory: "c:\\CODER\\workspaceaccent\\",
     accent: false,
   },
 ]) {

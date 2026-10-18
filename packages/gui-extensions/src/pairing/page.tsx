@@ -225,7 +225,7 @@ function DialogPairing(props: {
   const system = ctx.system
 
   // The service attaches the tunnel in the background after it starts, so ask until the server advertises it, for
-  // about three minutes, as `opencode pair --remote` waits.
+  // about three minutes, as `coder pair --remote` waits.
   const tunnel = useQuery(() => ({
     queryKey: [ctx.id, "tunnel"],
     queryFn: (input) => props.tunnel(input.signal),
@@ -300,7 +300,7 @@ function DialogPairing(props: {
     </button>
   )
 
-  // The QR code carries the remote address as `opencode pair --remote` prints it, {"code","urls"} JSON, which the
+  // The QR code carries the remote address as `coder pair --remote` prints it, {"code","urls"} JSON, which the
   // app's scanner reads.
   const qr = createMemo(() => {
     if (!code.isSuccess || !tunnel.isSuccess) return

@@ -155,7 +155,7 @@ function sdk(input: {
   pending?: Record<string, Awaited<ReturnType<CoderClient["session"]["inbox"]["list"]>>>
   wait?: () => Promise<void>
 }) {
-  const client = Coder.make({ baseUrl: "https://opencode.test" })
+  const client = Coder.make({ baseUrl: "https://coder.test" })
   let subscription = 0
   spyOn(client.event, "subscribe").mockImplementation(() => input.streams[subscription++]?.stream ?? feed().stream)
   spyOn(client.message, "list").mockImplementation((request) =>

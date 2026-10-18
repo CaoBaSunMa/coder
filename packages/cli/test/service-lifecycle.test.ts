@@ -117,7 +117,7 @@ serviceTest(
       (error: Error) => error.message,
     )
     expect(conflict).toContain(`Managed service port ${home.port} on 127.0.0.1 is already in use by another process`)
-    expect(conflict).toContain("opencode service set port <port>")
+    expect(conflict).toContain("coder service set port <port>")
     expect(await servers(home)).toEqual([])
     expect(await Bun.file(home.registration).exists()).toBe(false)
 
@@ -180,7 +180,7 @@ async function serviceHome(options: { readonly failBoot?: boolean } = {}) {
   // A directory where the database file belongs makes boot fail after the server registers.
   if (options.failBoot) await fs.mkdir(path.join(root, "database"))
   // Servers spawned through this home's entry carry its path, so `servers()` sees only this home.
-  const homeEntry = path.join(root, "opencode.ts")
+  const homeEntry = path.join(root, "coder.ts")
   await fs.writeFile(homeEntry, `import ${JSON.stringify(entry)}\n`)
   const overrides = options.failBoot ? { CODER_DB: path.join(root, "database") } : {}
   const home = {
@@ -209,7 +209,7 @@ async function cli(home: Home, ...args: string[]) {
     new Response(child.stdout).text(),
     new Response(child.stderr).text(),
   ])
-  if (code !== 0) throw new Error(`opencode ${args.join(" ")} exited ${code}: ${stderr.trim()}`)
+  if (code !== 0) throw new Error(`coder ${args.join(" ")} exited ${code}: ${stderr.trim()}`)
   return stdout.trim()
 }
 

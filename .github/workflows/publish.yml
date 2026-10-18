@@ -58,7 +58,7 @@ jobs:
 
       - name: Install Coder
         if: inputs.bump || inputs.version
-        run: bun i -g opencode-ai
+        run: bun i -g coder-ai
 
       - id: version
         run: |
@@ -596,7 +596,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.AUR_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          git config --global user.email "opencode@sst.dev"
+          git config --global user.email "coder@sst.dev"
           git config --global user.name "coder"
           ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts || true
 

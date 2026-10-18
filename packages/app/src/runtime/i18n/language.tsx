@@ -205,7 +205,7 @@ function readStoredLocale() {
   if (typeof localStorage !== "object") return
 
   try {
-    const raw = localStorage.getItem("opencode.global.dat:language")
+    const raw = localStorage.getItem("coder.global.dat:language")
 
     if (!raw) return
     const next = Schema.decodeUnknownOption(Schema.fromJsonString(StoredLocaleSchema))(raw)

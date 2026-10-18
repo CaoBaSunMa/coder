@@ -742,10 +742,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Pirmo reizi ilustrēts Londonā, Anglijā",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, atvērtā koda kodēšanas aģents",
-  "settings.about.trademark": "Coder ir Anomaly Innovations, Inc. reģistrēta preču zīme.",
+  "settings.about.trademark": "Coder ir Coder Project reģistrēta preču zīme.",
   "settings.about.typeset": "Salikums Inter un IBM Plex Mono",
   "settings.about.tagline": "AI nevar izveidot lielisku programmatūru bez jums",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Rediģēt projektu",
   "settings.timeline.title": "Laika skala",
   "settings.timeline.detail": "Laika skalas informācija",
@@ -790,8 +790,8 @@ export const dict = {
   "server.connect.failed":
     "Nevarēja izveidot savienojumu. Pārbaudiet servera adresi un paroli, pēc tam mēģiniet vēlreiz.",
   "server.connect.scan": "Skenējiet QR kodu",
-  "server.connect.scan.description": "Pavērsiet kameru pret QR kodu, ko parāda opencode pair.",
-  "server.connect.scan.invalid": "Šis nav kods Coder savienošanai pārī. Skenējiet kodu, ko parāda opencode pair.",
+  "server.connect.scan.description": "Pavērsiet kameru pret QR kodu, ko parāda coder pair.",
+  "server.connect.scan.invalid": "Šis nav kods Coder savienošanai pārī. Skenējiet kodu, ko parāda coder pair.",
   "server.connect.camera": "Kameras savienošana pārī",
   "server.connect.camera.starting": "Tiek atvērta kamera…",
   "server.connect.mixedContent":

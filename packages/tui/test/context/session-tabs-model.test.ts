@@ -18,8 +18,8 @@ import {
 
 describe("session tabs", () => {
   test("appends the branch to the project detail", () => {
-    expect(sessionTabDetail("coder", "feature/sidebar", "main", true)).toBe("opencode ⎇ feature/sidebar")
-    expect(sessionTabDetail("coder", "feature/sidebar", undefined, true)).toBe("opencode ⎇ feature/sidebar")
+    expect(sessionTabDetail("coder", "feature/sidebar", "main", true)).toBe("coder ⎇ feature/sidebar")
+    expect(sessionTabDetail("coder", "feature/sidebar", undefined, true)).toBe("coder ⎇ feature/sidebar")
     expect(sessionTabDetail("coder", "feature/sidebar", "main", false)).toBe("coder")
     expect(sessionTabDetail("coder", "main", "main", true)).toBe("coder")
     expect(sessionTabDetail("coder", undefined, "main", true)).toBe("coder")

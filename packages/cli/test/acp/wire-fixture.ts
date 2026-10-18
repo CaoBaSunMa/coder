@@ -442,7 +442,7 @@ export async function startWire(options: WireOptions = {}) {
   const clientStream = ndJsonStream(clientToAgent.writable, agentToClient.readable)
   const connection = client({ name: "test" })
     .onNotification("session/update", (ctx) => handled(updates, ctx.params))
-    .onNotification("opencode/session/child_update", Schema.decodeUnknownSync(ChildUpdate), (ctx) =>
+    .onNotification("coder/session/child_update", Schema.decodeUnknownSync(ChildUpdate), (ctx) =>
       handled(childUpdates, ctx.params),
     )
     .onRequest("session/request_permission", (ctx) => {
@@ -506,7 +506,7 @@ export async function startWire(options: WireOptions = {}) {
         ...(capabilities.elicitation ? { elicitation: { form: {} } } : {}),
         ...(capabilities.compaction !== undefined ? { session: { compaction: capabilities.compaction } } : {}),
         _meta: {
-          ...(capabilities.childSessionUpdates ? { "opencode/child-session-updates": true } : {}),
+          ...(capabilities.childSessionUpdates ? { "coder/child-session-updates": true } : {}),
           ...(capabilities.terminalAuth ? { "terminal-auth": true } : {}),
         },
       },
@@ -574,7 +574,7 @@ function startServer(options: WireOptions, changed: () => void) {
     commands: [reviewCommand],
     plugins: [
       {
-        id: "opencode.models.dev",
+        id: "coder.models.dev",
         source: { type: "builtin" },
         features: { server: true },
         state: { status: "active" },

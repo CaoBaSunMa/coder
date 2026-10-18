@@ -29,7 +29,7 @@ export interface Interface {
   readonly exportDebug: Effect.Effect<string>
 }
 
-export class Service extends Context.Service<Service, Interface>()("opencode/desktop/DesktopLogging") {}
+export class Service extends Context.Service<Service, Interface>()("coder/desktop/DesktopLogging") {}
 
 const serviceLayer = Layer.effect(
   Service,

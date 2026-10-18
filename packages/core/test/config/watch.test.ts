@@ -20,7 +20,7 @@ describe("ConfigWatch.plan", () => {
     expect(Array.from(missing.values())).toEqual([
       { path: project, type: "entries", names: [".agents", ".claude", ".coder", "coder.json", "coder.jsonc"] },
     ])
-    const system = AbsolutePath.make(path.join(project, "system-opencode"))
+    const system = AbsolutePath.make(path.join(project, "system-coder"))
     const present = ConfigWatch.plan({
       ...sources,
       system: { path: system, present: true },
@@ -32,7 +32,7 @@ describe("ConfigWatch.plan", () => {
       {
         path: project,
         type: "entries",
-        names: [".agents", ".claude", ".coder", "coder.json", "coder.jsonc", "system-opencode"],
+        names: [".agents", ".claude", ".coder", "coder.json", "coder.jsonc", "system-coder"],
       },
     ])
   })

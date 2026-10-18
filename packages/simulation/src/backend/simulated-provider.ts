@@ -272,7 +272,7 @@ export const layerDrive = (options: { readonly endpoint: string; readonly versio
       yield* Effect.addFinalizer(() => tools.shutdown)
       yield* SimulationControlServer.start({
         endpoint: options.endpoint,
-        label: "opencode drive backend websocket",
+        label: "coder drive backend websocket",
         data: () => ({}),
         decode: SimulationProtocol.Backend.decodeRequestEffect,
         handle: (socket, request) =>
@@ -282,7 +282,7 @@ export const layerDrive = (options: { readonly endpoint: string; readonly versio
             discard: true,
           }),
       })
-      yield* Effect.sync(() => process.stderr.write(`opencode drive backend websocket: ${options.endpoint}\n`))
+      yield* Effect.sync(() => process.stderr.write(`coder drive backend websocket: ${options.endpoint}\n`))
 
       return Service.of({
         stream: (request) =>
@@ -537,7 +537,7 @@ const makeToolDriver = Effect.fn("SimulatedProvider.makeToolDriver")(function* (
 
   yield* plugins.register(
     Plugin.define({
-      id: "opencode.simulation.tools",
+      id: "coder.simulation.tools",
       effect: (ctx) =>
         Effect.gen(function* () {
           const scope = yield* Scope.Scope

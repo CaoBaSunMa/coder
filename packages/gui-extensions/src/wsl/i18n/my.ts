@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "distro ကို ထည့်သွင်းရန် မအောင်မြင်ပါ- {{distro}}",
   "error.installCoder": "Coder ထည့်သွင်းခြင်း မအောင်မြင်ပါ။",
   "error.alreadyAdded": "{{distro}} ကို ထည့်သွင်းပြီးဖြစ်သည်။",
-  "error.coderMissing": "opencode ကို ဤ distro တွင် ထည့်သွင်းမထားပါ။",
-  "error.coderCannotRun": "opencode ကို ထည့်သွင်းထားသော်လည်း မလည်ပတ်နိုင်ပါ။",
+  "error.coderMissing": "coder ကို ဤ distro တွင် ထည့်သွင်းမထားပါ။",
+  "error.coderCannotRun": "coder ကို ထည့်သွင်းထားသော်လည်း မလည်ပတ်နိုင်ပါ။",
   "error.coderNotInstalled": "Coder ကို {{distro}} တွင် ထည့်သွင်းမထားပါ။",
   "error.updateVersion":
     "Coder အပ်ဒိတ် ပြီးဆုံးသွားသော်လည်း {{distro}} သည် {{installed}} မှ ဆက်လက်တင်ပြနေပါသည်။ {{expected}} မျှော်လင့်ထားသည်။",

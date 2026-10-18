@@ -2203,7 +2203,7 @@ test("refreshes references after updates", async () => {
 
 test("keeps shell state scoped to location", async () => {
   const events = createEventStream()
-  const other = "/tmp/opencode/other"
+  const other = "/tmp/coder/other"
   let removed: URL | undefined
   const calls = createFetch((url, request) => {
     if (url.pathname === "/api/shell/sh_other" && request.method === "DELETE") {

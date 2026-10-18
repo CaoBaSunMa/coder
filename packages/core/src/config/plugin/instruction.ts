@@ -18,7 +18,7 @@ type Loaded =
   | { readonly type: "unavailable" }
 
 export const Plugin = define({
-  id: "opencode.config.instruction",
+  id: "coder.config.instruction",
   effect: Effect.fn(function* (ctx) {
     const discovery = yield* InstructionDiscovery.Service
     // Activate even when both discovery scopes are disabled: configured `instructions`

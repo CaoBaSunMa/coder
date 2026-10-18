@@ -15,7 +15,7 @@ const item: SessionInboxItem = {
 function fixture(fetch: (request: Request) => Promise<Response>) {
   const listeners = new Set<Parameters<CreateDataInput["event"]["listen"]>[0]>()
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: (input, init) => fetch(input instanceof Request ? input : new Request(input, init)),
   })
   return createRoot((dispose) => ({

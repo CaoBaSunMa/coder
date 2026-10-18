@@ -62,7 +62,7 @@ export function StatsPoster(props: { stats: SessionStatsInfo }) {
     <box width={width()} flexDirection="column" alignItems="center" flexShrink={0} gap={compact() ? 1 : 2}>
       <box width="100%" flexDirection={width() < 44 ? "column" : "row"} justifyContent="space-between">
         <text fg={theme.text.base} attributes={TextAttributes.BOLD}>
-          opencode / stats
+          coder / stats
         </text>
         <text fg={theme.text.muted}>{dates()}</text>
       </box>
@@ -180,7 +180,7 @@ function StatsPage(props: { context: Plugin.Context; onClose: () => void }) {
 }
 
 export default Plugin.define({
-  id: "opencode.stats",
+  id: "coder.stats",
   setup(context) {
     const [previous, setPrevious] = createSignal({ ...context.ui.router.current() })
     context.ui.router.register({

@@ -18,7 +18,7 @@ type ModelItem = { provider: ModelProvider & { integrationID?: string }; cost?: 
 
 type ModelGroup<T> = { category: string; items: T[] }
 
-export const CONSOLE_GROUP_KEY = "console:opencode"
+export const CONSOLE_GROUP_KEY = "console:coder"
 
 export function CustomManagedProviderIcon(props: { class?: string }) {
   return <img data-component="custom-managed-provider-icon" src={customManagedProvider} alt="" class={props.class} />

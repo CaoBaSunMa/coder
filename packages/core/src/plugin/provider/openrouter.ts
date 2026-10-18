@@ -3,7 +3,7 @@ import { Model } from "../../model.js"
 import { define } from "@xcoder/plugin/effect/plugin"
 
 export const OpenRouterPlugin = define({
-  id: "opencode.provider.openrouter",
+  id: "coder.provider.openrouter",
   effect: Effect.fn(function* (ctx) {
     yield* ctx.provider.transform((evt) => {
       for (const item of evt.list()) {

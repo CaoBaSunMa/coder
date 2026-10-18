@@ -26,15 +26,15 @@ test.each([
   {
     name: "namespace extension.summary.* → extension.details.*",
     home: () =>
-      imported("details", "prefs", details.stores.prefs, "opencode.global.dat:extension.details.prefs", [
-        ["opencode.global.dat:extension.summary.prefs", { projectExpanded: false, serverExpanded: false }],
+      imported("details", "prefs", details.stores.prefs, "coder.global.dat:extension.details.prefs", [
+        ["coder.global.dat:extension.summary.prefs", { projectExpanded: false, serverExpanded: false }],
       ]),
     expected: { projectExpanded: false, serverExpanded: false },
   },
   {
     name: "settings sessionSummary, from before extensions → extension.details.prefs",
     home: () =>
-      imported("details", "prefs", details.stores.prefs, "opencode.global.dat:extension.details.prefs", [
+      imported("details", "prefs", details.stores.prefs, "coder.global.dat:extension.details.prefs", [
         ["settings.v3", { sessionSummary: { projectExpanded: false, serverExpanded: true } }],
       ]),
     expected: { projectExpanded: false, serverExpanded: true },
@@ -43,8 +43,8 @@ test.each([
     // An older home without the field holds no value, so the import reads on to the next one.
     name: "layout review.diffStyle, from the unprefixed layout when the newer one lacks it → extension.review.diff",
     home: () =>
-      imported("review", "diff", review.stores.diff, "opencode.global.dat:extension.review.diff", [
-        ["opencode.global.dat:layout", { fileTree: { opened: true } }],
+      imported("review", "diff", review.stores.diff, "coder.global.dat:extension.review.diff", [
+        ["coder.global.dat:layout", { fileTree: { opened: true } }],
         ["layout", { review: { diffStyle: "unified" } }],
       ]),
     expected: { diffStyle: "unified" },
@@ -56,7 +56,7 @@ test.each([
         "updater",
         "releaseNotes",
         updater.stores.releaseNotes,
-        "opencode.global.dat:extension.updater.releaseNotes",
+        "coder.global.dat:extension.updater.releaseNotes",
         [["settings.v3", { general: { releaseNotes: false } }]],
       ),
     expected: { enabled: false },
@@ -64,7 +64,7 @@ test.each([
   {
     name: "Preferences mobileDiffWrap → extension.review.mobileDiff",
     home: () =>
-      imported("review", "mobileDiff", review.stores.mobileDiff, "opencode.global.dat:extension.review.mobileDiff", [
+      imported("review", "mobileDiff", review.stores.mobileDiff, "coder.global.dat:extension.review.mobileDiff", [
         ["settings.v3", { general: { mobileDiffWrap: false } }],
       ]),
     expected: { wrap: false },
@@ -72,7 +72,7 @@ test.each([
   {
     name: "What's New highlights.v1 → extension.updater.seen",
     home: () =>
-      imported("updater", "seen", updater.stores.seen, "opencode.global.dat:extension.updater.seen", [
+      imported("updater", "seen", updater.stores.seen, "coder.global.dat:extension.updater.seen", [
         ["highlights.v1", { version: "2.0.20" }],
       ]),
     expected: { version: "2.0.20" },

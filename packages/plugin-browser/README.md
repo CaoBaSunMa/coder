@@ -124,5 +124,5 @@ Per-URL and server-file permission checks belong to the final permission layer
 Disable through normal configuration:
 
 ```jsonc
-{ "plugins": ["-opencode.browser"] }
+{ "plugins": ["-coder.browser"] }
 ```

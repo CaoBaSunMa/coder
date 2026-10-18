@@ -908,14 +908,14 @@ Earlier work
   })
 
   test("replays flat state under an Coder hosted model's route key", () => {
-    const opencode = Model.Ref.make({ id: Model.ID.make("claude-fable-5"), providerID: Provider.ID.coder })
+    const coder = Model.Ref.make({ id: Model.ID.make("claude-fable-5"), providerID: Provider.ID.coder })
     const messages = toLLMMessages(
       [
         SessionMessage.Assistant.make({
           id: id("assistant-coder-reasoning"),
           type: "assistant",
           agent: build,
-          model: opencode,
+          model: coder,
           content: [
             SessionMessage.AssistantReasoning.make({
               type: "reasoning",
@@ -926,7 +926,7 @@ Earlier work
           time: { created, completed: created },
         }),
       ],
-      opencode,
+      coder,
       "anthropic",
     )
 

@@ -371,7 +371,7 @@ export async function mockCoderServer(page: Page, config: MockServerConfig) {
 
     if (
       password !== undefined &&
-      (await route.request().headerValue("authorization")) !== `Basic ${btoa(`opencode:${password}`)}`
+      (await route.request().headerValue("authorization")) !== `Basic ${btoa(`coder:${password}`)}`
     ) {
       return route.fulfill({
         status: 401,
@@ -847,7 +847,7 @@ function mockHandlers(
             version: "2.0.0",
             pid: 1,
             urls: config.server ? [config.server] : [],
-            paths: { tmp: "/tmp/opencode" },
+            paths: { tmp: "/tmp/coder" },
           }),
         config: () => Effect.succeed(configEntries),
         reference: () => Effect.succeed({ location: location(config), data: [] }),

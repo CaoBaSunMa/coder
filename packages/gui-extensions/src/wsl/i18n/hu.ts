@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "A disztribúció telepítése sikertelen: {{distro}}",
   "error.installCoder": "Az Coder telepítése sikertelen",
   "error.alreadyAdded": "A(z) {{distro}} már hozzá van adva",
-  "error.coderMissing": "Az opencode nincs telepítve ebben a disztribúcióban",
-  "error.coderCannotRun": "Az opencode telepítve van, de nem futtatható",
+  "error.coderMissing": "Az coder nincs telepítve ebben a disztribúcióban",
+  "error.coderCannotRun": "Az coder telepítve van, de nem futtatható",
   "error.coderNotInstalled": "Az Coder nincs telepítve ebben: {{distro}}",
   "error.updateVersion":
     "Az Coder frissítése befejeződött, de a(z) {{distro}} továbbra is ezt jelenti: {{installed}}; a várt érték: {{expected}}",

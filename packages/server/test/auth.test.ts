@@ -2,7 +2,7 @@ import { expect, test } from "bun:test"
 import { ServerAuth } from "@xcoder/server/auth"
 import { Option, Redacted } from "effect"
 
-test("accepts only the fixed opencode username", () => {
+test("accepts only the fixed coder username", () => {
   const config = { password: Option.some("secret"), username: "coder" }
   expect(ServerAuth.authorized({ username: "coder", password: Redacted.make("secret") }, config)).toBe(true)
   expect(ServerAuth.authorized({ username: "custom", password: Redacted.make("secret") }, config)).toBe(false)

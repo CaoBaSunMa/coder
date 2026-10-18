@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Distribütivi quraşdırmaq mümkün olmadı: {{distro}}",
   "error.installCoder": "Coder quraşdırılması uğursuz oldu",
   "error.alreadyAdded": "{{distro}} artıq əlavə edilib",
-  "error.coderMissing": "Bu distribütivdə opencode quraşdırılmayıb",
-  "error.coderCannotRun": "opencode quraşdırılıb, lakin onu işə salmaq mümkün olmadı",
+  "error.coderMissing": "Bu distribütivdə coder quraşdırılmayıb",
+  "error.coderCannotRun": "coder quraşdırılıb, lakin onu işə salmaq mümkün olmadı",
   "error.coderNotInstalled": "Coder {{distro}} distribütivində quraşdırılmayıb",
   "error.updateVersion":
     "Coder yeniləməsi tamamlandı, lakin {{distro}} hələ də {{installed}} versiyasını bildirir; gözlənilən versiya: {{expected}}",

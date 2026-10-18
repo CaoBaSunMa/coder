@@ -35,13 +35,13 @@ function fixture(
       ? yield* executableOverride(root, path.join(root, "home"))
       : formula
         ? path.join(root, "Cellar", formula, "2.0.20", "bin", "coder")
-        : path.join(modules, "@opencode", "cli", "bin", "coder")
+        : path.join(modules, "@coder", "cli", "bin", "coder")
     yield* fs.makeDirectory(path.dirname(executable), { recursive: true })
     yield* fs.writeFileString(executable, "binary")
     if (!formula && !executableOverride)
       yield* fs.writeFileString(
-        path.join(modules, "@opencode", "cli", "package.json"),
-        JSON.stringify({ name, bin: { opencode: "bin/coder" } }),
+        path.join(modules, "@coder", "cli", "package.json"),
+        JSON.stringify({ name, bin: { coder: "bin/coder" } }),
       )
     const requests: string[] = []
     // The updater uses global fetch; scope this replacement to each install test.
@@ -273,7 +273,7 @@ it.live("install failures expose stderr and process errors do not report success
               : "@xcoder/cli@2.3.4"
             : command.command === "vp"
               ? "[]"
-              : "opencode-ai@1.0.0",
+              : "coder-ai@1.0.0",
         ),
       }))
       expect(yield* test.updater.method()).toBe(method)
@@ -311,7 +311,7 @@ it.live("vp detection ignores no-match output that repeats the package name", ()
 
 it.live("Homebrew Core installs check and upgrade the Core formula", () =>
   Effect.gen(function* () {
-    const test = yield* fixture(() => ({}), "@xcoder/cli", false, "anomalyco/tap/coder-v2", "coder")
+    const test = yield* fixture(() => ({}), "@xcoder/cli", false, "coder-ai/tap/coder-v2", "coder")
     expect(yield* test.updater.method()).toBe("brew")
     expect(yield* test.updater.latest()).toBe("2.0.21")
     yield* test.updater.upgrade("brew", "2.0.21")
@@ -327,11 +327,11 @@ it.live("Homebrew Core installs check and upgrade the Core formula", () =>
 ;["coder-v2", "coder-beta"].forEach((formula) => {
   it.live(`Homebrew tap installs of ${formula} use the published tap formula`, () =>
     Effect.gen(function* () {
-      const test = yield* fixture(() => ({}), "@xcoder/cli", false, `anomalyco/tap/${formula}`, formula)
+      const test = yield* fixture(() => ({}), "@xcoder/cli", false, `coder-ai/tap/${formula}`, formula)
       expect(yield* test.updater.method()).toBe("brew")
       expect(yield* test.updater.latest()).toBe("2.3.4")
       yield* test.updater.upgrade("brew", "2.3.4")
-      expect(test.commands).toEqual([["brew", "upgrade", `anomalyco/tap/${formula}`]])
+      expect(test.commands).toEqual([["brew", "upgrade", `coder-ai/tap/${formula}`]])
       expect(test.requests).toEqual([
         "https://releases.coder.example.com/update/api/local/cli/homebrew?current=local",
         "https://releases.coder.example.com/update/api/local/cli/homebrew?current=local",
@@ -356,14 +356,14 @@ const winget = (search: Partial<AppProcess.RunResult>) =>
           "Microsoft",
           "WinGet",
           "Packages",
-          "Anomaly.Coder_Microsoft.Winget.Source_8wekyb3d8bbwe",
-          "opencode.exe",
+          "Coder.Coder_Microsoft.Winget.Source_8wekyb3d8bbwe",
+          "coder.exe",
         ),
       ),
   )
 const wingetArgs = [
   "--id",
-  "Anomaly.Coder",
+  "Coder.Coder",
   "--exact",
   "--source",
   "winget",
@@ -375,7 +375,7 @@ it.live("WinGet installs check, upgrade, and remove the version in the WinGet in
   Effect.gen(function* () {
     const test = yield* winget({
       stdout: Buffer.from(
-        "Name     Id               Version\r\n------------------------------\r\nCoder Anomaly.Coder 2.0.28\r\n",
+        "Name     Id               Version\r\n------------------------------\r\nCoder Coder.Coder 2.0.28\r\n",
       ),
     })
     expect(yield* test.updater.method()).toBe("winget")
@@ -483,7 +483,7 @@ windows("windows links the curl binary before the installer replaces it", () =>
       false,
       "@xcoder/cli",
       undefined,
-      (_root, home) => Effect.succeed(path.join(home, ".coder", "bin", "opencode.exe")),
+      (_root, home) => Effect.succeed(path.join(home, ".coder", "bin", "coder.exe")),
     )
     layout.executable = test.executable
     layout.cache = test.global.cache
@@ -527,7 +527,7 @@ windows("windows leaves a source checkout's runtime alone", () =>
     const test = yield* fixture(() => {
       expect(links(layout.cache)).toEqual([])
       return {}
-    }, "not-opencode")
+    }, "not-coder")
     layout.cache = test.global.cache
     yield* test.updater.upgrade("bun", "2.3.4")
     expect(test.commands).toHaveLength(1)

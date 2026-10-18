@@ -99,7 +99,7 @@ export function mount(input: {
             )[input.mode],
           },
         ],
-        opencodeChecks: {
+        coderChecks: {
           Ubuntu: {
             distro: "Ubuntu",
             resolvedPath: "/usr/bin/coder",
@@ -140,7 +140,7 @@ export function mount(input: {
         setRuntime(id, { kind: "stopped" })
         publish("wsl")
         setStore("state", (state) => ({
-          opencodeChecks: {
+          coderChecks: {
             ...state.coderChecks,
             [name]: { ...state.coderChecks[name]!, version: "current", matchesDesktop: true },
           },

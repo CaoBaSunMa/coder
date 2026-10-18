@@ -16,7 +16,7 @@ import {
 } from "@xcoder/session-ui/storybook"
 import { SessionPreview } from "./story-model"
 
-const description = "opencode · modular-session-ui"
+const description = "coder · modular-session-ui"
 
 const retryAfterInterruption = {
   ...retryDocument,
@@ -99,7 +99,7 @@ export const MixedDirectionRtl = {
   render: () => (
     <SessionPreview
       title="مراجعة واجهة Session"
-      description="opencode · packages/app/src/session/screen.tsx"
+      description="coder · packages/app/src/session/screen.tsx"
       document={attachmentsAndCommentsDocument}
       draft="راجع المسار packages/app/src/session/screen.tsx ثم شغّل bun test"
     />

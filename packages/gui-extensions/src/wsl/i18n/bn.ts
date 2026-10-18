@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "ডিস্ট্রো ইনস্টল করতে ব্যর্থ হয়েছে: {{distro}}",
   "error.installCoder": "Coder ইনস্টলেশন ব্যর্থ হয়েছে৷",
   "error.alreadyAdded": "{{distro}} ইতিমধ্যেই যোগ করা হয়েছে৷",
-  "error.coderMissing": "এই ডিস্ট্রোতে opencode ইনস্টল করা নেই",
-  "error.coderCannotRun": "opencode ইনস্টল করা আছে কিন্তু চালানো যায়নি",
+  "error.coderMissing": "এই ডিস্ট্রোতে coder ইনস্টল করা নেই",
+  "error.coderCannotRun": "coder ইনস্টল করা আছে কিন্তু চালানো যায়নি",
   "error.coderNotInstalled": "Coder {{distro}} এ ইনস্টল করা নেই",
   "error.updateVersion":
     "Coder আপডেট শেষ হয়েছে কিন্তু {{distro}} এখনও রিপোর্ট করে {{installed}}; প্রত্যাশিত {{expected}}",

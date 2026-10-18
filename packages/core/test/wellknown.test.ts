@@ -20,7 +20,7 @@ it.live("loads embedded and remote configuration", () =>
         port: 0,
         fetch(request) {
           const url = new URL(request.url)
-          if (url.pathname === "/.well-known/opencode") {
+          if (url.pathname === "/.well-known/coder") {
             return Response.json({
               auth: { command: ["login"], env: "TOKEN" },
               config: { model: "embedded/model" },

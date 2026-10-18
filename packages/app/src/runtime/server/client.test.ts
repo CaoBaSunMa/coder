@@ -97,7 +97,7 @@ test("rotates HTTP and PTY clients together", async () => {
       version: "2.0.0-test",
       pid: 1,
       urls: [request.url],
-      paths: { tmp: "/tmp/opencode" },
+      paths: { tmp: "/tmp/coder" },
     })
   }) as typeof globalThis.fetch
 
@@ -123,11 +123,11 @@ test("rotates HTTP and PTY clients together", async () => {
   expect(requests).toEqual([
     {
       url: "http://127.0.0.1:4100/api/info",
-      authorization: `Basic ${btoa("opencode:first")}`,
+      authorization: `Basic ${btoa("coder:first")}`,
     },
     {
       url: "http://127.0.0.1:4200/api/info",
-      authorization: `Basic ${btoa("opencode:second")}`,
+      authorization: `Basic ${btoa("coder:second")}`,
     },
   ])
 })

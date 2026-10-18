@@ -16,7 +16,7 @@ function server() {
     aborted: boolean
   }[] = []
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       let controller!: ReadableStreamDefaultController<Uint8Array>

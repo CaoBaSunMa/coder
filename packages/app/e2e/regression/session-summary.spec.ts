@@ -93,7 +93,7 @@ test("summary disclosures import legacy settings and persist in extension storag
   await expect(trigger).toBeFocused()
   await expect
     .poll(() =>
-      page.evaluate(() => JSON.parse(localStorage.getItem("opencode.global.dat:extension.details.prefs") ?? "null")),
+      page.evaluate(() => JSON.parse(localStorage.getItem("coder.global.dat:extension.details.prefs") ?? "null")),
     )
     .toEqual({ projectExpanded: true, serverExpanded: false })
 
@@ -564,7 +564,7 @@ test("multiple desktop connections show the session's server name", async ({ pag
   await mockStressTimeline(page)
   await page.route("http://secondary.test/**", (route) =>
     route.fulfill({
-      json: { version: "2.0.0", pid: 1, urls: ["http://secondary.test"], paths: { tmp: "/tmp/opencode" } },
+      json: { version: "2.0.0", pid: 1, urls: ["http://secondary.test"], paths: { tmp: "/tmp/coder" } },
     }),
   )
   await seed(page, {
@@ -589,7 +589,7 @@ test.describe("remote configuration", () => {
 
   test("remote servers copy each service's configuration path", async ({ page }) => {
     const remote = "http://summary-remote.test:4096"
-    const home = "/home/remote/.config/opencode"
+    const home = "/home/remote/.config/coder"
 
     const entries = [
       { type: "document", path: `${home}/mcp.jsonc`, info: { mcp: { servers: {} } } },

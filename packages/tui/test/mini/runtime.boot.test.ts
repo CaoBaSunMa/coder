@@ -74,7 +74,7 @@ describe("run runtime boot", () => {
   })
 
   test("loads v2 providers and models for model selector data", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const location = { directory: "/workspace", project: { id: "proj_1", directory: "/workspace" } }
     const providerList = spyOn(sdk.provider, "list").mockResolvedValue({
       location,

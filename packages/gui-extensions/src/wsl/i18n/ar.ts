@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "فشل تثبيت التوزيعة: {{distro}}",
   "error.installCoder": "فشل تثبيت Coder",
   "error.alreadyAdded": "تمت إضافة {{distro}} بالفعل",
-  "error.coderMissing": "opencode غير مثبت في هذه التوزيعة",
-  "error.coderCannotRun": "opencode مثبت، لكن تعذر تشغيله",
+  "error.coderMissing": "coder غير مثبت في هذه التوزيعة",
+  "error.coderCannotRun": "coder مثبت، لكن تعذر تشغيله",
   "error.coderNotInstalled": "Coder غير مثبت في {{distro}}",
   "error.updateVersion":
     "اكتمل تحديث Coder، لكن {{distro}} ما زالت تعرض الإصدار {{installed}}؛ الإصدار المتوقع هو {{expected}}",

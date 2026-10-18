@@ -95,10 +95,10 @@ describe("normalizeProjectInfo", () => {
 })
 
 test.each([
-  ["C:\\Repos\\sst\\opencode", "C:/Repos/sst/opencode"],
-  ["C:/Repos/sst/opencode", "C:/Repos/sst/opencode"],
+  ["C:\\Repos\\sst\\coder", "C:/Repos/sst/coder"],
+  ["C:/Repos/sst/coder", "C:/Repos/sst/coder"],
   ["/tmp/foo\\bar", "/tmp/foo\\bar"],
-  ["C:/Repos/sst/opencode/", "C:/Repos/sst/opencode"],
+  ["C:/Repos/sst/coder/", "C:/Repos/sst/coder"],
   ["C:/", "C:/"],
   ["/", "/"],
 ])("directoryKey(%p) is %p", (input, expected) => {

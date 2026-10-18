@@ -3,7 +3,7 @@ import type { CoderEvent } from "@xcoder/client/effect"
 import type { SessionError } from "@xcoder/schema/session-error"
 import { SessionMessage } from "@xcoder/schema/session-message"
 
-const MarkerMeta = "opencode/compaction"
+const MarkerMeta = "coder/compaction"
 
 type Started = { readonly status: "started"; readonly messageId: string; readonly reason: "auto" | "manual" }
 

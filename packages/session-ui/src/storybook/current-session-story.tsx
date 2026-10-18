@@ -12,7 +12,7 @@ import { CURRENT_SESSION_ID, STORY_TIME } from "./current-session-fixtures"
 export function CurrentSessionProviders(props: { document: SessionDocument; children: JSX.Element }) {
   return (
     <DataProvider
-      directory="C:/workspaces/opencode"
+      directory="C:/workspaces/coder"
       sessionID={props.document.sessionID}
       data={{
         agent: [

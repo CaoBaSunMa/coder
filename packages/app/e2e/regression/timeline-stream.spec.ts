@@ -218,7 +218,7 @@ test.describe("static projection", () => {
     const loaded = group.locator('[data-component="tool-loaded-item"]')
     await expect(loaded).toHaveCount(2)
     await expect(loaded.nth(0)).toHaveAttribute("aria-label", "Loaded ocpr, effect, ui-pr-screenshots skills")
-    await expect(loaded.nth(1)).toHaveAttribute("aria-label", "Loaded opencode skill")
+    await expect(loaded.nth(1)).toHaveAttribute("aria-label", "Loaded coder skill")
   })
 
   test("leaves tools expanded by settings outside the collapsed stack", async ({ page }) => {

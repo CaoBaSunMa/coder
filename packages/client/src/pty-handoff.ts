@@ -23,7 +23,7 @@ export async function prepare(file: string, info: Info, timeout: number) {
     headers:
       info.password === undefined
         ? undefined
-        : { authorization: "Basic " + Buffer.from(`opencode:${info.password}`).toString("base64") },
+        : { authorization: "Basic " + Buffer.from(`coder:${info.password}`).toString("base64") },
   })
   const handoff = await client.experimental.persistentPty
     .handoff({ signal: AbortSignal.timeout(timeout) })

@@ -60,7 +60,7 @@ test("returns a retryable 503 when D1 rejects a lookup", async () => {
     EVENTS: { send: () => Promise.resolve() },
   } as unknown as Env
   const response = await worker.fetch(
-    new Request("https://releases.coder.example.com/update/api/latest/desktop/opencode/coder-desktop-win-x64.exe"),
+    new Request("https://releases.coder.example.com/update/api/latest/desktop/coder/coder-desktop-win-x64.exe"),
     env,
     { waitUntil: () => {} },
   )
@@ -76,7 +76,7 @@ test("reuses D1 reads across lookups for 1 minute", async () => {
   setSystemTime(new Date("2026-10-13T00:00:00Z"))
 
   expect(
-    await Promise.all([lookup(db.env, "reuse/cli/opencode"), lookup(db.env, "reuse/cli/opencode")]).then((responses) =>
+    await Promise.all([lookup(db.env, "reuse/cli/coder"), lookup(db.env, "reuse/cli/coder")]).then((responses) =>
       Promise.all(responses.map(version)),
     ),
   ).toEqual(["1.0.0", "1.0.0"])
@@ -85,11 +85,11 @@ test("reuses D1 reads across lookups for 1 minute", async () => {
   db.sqlite.query("UPDATE artifact SET active = 0").run()
   db.insert({ channel: "reuse", version: "1.0.1", time: 2, active: true })
   setSystemTime(new Date("2026-10-13T00:00:59Z"))
-  expect(await version(await lookup(db.env, "reuse/cli/opencode"))).toBe("1.0.0")
+  expect(await version(await lookup(db.env, "reuse/cli/coder"))).toBe("1.0.0")
   expect(db.queries).toHaveLength(2)
 
   setSystemTime(new Date("2026-10-13T00:01:01Z"))
-  expect(await version(await lookup(db.env, "reuse/cli/opencode"))).toBe("1.0.1")
+  expect(await version(await lookup(db.env, "reuse/cli/coder"))).toBe("1.0.1")
   expect(db.queries).toHaveLength(4)
 })
 
@@ -98,12 +98,12 @@ test("evicts stale and cold entries without clearing hot reads", async () => {
   db.insert({ channel: "hot", version: "1.0.0", time: 1, active: true })
   setSystemTime(new Date("2026-10-13T01:00:00Z"))
 
-  expect(await version(await lookup(db.env, "hot/cli/opencode"))).toBe("1.0.0")
+  expect(await version(await lookup(db.env, "hot/cli/coder"))).toBe("1.0.0")
   expect(db.queries).toHaveLength(2)
 
   for (let i = 0; i < 600; i++) {
-    expect((await lookup(db.env, `cold-${i}/cli/opencode`)).status).toBe(404)
-    expect(await version(await lookup(db.env, "hot/cli/opencode"))).toBe("1.0.0")
+    expect((await lookup(db.env, `cold-${i}/cli/coder`)).status).toBe(404)
+    expect(await version(await lookup(db.env, "hot/cli/coder"))).toBe("1.0.0")
   }
   expect(db.queries).toHaveLength(1202)
 })
@@ -118,9 +118,9 @@ test("retries D1 on the next lookup after a failed read", async () => {
       ? { bind: () => ({ first: () => Promise.reject(new Error("overloaded")) }) }
       : prepare.call(db.env.DB, sql)) as typeof prepare
 
-  expect((await lookup(db.env, "retry/cli/opencode")).status).toBe(503)
+  expect((await lookup(db.env, "retry/cli/coder")).status).toBe(503)
   fail = false
-  expect(await version(await lookup(db.env, "retry/cli/opencode"))).toBe("1.0.0")
+  expect(await version(await lookup(db.env, "retry/cli/coder"))).toBe("1.0.0")
 })
 
 test("selects the minimum and active artifacts from the partial indexes", async () => {
@@ -129,9 +129,9 @@ test("selects the minimum and active artifacts from the partial indexes", async 
   db.insert({ channel: "minimum", version: "1.5.0", time: 2 })
   db.insert({ channel: "minimum", version: "2.0.0", time: 3, active: true })
 
-  expect(await version(await lookup(db.env, "minimum/cli/opencode?current=0.9.0"))).toBe("1.0.0")
-  expect(await version(await lookup(db.env, "minimum/cli/opencode?current=1.0.0"))).toBe("2.0.0")
-  expect(await version(await lookup(db.env, "minimum/cli/opencode"))).toBe("2.0.0")
+  expect(await version(await lookup(db.env, "minimum/cli/coder?current=0.9.0"))).toBe("1.0.0")
+  expect(await version(await lookup(db.env, "minimum/cli/coder?current=1.0.0"))).toBe("2.0.0")
+  expect(await version(await lookup(db.env, "minimum/cli/coder"))).toBe("2.0.0")
 
   // A release that is both active and minimum is listed once.
   db.insert({ channel: "both", version: "3.0.0", time: 1, active: true, minimum: true })
@@ -151,13 +151,13 @@ test("caches rollout fallback reads across caller IPs and overlapping releases",
   setSystemTime(new Date(base + 7 * 3_600_000 + 1_000))
 
   // Missing IP waits for full 6h rollout -> cutoff is base + 1h + 1s, selects 1.0.0.
-  expect(await version(await lookup(db.env, "rollout/cli/opencode"))).toBe("1.0.0")
+  expect(await version(await lookup(db.env, "rollout/cli/coder"))).toBe("1.0.0")
   expect(db.queries).toHaveLength(3)
 
   // Different caller IPs evaluate different cutoffs against the cached rollout history without extra D1 reads.
   const versions = await Promise.all(
     Array.from({ length: 20 }, (_, i) =>
-      lookup(db.env, "rollout/cli/opencode", { "CF-Connecting-IP": `203.0.113.${i + 1}` }).then(version),
+      lookup(db.env, "rollout/cli/coder", { "CF-Connecting-IP": `203.0.113.${i + 1}` }).then(version),
     ),
   )
   expect(new Set(versions)).toEqual(new Set(["1.0.0", "1.1.0"]))

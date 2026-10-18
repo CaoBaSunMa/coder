@@ -1,7 +1,7 @@
 /**
  * Snapshot benchmark + robustness probe.
  *
- *   bun run script/benchmark-snapshot.ts [--fixtures small,medium,large,opencode] [--iterations 10] [--json out.json]
+ *   bun run script/benchmark-snapshot.ts [--fixtures small,medium,large,coder] [--iterations 10] [--json out.json]
  *
  * Fixtures are generated once under $TMPDIR/coder-snapshot-bench and reset before each run.
  * Every timed scenario also reports how many git processes it spawned.
@@ -25,7 +25,7 @@ const flag = (name: string) => {
   return index === -1 ? undefined : args[index + 1]
 }
 const iterations = Number(flag("iterations") ?? 10)
-const selected = (flag("fixtures") ?? "small,medium,large,opencode").split(",")
+const selected = (flag("fixtures") ?? "small,medium,large,coder").split(",")
 const jsonOut = flag("json")
 const root = path.join(process.env.SNAPSHOT_BENCH_ROOT ?? os.tmpdir(), "coder-snapshot-bench")
 
@@ -69,7 +69,7 @@ async function cloneCoder() {
   if (await Bun.file(path.join(dir, ".bench-ready")).exists()) return dir
   await fs.rm(dir, { recursive: true, force: true })
   const source = (await $`git rev-parse --show-toplevel`.cwd(import.meta.dir).text()).trim()
-  console.error(`cloning ${source} into fixture opencode`)
+  console.error(`cloning ${source} into fixture coder`)
   await $`git clone --quiet --local --no-hardlinks ${source} ${dir}`.quiet()
   // A realistic ignored dependency tree without paying for a full install.
   await writeMany(
@@ -87,7 +87,7 @@ async function gitInit(dir: string) {
   await $`git init -q`.cwd(dir).quiet()
   await Bun.write(path.join(dir, ".git", "info", "exclude"), ".bench-ready\n")
   await $`git -c core.fsmonitor=false add -A`.cwd(dir).quiet()
-  await $`git -c user.email=bench@opencode.test -c user.name=Bench commit -q --no-gpg-sign -m initial`.cwd(dir).quiet()
+  await $`git -c user.email=bench@coder.test -c user.name=Bench commit -q --no-gpg-sign -m initial`.cwd(dir).quiet()
 }
 
 async function reset(dir: string) {

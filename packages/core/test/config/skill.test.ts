@@ -132,7 +132,7 @@ describe("SkillFile.parse", () => {
     expect(parse("disable-model-invocation: false")).not.toMatchObject({ skill: { autoinvoke: expect.anything() } })
     expect(parse("disable-model-invocation: maybe")).not.toMatchObject({ skill: { autoinvoke: expect.anything() } })
     expect(
-      parse("disable-model-invocation: true\nmetadata:\n  opencode/autoinvoke: true"),
+      parse("disable-model-invocation: true\nmetadata:\n  coder/autoinvoke: true"),
     ).toMatchObject({ skill: { autoinvoke: true } })
   })
 
@@ -146,7 +146,7 @@ describe("SkillFile.parse", () => {
 name: Manual
 description: Manual only
 metadata:
-  opencode/autoinvoke: false
+  coder/autoinvoke: false
 ---
 # manual`,
       ),
@@ -182,14 +182,14 @@ describe("ConfigSkillPlugin.Plugin", () => {
         Effect.gen(function* () {
           const claude = path.join(tmp.path, "claude")
           const agents = path.join(tmp.path, "agents")
-          const opencode = path.join(tmp.path, "coder")
+          const coder = path.join(tmp.path, "coder")
           const home = path.join(tmp.path, "home")
           const directory = path.join(tmp.path, "project")
           const expected = [
             path.join(claude, "skills"),
             path.join(agents, "skills"),
-            path.join(opencode, "skill"),
-            path.join(opencode, "skills"),
+            path.join(coder, "skill"),
+            path.join(coder, "skills"),
             path.join(home, "shared"),
             path.join(directory, "relative"),
           ]
@@ -197,7 +197,7 @@ describe("ConfigSkillPlugin.Plugin", () => {
 
           yield* startEntries(
             [
-              new Directory({ type: "directory", path: AbsolutePath.make(opencode) }),
+              new Directory({ type: "directory", path: AbsolutePath.make(coder) }),
               new Document({ type: "document", info: decode({ skills: ["~/shared", "./relative"] }) }),
             ],
             directory,

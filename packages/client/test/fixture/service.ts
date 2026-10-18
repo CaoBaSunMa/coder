@@ -63,7 +63,7 @@ const server = Bun.serve({
       return Response.json({ handoff: null })
     }
     if (pathname === "/api/experimental/persistent-pty/handoff" && mode === "handoff") {
-      if (request.method !== "POST" || request.headers.get("authorization") !== "Basic " + btoa("opencode:private"))
+      if (request.method !== "POST" || request.headers.get("authorization") !== "Basic " + btoa("coder:private"))
         return new Response(null, { status: 401 })
       await writeFile(registration + ".prepared", JSON.stringify(handoff))
       return Response.json({ handoff })
@@ -86,19 +86,19 @@ const server = Bun.serve({
     }
     if (mode === "starting" && !(await Bun.file(registration + ".release").exists()))
       return Response.json(
-        { version, pid: process.pid, urls: [server.url.toString()], paths: { tmp: "/tmp/opencode" } },
+        { version, pid: process.pid, urls: [server.url.toString()], paths: { tmp: "/tmp/coder" } },
         { status: 503 },
       )
     if (mode === "failed-owner")
       return Response.json(
-        { version, pid: process.pid, urls: [server.url.toString()], paths: { tmp: "/tmp/opencode" } },
+        { version, pid: process.pid, urls: [server.url.toString()], paths: { tmp: "/tmp/coder" } },
         { status: 500 },
       )
     return Response.json({
       version,
       pid: process.pid,
       urls: [server.url.toString()],
-      paths: { tmp: "/tmp/opencode" },
+      paths: { tmp: "/tmp/coder" },
     })
   },
 })

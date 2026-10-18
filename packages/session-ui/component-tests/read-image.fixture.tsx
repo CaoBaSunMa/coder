@@ -16,7 +16,7 @@ export function mountReadImage(options: { path: string; grouped: boolean; runnin
   render(() => {
     const api = Coder.make({
       baseUrl: location.origin,
-      headers: { Authorization: `Basic ${btoa("opencode:fixture")}` },
+      headers: { Authorization: `Basic ${btoa("coder:fixture")}` },
     })
 
     const [state, setState] = createStore({ open: true, visible: true, running: !!options.running, appended: false })

@@ -16,12 +16,12 @@ the `/update` prefix. Admin forms, pagination, and redirects preserve the reques
 Electron updater manifests are available at `/api/<channel>/desktop/<distribution>/<filename>`:
 
 ```sh
-curl 'https://releases.coder.example.com/update/api/beta/desktop/opencode/latest-mac.yml'
+curl 'https://releases.coder.example.com/update/api/beta/desktop/coder/latest-mac.yml'
 ```
 
 Use `latest.yml` for Windows, `latest-mac.yml` for macOS, `latest-linux.yml` for Linux x64,
 and `latest-linux-arm64.yml` for Linux ARM64. The distribution selects the stored download
-URLs (`opencode` or `github`). Each manifest includes the selected artifact's version,
+URLs (`coder` or `github`). Each manifest includes the selected artifact's version,
 file URLs, SHA-512 checksums, sizes, and release date. Existing minimum-version selection
 and `current`/User-Agent handling also apply to these feeds.
 
@@ -58,8 +58,8 @@ of its `active` artifact. Set or clear it from the admin page. Publishing a new 
 release preserves the minimum marker.
 
 Clients send their running version as `?current=<version>` and use the CLI's default
-`User-Agent: opencode/<channel>/<version>/cli`. When `current` is absent, the service
-parses that User-Agent or the older `opencode/<version>` format.
+`User-Agent: coder/<channel>/<version>/cli`. When `current` is absent, the service
+parses that User-Agent or the older `coder/<version>` format.
 The caller's channel comes from the default User-Agent, or from a preview version
 such as `0.0.0-beta-18955` when that channel is absent. If an identified caller channel
 differs from the requested channel, the service serves the active release without
@@ -75,8 +75,8 @@ identifiers and historical `next` versions to `beta`. The retired `/api/next`
 channel transparently resolves to `beta` for older clients.
 
 Choose a minimum that older clients can install and that can itself consume the active
-release. For the CLI package migration, retain a package-aware release published as
-`@opencode-ai/cli` as the minimum before activating releases under `@xcoder/cli`.
+release. For the CLI package migration, retain a package-aware release published
+under the previous package name as the minimum before activating releases under `@xcoder/cli`.
 
 Both admin mounts must be protected by the same Cloudflare Access self-hosted application:
 
@@ -102,19 +102,19 @@ logged but do not fail requests or retry; this is not lossless audit logging.
 Requests blocked before reaching the Worker are not recorded.
 
 The stream ID in `wrangler.jsonc` comes from the `lake.stream` output of the
-`anomalyco/platform/production` Pulumi stack. Update the binding if that stream is
+shared platform production Pulumi stack. Update the binding if that stream is
 replaced. The stream is shared across release channels because the update service
 has a single public deployment.
 
 ## Publishing
 
 The publish workflow also registers direct binary downloads with distribution
-`opencode`, after uploading every file to the public files bucket:
+`coder`, after uploading every file to the public files bucket:
 
 ```sh
-curl 'https://releases.coder.example.com/update/api/dev/cli/opencode'
-curl 'https://releases.coder.example.com/update/api/dev/cli-node/opencode'
-curl 'https://releases.coder.example.com/update/api/latest/desktop/opencode'
+curl 'https://releases.coder.example.com/update/api/dev/cli/coder'
+curl 'https://releases.coder.example.com/update/api/dev/cli-node/coder'
+curl 'https://releases.coder.example.com/update/api/latest/desktop/coder'
 ```
 
 `metadata.files` maps each filename to its direct

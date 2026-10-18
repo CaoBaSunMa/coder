@@ -175,7 +175,7 @@ test.each(
     exitSplash({ ...input, title: "Review mini layout", session_id: sessionID, theme }),
     input.width,
   )
-  const command = `opencode mini -s ${sessionID}`
+  const command = `coder mini -s ${sessionID}`
   const commandRows =
     input.width >= 80 ? [result.rows[2].slice(result.rows[2].indexOf("coder"))] : result.rows.slice(1)
   const reconstructed = commandRows

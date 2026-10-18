@@ -13,7 +13,7 @@ export function isolatedEnv(root: string, overrides: Record<string, string | und
     CODER_CLI_CONFIG_CONTENT: undefined,
     CODER_CONFIG_CONTENT: "{}",
     CODER_CONFIG_DIR: path.join(root, "config"),
-    CODER_DB: path.join(root, "opencode.db"),
+    CODER_DB: path.join(root, "coder.db"),
     CODER_DISABLE_FILEWATCHER: "true",
     CODER_DISABLE_MODELS_FETCH: "true",
     CODER_TEST_HOME: root,

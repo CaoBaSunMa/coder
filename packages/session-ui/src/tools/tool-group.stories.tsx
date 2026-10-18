@@ -192,7 +192,7 @@ const stickyParts: ContextGroupPart[] = [
             `sticky_grep_${index}`,
             "grep",
             "completed",
-            { path: "C:/tmp/opencode/stack/packages/plugin-review-desktop/", pattern: 'turn"|lastTurn|session\\.diff' },
+            { path: "C:/tmp/coder/stack/packages/plugin-review-desktop/", pattern: 'turn"|lastTurn|session\\.diff' },
             { metadata: { matches: 4 } },
           )
         : storyTool(

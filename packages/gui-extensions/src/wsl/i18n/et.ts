@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "Distro installimine ebaõnnestus: {{distro}}",
   "error.installCoder": "Coder installimine ebaõnnestus",
   "error.alreadyAdded": "{{distro}} on juba lisatud",
-  "error.coderMissing": "opencode pole sellesse distrosse installitud",
-  "error.coderCannotRun": "opencode on installitud, kuid seda ei saa käivitada",
+  "error.coderMissing": "coder pole sellesse distrosse installitud",
+  "error.coderCannotRun": "coder on installitud, kuid seda ei saa käivitada",
   "error.coderNotInstalled": "Coder pole installitud asukohta {{distro}}",
   "error.updateVersion":
     "Coder värskendus on lõpetatud, kuid {{distro}} teatab endiselt {{installed}}; oodata {{expected}}",

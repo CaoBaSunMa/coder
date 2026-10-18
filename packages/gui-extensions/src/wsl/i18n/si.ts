@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "distro ස්ථාපනය කිරීමට අසමත් විය: {{distro}}",
   "error.installCoder": "Coder ස්ථාපනය අසාර්ථක විය",
   "error.alreadyAdded": "{{distro}} දැනටමත් එක් කර ඇත",
-  "error.coderMissing": "මෙම distro හි opencode ස්ථාපනය කර නොමැත",
-  "error.coderCannotRun": "opencode ස්ථාපනය කර ඇති නමුත් ධාවනය කල නොහැක",
+  "error.coderMissing": "මෙම distro හි coder ස්ථාපනය කර නොමැත",
+  "error.coderCannotRun": "coder ස්ථාපනය කර ඇති නමුත් ධාවනය කල නොහැක",
   "error.coderNotInstalled": "Coder {{distro}} හි ස්ථාපනය කර නැත",
   "error.updateVersion":
     "Coder යාවත්කාලීන කිරීම අවසන් නමුත් {{distro}} තවමත් වාර්තා කරන්නේ {{installed}}; අපේක්ෂිත {{expected}}",

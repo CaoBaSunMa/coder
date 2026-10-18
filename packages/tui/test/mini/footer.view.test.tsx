@@ -536,7 +536,7 @@ test("direct footer describes commands and context and shows the model provider"
   try {
     await app.renderOnce()
     expect(app.captureCharFrame()).toContain("┃ Ask anything, / for commands, @ for context…")
-    expect(app.captureCharFrame()).toContain("Build · GPT-5 · opencode · ctrl+p menu")
+    expect(app.captureCharFrame()).toContain("Build · GPT-5 · coder · ctrl+p menu")
   } finally {
     app.cleanup()
   }
@@ -1712,8 +1712,8 @@ test("direct footer counts queued and steering work while running", async () => 
     const frame = app.captureCharFrame()
     const transparent = RGBA.fromValues(0, 0, 0, 0).toInts()
     const statusline = footerStatusline(app.renderer.root)
-    expect(frame).toContain("esc stop · ctrl+x q 2 pending · ↓ 1 subagent · ctrl+b background · Build")
-    expect(frame).toMatch(/opencode · ctrl\+p menu *$/m)
+    expect(frame).toContain("esc interrupt · ctrl+x q 2 pending · ↓ 1 subagent · ctrl+b background · Build")
+    expect(frame).toMatch(/coder · ctrl\+p menu *$/m)
     expect(frame).not.toContain("1 agent")
     expect(statusline.backgroundColor.toInts()).toEqual(transparent)
   } finally {
@@ -1795,7 +1795,7 @@ test.each([
   { field: "agent", text: "esc stop · GPT-5 [high]" },
   {
     field: "model",
-    text: "esc stop · Build · long-model-long-model-lo… [high] · opencode · ctrl+p menu",
+    text: "esc stop · Build · long-model-long-model-lo… [high] · coder · ctrl+p menu",
   },
   { field: "provider", text: "esc stop · Build · GPT-5 [high]" },
 ])("running footer abbreviates only the model and stops at an oversized $field", async ({ field, text }) => {

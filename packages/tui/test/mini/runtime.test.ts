@@ -51,7 +51,7 @@ afterEach(() => {
 
 describe("run interactive runtime", () => {
   test("resolves the default model reactively without blocking catalog startup", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const events: FooterEvent[] = []
     const ui = createFooterApiFixture({ events })
     const api = ui.api
@@ -167,7 +167,7 @@ describe("run interactive runtime", () => {
   })
 
   test("routes form responses to their owners with global location and local settlement", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const api = footer()
     const streamStarted = defer<void>()
     let lifecycle!: LifecycleInput
@@ -257,7 +257,7 @@ describe("run interactive runtime", () => {
   })
 
   test("resolves the deferred session only after first paint", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const lifecycleStarted = defer<void>()
     const painted = defer<void>()
     const api = footer()
@@ -311,7 +311,7 @@ describe("run interactive runtime", () => {
   })
 
   test("restores deferred session history and model after first paint", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const lifecycleStarted = defer<void>()
     const painted = defer<void>()
     const events: FooterEvent[] = []
@@ -408,7 +408,7 @@ describe("run interactive runtime", () => {
   })
 
   test("aborts deferred resume history on close and uses the cached exit title", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const painted = defer<void>()
     const readsStarted = defer<void>()
     const api = footer()
@@ -486,7 +486,7 @@ describe("run interactive runtime", () => {
   })
 
   test("adopts deferred target placement and supplied TUI config", async () => {
-    const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+    const sdk = Coder.make({ baseUrl: "https://coder.test" })
     const lifecycleStarted = defer<void>()
     const painted = defer<void>()
     const api = footer()

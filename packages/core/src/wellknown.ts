@@ -63,7 +63,7 @@ export const Event = {
 const requestTimeout = "15 seconds"
 
 export const inspect = Effect.fn("WellKnown.inspect")(function* (origin: string) {
-  const url = `${origin.replace(/\/+$/, "")}/.well-known/opencode`
+  const url = `${origin.replace(/\/+$/, "")}/.well-known/coder`
   const http = HttpClient.filterStatusOk(yield* HttpClient.HttpClient)
   return yield* http.execute(HttpClientRequest.get(url).pipe(HttpClientRequest.acceptJson)).pipe(
     Effect.flatMap(HttpClientResponse.schemaBodyJson(Manifest)),

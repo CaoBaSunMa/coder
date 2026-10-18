@@ -210,7 +210,7 @@ async function openPickerSession(page: Page, direction: "ltr" | "rtl", paid: boo
   await page.addInitScript((direction) => {
     localStorage.setItem("coder-color-scheme", direction === "rtl" ? "dark" : "light")
     localStorage.setItem(
-      "opencode.global.dat:model",
+      "coder.global.dat:model",
       JSON.stringify({
         user: ["a", "b"].map((id) => ({ providerID: "coder", modelID: `mobile-${id}`, visibility: "show" })),
         recent: [],

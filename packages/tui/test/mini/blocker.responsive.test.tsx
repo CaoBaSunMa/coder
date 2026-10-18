@@ -630,7 +630,7 @@ test.each([16, 24, 80])("text form keeps its editor, error and controls at %s x 
 
 test("external form exposes its complete URL and state-specific actions", async () => {
   const opened: string[] = []
-  const url = "https://identity.example.test/oauth/authorize?client_id=opencode&redirect_uri=URL_SENTINEL"
+  const url = "https://identity.example.test/oauth/authorize?client_id=coder&redirect_uri=URL_SENTINEL"
   const app = await testRender(
     () => (
       <RunFormBody

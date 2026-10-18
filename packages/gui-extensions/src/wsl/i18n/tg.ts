@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Насб кардани distro иҷро нашуд: {{distro}}",
   "error.installCoder": "Coder насб карда нашуд",
   "error.alreadyAdded": "{{distro}} аллакай илова карда шудааст",
-  "error.coderMissing": "opencode дар ин паҳнкунӣ насб нашудааст",
-  "error.coderCannotRun": "opencode насб шудааст, аммо иҷро карда натавонист",
+  "error.coderMissing": "coder дар ин паҳнкунӣ насб нашудааст",
+  "error.coderCannotRun": "coder насб шудааст, аммо иҷро карда натавонист",
   "error.coderNotInstalled": "Coder дар {{distro}} насб нашудааст",
   "error.updateVersion":
     "Coder навсозӣ анҷом ёфт, аммо {{distro}} то ҳол гузориш медиҳад {{installed}}; интизорӣ {{expected}}",

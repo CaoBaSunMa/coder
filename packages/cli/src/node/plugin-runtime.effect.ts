@@ -12,7 +12,7 @@ import {
 } from "@xcoder/plugin/effect"
 import { Tool } from "@xcoder/schema/tool"
 
-const key = Symbol.for("opencode.plugin.v2.effect")
+const key = Symbol.for("coder.plugin.v2.effect")
 ;(globalThis as typeof globalThis & { [key]?: unknown })[key] = {
   Agent,
   Command,

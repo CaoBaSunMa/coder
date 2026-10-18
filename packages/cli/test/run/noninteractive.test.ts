@@ -219,7 +219,7 @@ async function run(input: {
   wait?: () => Promise<void>
   terminalDelay?: number
 }) {
-  const sdk = Coder.make({ baseUrl: "https://opencode.test" })
+  const sdk = Coder.make({ baseUrl: "https://coder.test" })
   const values: V2Event[] = [{ id: "evt_connected", type: "server.connected", data: {} }]
   let wake: (() => void) | undefined
   const wait = Promise.withResolvers<void>()

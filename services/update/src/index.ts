@@ -91,7 +91,7 @@ export default {
 
 async function lookup(request: Request, env: Env, url: URL, path: string[]) {
   const resolved = resolveChannel(path[0])
-  const agent = request.headers.get("User-Agent")?.match(/^opencode\/(?:([^/]+)\/([^/]+)\/cli|(.*))$/)
+  const agent = request.headers.get("User-Agent")?.match(/^coder\/(?:([^/]+)\/([^/]+)\/cli|(.*))$/)
   const current = url.searchParams.get("current") ?? agent?.[2] ?? agent?.[3]
   const source = agent?.[1] ?? current?.match(/^v?0\.0\.0-(.+)-\d+(?:\.\d+)?(?:\+.*)?$/)?.[1]
   const caller = source === undefined || resolveChannel(source) === resolved ? current : undefined

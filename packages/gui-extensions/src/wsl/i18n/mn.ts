@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Дистро суулгаж чадсангүй: {{distro}}",
   "error.installCoder": "Coder суулгаж чадсангүй",
   "error.alreadyAdded": "{{distro}} аль хэдийн нэмэгдсэн байна",
-  "error.coderMissing": "opencode энэ түгээлтэд суулгаагүй байна",
-  "error.coderCannotRun": "opencode суулгасан боловч ажиллуулж чадсангүй",
+  "error.coderMissing": "coder энэ түгээлтэд суулгаагүй байна",
+  "error.coderCannotRun": "coder суулгасан боловч ажиллуулж чадсангүй",
   "error.coderNotInstalled": "Coder-г {{distro}}-д суулгаагүй байна",
   "error.updateVersion":
     "Coder шинэчлэлт дууссан боловч {{distro}} мэдээлсэн хэвээр {{installed}}; хүлээгдэж буй {{expected}}",

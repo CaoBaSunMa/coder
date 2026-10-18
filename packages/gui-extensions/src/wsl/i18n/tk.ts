@@ -40,7 +40,7 @@ export default {
   "error.installCoder": "Coder gurmak şowsuz",
   "error.alreadyAdded": "{{distro}} eýýäm goşuldy",
   "error.coderMissing": "açyk kod bu distroda gurlanok",
-  "error.coderCannotRun": "opencode guruldy, ýöne işledip bilmedi",
+  "error.coderCannotRun": "coder guruldy, ýöne işledip bilmedi",
   "error.coderNotInstalled": "Coder {{distro}} gurulmady",
   "error.updateVersion":
     "Coder täzelenmesi gutardy, ýöne {{distro}} henizem {{installed}} habar berýär; garaşylýan {{expected}}",

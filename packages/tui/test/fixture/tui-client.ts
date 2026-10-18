@@ -1,6 +1,6 @@
 import { Coder, type CoderEvent } from "@xcoder/client"
 
-export const worktree = "/tmp/opencode"
+export const worktree = "/tmp/coder"
 export const directory = `${worktree}/packages/tui`
 
 export function json(data: unknown, init?: ResponseInit) {

@@ -136,7 +136,7 @@ function StorybookIndex(props: { context: Plugin.Context }) {
 }
 
 export default Plugin.define({
-  id: "opencode.storybook",
+  id: "coder.storybook",
   setup(context) {
     context.ui.router.register({
       name: "storybook",

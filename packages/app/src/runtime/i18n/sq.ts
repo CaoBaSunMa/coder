@@ -735,10 +735,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Ilustruar për herë të parë në Londër, Angli",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, agjenti kodues me burim të hapur",
-  "settings.about.trademark": "Coder është një markë e regjistruar e Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder është një markë e regjistruar e Coder Project",
   "settings.about.typeset": "Llojet në Inter dhe IBM Plex Mono",
   "settings.about.tagline": "AI nuk mund të ndërtojë softuer të shkëlqyeshëm, pa ju",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Redakto projektin",
   "settings.timeline.title": "Afati kohor",
   "settings.timeline.detail": "Detajet e afatit kohor",
@@ -780,8 +780,8 @@ export const dict = {
   "server.connect.failed":
     "Nuk mund të lidhej. Kontrolloni adresën dhe fjalëkalimin e serverit, më pas provoni përsëri.",
   "server.connect.scan": "Skanoni kodin QR",
-  "server.connect.scan.description": "Drejtoje kamerën drejt kodit QR të treguar nga opencode pair.",
-  "server.connect.scan.invalid": "Ky nuk është një kod çiftimi Coder. Skanoni kodin e treguar nga opencode pair.",
+  "server.connect.scan.description": "Drejtoje kamerën drejt kodit QR të treguar nga coder pair.",
+  "server.connect.scan.invalid": "Ky nuk është një kod çiftimi Coder. Skanoni kodin e treguar nga coder pair.",
   "server.connect.camera": "Çiftimi i kamerës",
   "server.connect.camera.starting": "Hapja e kamerës…",
   "server.connect.mixedContent":

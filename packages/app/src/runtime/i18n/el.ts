@@ -745,10 +745,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Εικονογραφήθηκε για πρώτη φορά στο Λονδίνο της Αγγλίας",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, ο παράγοντας κωδικοποίησης ανοιχτού κώδικα",
-  "settings.about.trademark": "Το Coder είναι σήμα κατατεθέν της Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Το Coder είναι σήμα κατατεθέν της Coder Project",
   "settings.about.typeset": "Δακτυλογράφηση σε Inter και IBM Plex Mono",
   "settings.about.tagline": "Το AI δεν μπορεί να δημιουργήσει εξαιρετικό λογισμικό, χωρίς εσάς",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Επεξεργασία έργου",
   "settings.timeline.title": "Χρονολόγιο",
   "settings.timeline.detail": "Λεπτομέρειες χρονολογίου",
@@ -794,9 +794,9 @@ export const dict = {
   "server.connect.failed":
     "Δεν ήταν δυνατή η σύνδεση. Ελέγξτε τη διεύθυνση του διακομιστή και τον κωδικό πρόσβασης και, στη συνέχεια, δοκιμάστε ξανά.",
   "server.connect.scan": "Σάρωση κωδικού QR",
-  "server.connect.scan.description": "Στρέψτε την κάμερά σας στον κωδικό QR που εμφανίζεται από το opencode pair.",
+  "server.connect.scan.description": "Στρέψτε την κάμερά σας στον κωδικό QR που εμφανίζεται από το coder pair.",
   "server.connect.scan.invalid":
-    "Αυτός δεν είναι κωδικός σύζευξης Coder. Σαρώστε τον κωδικό που εμφανίζεται από το opencode pair.",
+    "Αυτός δεν είναι κωδικός σύζευξης Coder. Σαρώστε τον κωδικό που εμφανίζεται από το coder pair.",
   "server.connect.camera": "Κάμερα ζευγοποίησης",
   "server.connect.camera.starting": "Άνοιγμα κάμερας…",
   "server.connect.mixedContent":

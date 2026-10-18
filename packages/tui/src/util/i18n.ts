@@ -12,7 +12,7 @@ export type MessageParams = Readonly<Record<string, string | number>>
 
 export const en = {
   "app.name": "Coder",
-  "app.terminalTitle": "OC | {title}",
+  "app.terminalTitle": "Coder | {title}",
 
   "common.ok": "ok",
   "common.confirm": "confirm",
@@ -44,6 +44,9 @@ export const en = {
   "update.confirm": "Confirm update action",
   "update.previous": "Previous update action",
   "update.next": "Next update action",
+  "update.skip": "Skip",
+  "update.action": "Update",
+  "update.restart": "Restart",
 
   "crash.title": "Coder crashed",
   "crash.subtitle": "An unexpected error stopped the session.",
@@ -86,6 +89,12 @@ export const en = {
   "permission.rejectOption": "Reject",
   "permission.noDiff": "No diff provided",
   "permission.patterns": "Patterns",
+  "permission.cancelRejection": "Cancel permission rejection",
+  "permission.confirmRejection": "Confirm permission rejection",
+  "permission.toggleFullscreen": "Toggle permission fullscreen",
+  "permission.previousOption": "Previous option",
+  "permission.nextOption": "Next option",
+  "permission.selectOption": "Select option",
 
   "command.exit": "Exit the app",
   "command.help": "Help",
@@ -99,7 +108,7 @@ export type MessageKey = keyof typeof en
 
 export const zh: Record<MessageKey, Message> = {
   "app.name": "Coder",
-  "app.terminalTitle": "OC | {title}",
+  "app.terminalTitle": "Coder | {title}",
 
   "common.ok": "确定",
   "common.confirm": "确认",
@@ -130,6 +139,9 @@ export const zh: Record<MessageKey, Message> = {
   "update.confirm": "确认更新操作",
   "update.previous": "上一个更新操作",
   "update.next": "下一个更新操作",
+  "update.skip": "跳过",
+  "update.action": "更新",
+  "update.restart": "重启",
 
   "crash.title": "Coder 崩溃了",
   "crash.subtitle": "意外错误导致会话中止。",
@@ -172,6 +184,12 @@ export const zh: Record<MessageKey, Message> = {
   "permission.rejectOption": "拒绝",
   "permission.noDiff": "没有提供差异内容",
   "permission.patterns": "匹配模式",
+  "permission.cancelRejection": "取消拒绝授权",
+  "permission.confirmRejection": "确认拒绝授权",
+  "permission.toggleFullscreen": "切换授权全屏",
+  "permission.previousOption": "上一个选项",
+  "permission.nextOption": "下一个选项",
+  "permission.selectOption": "选择选项",
 
   "command.exit": "退出应用",
   "command.help": "帮助",

@@ -9,7 +9,7 @@ afterEach(() => {
 
 describe("run catalog shared", () => {
   test("loads visible project references from the current reference catalog", async () => {
-    const client = Coder.make({ baseUrl: "https://opencode.test" })
+    const client = Coder.make({ baseUrl: "https://coder.test" })
     const list = spyOn(client.reference, "list").mockImplementation(
       () =>
         Promise.resolve({

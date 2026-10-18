@@ -67,7 +67,7 @@ export const SettingsProviders: Component<{
       ...Object.fromEntries(ids.map((id) => [id, status])),
     }))
 
-  // Console-managed providers (`coder-go`, `console-*`) connect through the `opencode`
+  // Console-managed providers (`coder-go`, `console-*`) connect through the `coder`
   // integration, so the lookup must follow `integrationID` rather than the provider id.
   const integration = (item: ProviderItem) => {
     const id = item.integrationID ?? item.id
@@ -153,7 +153,7 @@ export const SettingsProviders: Component<{
 
   const popular = createMemo(() => {
     const connectedIDs = new Set(connected().map((p) => p.id))
-    // The Console account (integration `opencode`) shares its id with the Zen provider. A stored API
+    // The Console account (integration `coder`) shares its id with the Zen provider. A stored API
     // key, including one imported from a v1 auth.json, makes Zen "connected" without any account, so
     // the Popular list keeps the sign-in row until the active credential is an OAuth grant. Until the
     // integration list arrives the row is still the models.dev Zen provider, so dedupe it as before.

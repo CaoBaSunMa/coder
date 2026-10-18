@@ -61,7 +61,7 @@ export function installed(home: string) {
   return (
     executable.split(path.sep).includes("node_modules") ||
     /[\\/]winget[\\/]packages[\\/]/i.test(executable) ||
-    executable === path.resolve(home, ".coder", "bin", "opencode.exe")
+    executable === path.resolve(home, ".coder", "bin", "coder.exe")
   )
 }
 

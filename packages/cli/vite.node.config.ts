@@ -10,7 +10,7 @@ const dir = import.meta.dirname
 
 function rawTextPlugin(): Plugin {
   return {
-    name: "opencode:raw-text",
+    name: "coder:raw-text",
     // "pre" is load-bearing for .txt: Vite's built-in asset plugin claims
     // known asset types (.txt among them) ahead of normal-priority plugins,
     // replacing the import with an asset URL string instead of the content.
@@ -28,7 +28,7 @@ export const appArchiveAsset = "app-archive.bin"
 
 function appAssetsPlugin(): Plugin {
   return {
-    name: "opencode:app-assets",
+    name: "coder:app-assets",
     resolveId(id) {
       if (id === "virtual:coder-app-assets") return "\0virtual:coder-app-assets"
     },
@@ -47,7 +47,7 @@ export default () =>
 
 function runtimeRequirePlugin(): Plugin {
   return {
-    name: "opencode:runtime-require",
+    name: "coder:runtime-require",
     enforce: "pre",
     transform(code, id) {
       if (!id.endsWith("turndown/lib/turndown.es.js")) return
@@ -60,7 +60,7 @@ function runtimeRequirePlugin(): Plugin {
 
 function simulationGraphPlugin(): Plugin {
   return {
-    name: "opencode:simulation-graph",
+    name: "coder:simulation-graph",
     generateBundle() {
       verifySimulationGraph(this.getModuleIds())
     },
@@ -69,7 +69,7 @@ function simulationGraphPlugin(): Plugin {
 
 function fffNodePlugin(): Plugin {
   return {
-    name: "opencode:fff-node",
+    name: "coder:fff-node",
     enforce: "pre",
     transform(code, id) {
       const normalized = id.replaceAll("\\", "/")
@@ -129,8 +129,8 @@ function nodePrelude(input: NodeBuildInput) {
     input.target.platform === "darwin"
       ? `${input.target.nodePtyPackage}/prebuilds/darwin-${input.target.arch}/spawn-helper`
       : undefined
-  const opencodePtyAsset = input.target.coderPtyAsset
-  const promiseModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.promise")]
+  const coderPtyAsset = input.target.coderPtyAsset
+  const promiseModule = `const sdk = globalThis[Symbol.for("coder.plugin.v2.promise")]
 if (!sdk) throw new Error("Coder Promise plugin SDK is unavailable")
 export const Agent = sdk.Agent
 export const Command = sdk.Command
@@ -143,16 +143,16 @@ export const Provider = sdk.Provider
 export const Reference = sdk.Reference
 export const Skill = sdk.Skill`
   const effectModule = promiseModule
-    .replace("opencode.plugin.v2.promise", "opencode.plugin.v2.effect")
+    .replace("coder.plugin.v2.promise", "coder.plugin.v2.effect")
     .replace("Promise plugin", "Effect plugin")
-  const promisePluginModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.promise")]
+  const promisePluginModule = `const sdk = globalThis[Symbol.for("coder.plugin.v2.promise")]
 if (!sdk) throw new Error("Coder Promise plugin SDK is unavailable")
 export const define = sdk.Plugin.define`
   const effectPluginModule = promisePluginModule
-    .replace("opencode.plugin.v2.promise", "opencode.plugin.v2.effect")
+    .replace("coder.plugin.v2.promise", "coder.plugin.v2.effect")
     .replace("Promise plugin", "Effect plugin")
   const promiseToolModule = `export {}`
-  const effectToolModule = `const sdk = globalThis[Symbol.for("opencode.plugin.v2.effect")]
+  const effectToolModule = `const sdk = globalThis[Symbol.for("coder.plugin.v2.effect")]
 if (!sdk) throw new Error("Coder Effect plugin SDK is unavailable")
 export const Error = sdk.Tool.Error
 `
@@ -167,20 +167,20 @@ const __filename = import.meta.filename
 const __dirname = import.meta.dirname
 const require = __cjs_mod__.createRequire(import.meta.url)
 const __ocPluginModules = ${JSON.stringify({
-    "@xcoder/plugin": "opencode:plugin-v2",
-    "@xcoder/plugin/promise/plugin": "opencode:plugin-promise-plugin",
-    "@xcoder/plugin/promise/tool": "opencode:plugin-promise-tool",
-    "@xcoder/plugin/effect": "opencode:plugin-v2-effect",
-    "@xcoder/plugin/effect/plugin": "opencode:plugin-v2-effect-plugin",
-    "@xcoder/plugin/effect/tool": "opencode:plugin-v2-effect-tool",
+    "@xcoder/plugin": "coder:plugin-v2",
+    "@xcoder/plugin/promise/plugin": "coder:plugin-promise-plugin",
+    "@xcoder/plugin/promise/tool": "coder:plugin-promise-tool",
+    "@xcoder/plugin/effect": "coder:plugin-v2-effect",
+    "@xcoder/plugin/effect/plugin": "coder:plugin-v2-effect-plugin",
+    "@xcoder/plugin/effect/tool": "coder:plugin-v2-effect-tool",
   })}
 const __ocPluginSources = ${JSON.stringify({
-    "opencode:plugin-v2": promiseModule,
-    "opencode:plugin-promise-plugin": promisePluginModule,
-    "opencode:plugin-promise-tool": promiseToolModule,
-    "opencode:plugin-v2-effect": effectModule,
-    "opencode:plugin-v2-effect-plugin": effectPluginModule,
-    "opencode:plugin-v2-effect-tool": effectToolModule,
+    "coder:plugin-v2": promiseModule,
+    "coder:plugin-promise-plugin": promisePluginModule,
+    "coder:plugin-promise-tool": promiseToolModule,
+    "coder:plugin-v2-effect": effectModule,
+    "coder:plugin-v2-effect-plugin": effectPluginModule,
+    "coder:plugin-v2-effect-tool": effectToolModule,
   })}
 __cjs_mod__.registerHooks({
   resolve(__ocSpecifier, __ocContext, __ocNextResolve) {
@@ -210,7 +210,7 @@ if (__ocIsSea()) {
 const __ocAssetRoot = __ocIsSea()
   ? __ocPath.join(__ocCacheRoot, ${JSON.stringify(`${input.assetHash}-${input.target.platform}-${input.target.arch}`)})
   : __ocFileURLToPath(new URL("./assets/", import.meta.url))
-const __ocPersistentPty = ${JSON.stringify(opencodePtyAsset)}
+const __ocPersistentPty = ${JSON.stringify(coderPtyAsset)}
 if (__ocIsSea()) {
   const __ocPtySpawnHelper = ${JSON.stringify(nodePtySpawnHelper)}
   for (const __ocKey of __ocAssetKeys()) {
@@ -292,7 +292,7 @@ export function mainConfig(input: NodeBuildInput): UserConfig {
       emptyOutDir: false,
       minify: true,
       rollupOptions: {
-        output: output("opencode.mjs", nodePrelude(input)),
+        output: output("coder.mjs", nodePrelude(input)),
       },
     },
   })

@@ -8,7 +8,7 @@ const label = process.env.DEMO_LABEL ?? "AFTER"
 // Only the conversation is simulated; shell execution and output reads are real.
 export default CoderDriver.use(
   {
-    opencode: { dev: process.env.CODER_DEV ?? process.cwd() },
+    coder: { dev: process.env.CODER_DEV ?? process.cwd() },
     keepArtifacts: true,
     tui: { recording: true, keypressOverlay: true, viewport: { cols: 90, rows: 30 } },
     config: { autoupdate: false, username: "Demo" },
@@ -30,18 +30,18 @@ export default CoderDriver.use(
       },
     },
   },
-  ({ ui, llm, tui, opencode, artifacts }) =>
+  ({ ui, llm, tui, coder, artifacts }) =>
     Effect.gen(function* () {
       const recording = tui.recording
       if (!recording) return yield* Effect.fail(new Error("Recording required"))
       yield* llm.serve(() => Stream.make(Llm.text("Ready to inspect the render job.")))
       yield* ui.submit("Inspect the render job.")
       yield* ui.waitFor("Ready to inspect the render job.")
-      const sessions = yield* opencode.session.list({ limit: 1, order: "desc" })
+      const sessions = yield* coder.session.list({ limit: 1, order: "desc" })
       const session = sessions.data[0]
       if (!session) return yield* Effect.fail(new Error("Session missing"))
-      yield* opencode.session.rename({ sessionID: session.id, title: "Shell output demo" })
-      yield* opencode.shell.create({ command: "sh render-scene.sh", timeout: 0, metadata: { sessionID: session.id } })
+      yield* coder.session.rename({ sessionID: session.id, title: "Shell output demo" })
+      yield* coder.shell.create({ command: "sh render-scene.sh", timeout: 0, metadata: { sessionID: session.id } })
       yield* ui.arrow("down")
       yield* ui.arrow("right")
       yield* ui.waitFor("sh render-scene.sh")

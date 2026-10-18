@@ -39,8 +39,8 @@ export default {
   "error.installDistro": "Nu s-a putut instala distribuția: {{distro}}",
   "error.installCoder": "Instalarea Coder a eșuat",
   "error.alreadyAdded": "{{distro}} este deja adăugată",
-  "error.coderMissing": "opencode nu este instalat în această distribuție",
-  "error.coderCannotRun": "opencode este instalat, dar nu a putut fi pornit",
+  "error.coderMissing": "coder nu este instalat în această distribuție",
+  "error.coderCannotRun": "coder este instalat, dar nu a putut fi pornit",
   "error.coderNotInstalled": "Coder nu este instalat în {{distro}}",
   "error.updateVersion":
     "Actualizarea Coder s-a terminat, dar {{distro}} raportează tot {{installed}}; era așteptat {{expected}}",

@@ -65,7 +65,7 @@ export const start = Effect.fn("SimulationServer.start")(function* (
 ) {
   return yield* SimulationControlServer.start({
     endpoint,
-    label: "opencode drive ui websocket",
+    label: "coder drive ui websocket",
     data: () => ({ drive: true as const }),
     decode: SimulationProtocol.Frontend.decodeRequestEffect,
     handle: (_socket, request) => handle(harness, request, version),

@@ -156,6 +156,6 @@ function cleanShellConfig(content: string) {
   const entry = (line: string) =>
     /^(?:export PATH=|fish_add_path\s)/.test(line.trim()) && line.includes(".coder/bin")
   return lines
-    .filter((line, index) => !entry(line) && !(line.trim() === "# opencode" && entry(lines[index + 1] ?? "")))
+    .filter((line, index) => !entry(line) && !(line.trim() === "# coder" && entry(lines[index + 1] ?? "")))
     .join("\n")
 }

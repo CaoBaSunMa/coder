@@ -13,7 +13,7 @@ export interface Interface {
   readonly reconnect: Effect.Effect<SidecarCredentials.Data>
 }
 
-export class Service extends Context.Service<Service, Interface>()("opencode/desktop/BackgroundService") {}
+export class Service extends Context.Service<Service, Interface>()("coder/desktop/BackgroundService") {}
 
 export const layer = Layer.effect(
   Service,

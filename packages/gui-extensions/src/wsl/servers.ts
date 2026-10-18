@@ -81,7 +81,7 @@ export function createWslServersController(options: WslServersControllerOptions)
 
   const setCliCheck = (distro: string, check: WslCoderCheck) => {
     setState({
-      opencodeChecks: {
+      coderChecks: {
         ...state.coderChecks,
         [distro]: check,
       },
@@ -115,7 +115,7 @@ export function createWslServersController(options: WslServersControllerOptions)
       setState({ distroProbes: { ...state.distroProbes, ...Object.fromEntries(distroProbes) } })
     }
 
-    const opencodeChecks = await Promise.all(
+    const coderChecks = await Promise.all(
       unique.flatMap((distro) =>
         distroProbeReady(state.distroProbes[distro]) && !state.coderChecks[distro]
           ? [inspectCli(distro).then((check) => [distro, check] as const)]
@@ -123,8 +123,8 @@ export function createWslServersController(options: WslServersControllerOptions)
       ),
     )
 
-    if (opencodeChecks.length) {
-      setState({ opencodeChecks: { ...state.coderChecks, ...Object.fromEntries(opencodeChecks) } })
+    if (coderChecks.length) {
+      setState({ coderChecks: { ...state.coderChecks, ...Object.fromEntries(coderChecks) } })
     }
   }
 
@@ -281,7 +281,7 @@ export function createWslServersController(options: WslServersControllerOptions)
     },
 
     async installCoder(distro: string) {
-      await runJob({ kind: "install-opencode", distro, startedAt: Date.now() }, async () => {
+      await runJob({ kind: "install-coder", distro, startedAt: Date.now() }, async () => {
         const id = state.servers.find((item) => item.config.distro === distro)?.config.id
 
         if (id) await stopServer(id)
@@ -345,7 +345,7 @@ function initialState(): WslServersState {
     installed: [],
     online: [],
     distroProbes: {},
-    opencodeChecks: {},
+    coderChecks: {},
     pendingRestart: false,
     servers: [],
     job: null,
@@ -404,11 +404,11 @@ function requireMatchingCli(t: MainContext["t"], check: WslCoderCheck, expected:
 
 function removeDistroState(state: WslServersState, distro: string) {
   const distroProbes = { ...state.distroProbes }
-  const opencodeChecks = { ...state.coderChecks }
+  const coderChecks = { ...state.coderChecks }
   delete distroProbes[distro]
-  delete opencodeChecks[distro]
+  delete coderChecks[distro]
 
-  return { distroProbes, opencodeChecks }
+  return { distroProbes, coderChecks }
 }
 
 function distroProbeReady(probe: WslDistroProbe | undefined) {

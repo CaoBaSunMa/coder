@@ -54,10 +54,10 @@ const compaction = {
 }
 const marker = (value: Record<string, unknown>) => ({
   sessionUpdate: "session_info_update",
-  _meta: { "opencode/compaction": { messageId: "msg_compact", reason: "manual", ...value } },
+  _meta: { "coder/compaction": { messageId: "msg_compact", reason: "manual", ...value } },
 })
 const childMeta = (id: string, parentID: string, depth: number, title: string) => ({
-  "opencode/child-session": { id, parentID, depth, title },
+  "coder/child-session": { id, parentID, depth, title },
 })
 const compactionMessage = (input: Record<string, unknown>) => ({
   id: "msg_compaction",
@@ -492,7 +492,7 @@ const rows: Row[] = [
       updates: [
         {
           _meta: {
-            "opencode/compaction": { status: "failed", messageId: "msg_2", reason: "auto", error: providerError },
+            "coder/compaction": { status: "failed", messageId: "msg_2", reason: "auto", error: providerError },
           },
         },
       ],
@@ -508,8 +508,8 @@ const rows: Row[] = [
     ),
     expected: {
       updates: [
-        { _meta: { "opencode/compaction": { status: "started" }, ...childMeta("ses_child", root, 1, "Explore") } },
-        { _meta: { "opencode/compaction": { status: "completed" }, ...childMeta("ses_child", root, 1, "Explore") } },
+        { _meta: { "coder/compaction": { status: "started" }, ...childMeta("ses_child", root, 1, "Explore") } },
+        { _meta: { "coder/compaction": { status: "completed" }, ...childMeta("ses_child", root, 1, "Explore") } },
       ],
     },
   },
@@ -569,7 +569,7 @@ const rows: Row[] = [
       updates: [
         {
           sessionUpdate: "session_info_update",
-          _meta: { "opencode/compaction": { status: "completed", messageId: "msg_compaction", reason: "auto" } },
+          _meta: { "coder/compaction": { status: "completed", messageId: "msg_compaction", reason: "auto" } },
         },
       ],
     },

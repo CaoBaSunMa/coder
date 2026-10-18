@@ -744,10 +744,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Il·lustrat per primera vegada a Londres, Anglaterra",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, l'agent de codificació de codi obert",
-  "settings.about.trademark": "Coder és una marca registrada de Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder és una marca registrada de Coder Project",
   "settings.about.typeset": "Tipografia en Inter i IBM Plex Mono",
   "settings.about.tagline": "La IA no pot crear un gran programari sense tu",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Modifica el projecte",
   "settings.timeline.title": "Cronologia",
   "settings.timeline.detail": "Detall de la cronologia",
@@ -794,9 +794,9 @@ export const dict = {
   "server.connect.failed":
     "No s'ha pogut connectar. Comproveu l'adreça i la contrasenya del servidor i torneu-ho a provar.",
   "server.connect.scan": "Escaneja el codi QR",
-  "server.connect.scan.description": "Apunteu la càmera al codi QR que mostra opencode pair.",
+  "server.connect.scan.description": "Apunteu la càmera al codi QR que mostra coder pair.",
   "server.connect.scan.invalid":
-    "Aquest no és un codi d'aparellament Coder. Escaneja el codi mostrat per opencode pair.",
+    "Aquest no és un codi d'aparellament Coder. Escaneja el codi mostrat per coder pair.",
   "server.connect.camera": "Càmera d'aparellament",
   "server.connect.camera.starting": "Obertura de la càmera...",
   "server.connect.mixedContent":

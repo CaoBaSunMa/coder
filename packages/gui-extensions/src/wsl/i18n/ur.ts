@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "ڈسٹری بیوشن انسٹال نہیں ہو سکی: ⁨{{distro}}⁩",
   "error.installCoder": "Coder کی تنصیب ناکام ہو گئی",
   "error.alreadyAdded": "⁨{{distro}}⁩ پہلے ہی شامل ہے",
-  "error.coderMissing": "اس ڈسٹری بیوشن میں opencode انسٹال نہیں ہے",
-  "error.coderCannotRun": "opencode انسٹال ہے لیکن چل نہیں سکا",
+  "error.coderMissing": "اس ڈسٹری بیوشن میں coder انسٹال نہیں ہے",
+  "error.coderCannotRun": "coder انسٹال ہے لیکن چل نہیں سکا",
   "error.coderNotInstalled": "⁨{{distro}}⁩ میں Coder انسٹال نہیں ہے",
   "error.updateVersion":
     "Coder کی اپ ڈیٹ مکمل ہو گئی لیکن ⁨{{distro}}⁩ اب بھی ⁨{{installed}}⁩ کی اطلاع دے رہا ہے؛ متوقع ورژن ⁨{{expected}}⁩ ہے",

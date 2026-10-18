@@ -21,7 +21,7 @@ test("a catalog refresh cannot replace an existing session's model", async ({ pa
     sessions: [{ id: sessionID, agent: "build", model: { id: "alpha", providerID: "coder", variant: "high" } }],
     provider: () => catalog.current,
     onPrompt: (input) => void prompts.push(input.body),
-    seed: { storage: { "opencode.global.dat:model": { recent: [{ providerID: "coder", modelID: "beta" }] } } },
+    seed: { storage: { "coder.global.dat:model": { recent: [{ providerID: "coder", modelID: "beta" }] } } },
   })
 
   const control = page.locator('[data-action="composer-model"]')
@@ -411,7 +411,7 @@ test("marks a Console provider with its workspace only when it is also connected
     id,
     canonical,
     integrationID: "coder",
-    name: `Anomaly / ${name}`,
+    name: `Example / ${name}`,
     models,
   })
 
@@ -429,7 +429,7 @@ test("marks a Console provider with its workspace only when it is also connected
     },
     seed: {
       storage: {
-        "opencode.global.dat:model": {
+        "coder.global.dat:model": {
           user: [
             ["coder", "console-model"],
             ["console-google", "managed-gemini"],
@@ -448,11 +448,11 @@ test("marks a Console provider with its workspace only when it is also connected
   await expect(menu.getByRole("menuitemradio", { name: "Direct Gemini", exact: true })).toBeVisible()
   const headings = menu.locator('[data-slot="menu-v2-group-label"]')
   await expect(headings).toHaveCount(4)
-  await expect(headings.filter({ hasText: /^GoogleAnomaly$/ })).toHaveCount(1)
+  await expect(headings.filter({ hasText: /^GoogleExample$/ })).toHaveCount(1)
   await expect(headings.filter({ hasText: /^Google$/ })).toHaveCount(1)
   await expect(headings.filter({ hasText: /^OpenAI$/ })).toHaveCount(1)
   await expect(headings.filter({ hasText: /^Coder$/ })).toHaveCount(1)
-  await expect(menu.getByText(/Anomaly \//)).toHaveCount(0)
+  await expect(menu.getByText(/Example \//)).toHaveCount(0)
 })
 
 test("shows thinking on hover or a non-default selection while preserving keyboard access", async ({ page }) => {

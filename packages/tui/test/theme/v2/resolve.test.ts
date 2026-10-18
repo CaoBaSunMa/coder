@@ -12,8 +12,8 @@ import {
 } from "@xcoder/theme/tui"
 import { getCoderTheme, parseTheme, type ThemeDocumentSource } from "../../../src/theme"
 
-const opencodeLight = selectTheme(getCoderTheme(), "light")
-const opencodeDark = selectTheme(getCoderTheme(), "dark")
+const coderLight = selectTheme(getCoderTheme(), "light")
+const coderDark = selectTheme(getCoderTheme(), "dark")
 const chromaticHues = ["gray", "red", "orange", "green", "cyan", "blue", "purple"] as const
 const light: ThemeDefinition = {
   ...coderLight,

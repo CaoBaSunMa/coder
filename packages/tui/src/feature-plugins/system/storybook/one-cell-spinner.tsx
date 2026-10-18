@@ -32,7 +32,7 @@ function OneCellSpinnerStory(props: { context: Plugin.Context }) {
   const previewWidth = () => (solo() ? Math.min(dimensions().width, 64) : dimensions().width)
   const speeds = createMemo(() => (dimensions().width >= 60 ? [0.5, 1, 2] : [speed()]))
   const splash = createMemo(() =>
-    entrySplashLayout({ width: Math.max(1, previewWidth() - 8), version: "1.18.4", detail: "~/src/opencode" }),
+    entrySplashLayout({ width: Math.max(1, previewWidth() - 8), version: "1.18.4", detail: "~/src/coder" }),
   )
   let scroll: ScrollBoxRenderable | undefined
   const revealSelected = () => {

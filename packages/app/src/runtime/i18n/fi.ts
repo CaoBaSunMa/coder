@@ -24,8 +24,8 @@ export const dict = {
   "server.connect.failed":
     "Yhteyttä ei voitu muodostaa. Tarkista palvelimen osoite ja salasana ja yritä sitten uudelleen.",
   "server.connect.scan": "Skannaa QR-koodi",
-  "server.connect.scan.description": "Suuntaa kamerasi QR-koodiin, joka näkyy opencode pair:ssä.",
-  "server.connect.scan.invalid": "Tämä ei ole Coder-pariliitoskoodi. Skannaa opencode pair:n näyttämä koodi.",
+  "server.connect.scan.description": "Suuntaa kamerasi QR-koodiin, joka näkyy coder pair:ssä.",
+  "server.connect.scan.invalid": "Tämä ei ole Coder-pariliitoskoodi. Skannaa coder pair:n näyttämä koodi.",
   "server.connect.camera": "Kameraparin muodostaminen",
   "server.connect.camera.starting": "Avataan kameraa…",
   "server.connect.mixedContent":
@@ -145,10 +145,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Kuvitettu ensimmäisen kerran Lontoossa, Englannissa",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, avoimen lähdekoodin koodausagentti",
-  "settings.about.trademark": "Coder on Anomaly Innovations, Inc:n rekisteröity tavaramerkki.",
+  "settings.about.trademark": "Coder on Coder Project:n rekisteröity tavaramerkki.",
   "settings.about.typeset": "Kirjasinlajit Inter ja IBM Plex Mono",
   "settings.about.tagline": "Tekoäly ei voi rakentaa erinomaista ohjelmistoa ilman sinua",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Muokkaa projektia",
   "settings.timeline.title": "Aikajana",
   "settings.timeline.detail": "Aikajanan tarkkuus",

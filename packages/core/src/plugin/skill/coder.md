@@ -39,8 +39,8 @@ For questions about the terminal interface, command-line invocation, `run`,
 that section.
 
 CLI and TUI preferences are separate from Coder's server and project
-configuration. They live in the global `~/.config/opencode/cli.json`, or
-`$XDG_CONFIG_HOME/opencode/cli.json` when `XDG_CONFIG_HOME` is set. There is no
+configuration. They live in the global `~/.config/coder/cli.json`, or
+`$XDG_CONFIG_HOME/coder/cli.json` when `XDG_CONFIG_HOME` is set. There is no
 project-local CLI configuration. Set `CODER_CLI_CONFIG_CONTENT` to merge
 inline JSON over the global settings. Most preferences can also be changed from
 the TUI by pressing `Ctrl+P` and selecting **Open settings**.
@@ -77,7 +77,7 @@ autocomplete:
 }
 ```
 
-Global configuration lives at `~/.config/opencode/coder.json(c)` and applies
+Global configuration lives at `~/.config/coder/coder.json(c)` and applies
 to every project for that user. Project configuration can live in any directory
 as `coder.json(c)` or `.coder/coder.json(c)`, including nested packages
 in a monorepo.
@@ -114,13 +114,13 @@ for themselves without limiting it to the current project; omit it when they
 explicitly want project-local configuration.
 
 ```sh
-opencode mcp add <name> --global --url <remote-url>
-opencode mcp list
+coder mcp add <name> --global --url <remote-url>
+coder mcp list
 ```
 
 Remote servers use OAuth by default. If `mcp list` reports that a server needs
 authentication, tell the user to run `/mcps`, select the server, and sign in.
-Do not run `opencode mcp auth` through the shell tool: it starts an interactive
+Do not run `coder mcp auth` through the shell tool: it starts an interactive
 flow whose authorization link can be hidden in background process output.
 Use the user-facing MCP interface instead.
 
@@ -171,13 +171,13 @@ Coder normally discovers or starts the shared background service
 automatically. If the service is stuck or unhealthy, restart it:
 
 ```sh
-opencode service restart
+coder service restart
 ```
 
 Check its status after restarting:
 
 ```sh
-opencode service status
+coder service status
 ```
 
 ## [API](https://coder.example.com/v2/docs/api)
@@ -193,15 +193,15 @@ HTTP method and path or an OpenAPI operation ID.
 Call an endpoint with an HTTP method and path:
 
 ```sh
-opencode api get /api/info
+coder api get /api/info
 ```
 
 Pass a request body with `--data` or `-d`, and additional headers with
 `--header` or `-H`:
 
 ```sh
-opencode api post /api/example --data '{"key":"value"}'
-opencode api get /api/example --header 'X-Example:value'
+coder api post /api/example --data '{"key":"value"}'
+coder api get /api/example --header 'X-Example:value'
 ```
 
 Request bodies default to `Content-Type: application/json`. When Coder is
@@ -243,11 +243,11 @@ Effect applications. For Cloudflare Durable Objects, use the
 Coder runs a client and a background server. Start by determining whether a
 problem belongs to the client, the shared server, or one project.
 
-- Check the service with `opencode service status` and verify the API with
-  `opencode api get /api/info`.
-- Compare with `opencode --standalone`, which runs the TUI with a private
+- Check the service with `coder service status` and verify the API with
+  `coder api get /api/info`.
+- Compare with `coder --standalone`, which runs the TUI with a private
   server, to isolate shared-service issues.
-- Inspect `~/.local/share/opencode/log/opencode.log`. Filter `role=cli` for
+- Inspect `~/.local/share/coder/log/coder.log`. Filter `role=cli` for
   client startup and `role=server` for sessions, providers, plugins,
   permissions, and tools.
 - Run one reproduction with `CODER_LOG_LEVEL=DEBUG` when normal logs are not

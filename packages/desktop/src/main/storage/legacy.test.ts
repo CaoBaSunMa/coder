@@ -48,10 +48,10 @@ describe("legacy store import", () => {
   test("copies every namespace into state and removes the files", async () => {
     const root = tempRoot()
     const database = openDatabase(":memory:")
-    writeStore(root, "opencode.global.dat", JSON.stringify({ model: "m", layout: { sidebar: 1 } }))
-    writeStore(root, "opencode.window.w1.dat", JSON.stringify({ tabs: "[]" }))
+    writeStore(root, "coder.global.dat", JSON.stringify({ model: "m", layout: { sidebar: 1 } }))
+    writeStore(root, "coder.window.w1.dat", JSON.stringify({ tabs: "[]" }))
     writeStore(root, "default.dat", JSON.stringify({ "settings.v3": "{}" }))
-    writeStore(root, "opencode.settings", JSON.stringify({ keep: true }))
+    writeStore(root, "coder.settings", JSON.stringify({ keep: true }))
     writeStore(root, "unrelated.txt", "x")
 
     const result = await run(database.db, root)
@@ -59,51 +59,51 @@ describe("legacy store import", () => {
     expect(result.imported).toBe(4)
     expect(rows(database.db)).toEqual([
       { name: "default.dat", key: "settings.v3", value: "{}" },
-      { name: "opencode.global.dat", key: "layout", value: '{"sidebar":1}' },
-      { name: "opencode.global.dat", key: "model", value: "m" },
-      { name: "opencode.window.w1.dat", key: "tabs", value: "[]" },
+      { name: "coder.global.dat", key: "layout", value: '{"sidebar":1}' },
+      { name: "coder.global.dat", key: "model", value: "m" },
+      { name: "coder.window.w1.dat", key: "tabs", value: "[]" },
     ])
-    expect(listing(root)).toEqual(["opencode.settings", "unrelated.txt"])
+    expect(listing(root)).toEqual(["coder.settings", "unrelated.txt"])
   })
 
   test("does not overwrite state that already exists", async () => {
     const root = tempRoot()
     const database = openDatabase(":memory:")
-    database.db.run(sql`INSERT INTO state VALUES ('opencode.global.dat', 'model', 'new', 0)`)
-    writeStore(root, "opencode.global.dat", JSON.stringify({ model: "old" }))
+    database.db.run(sql`INSERT INTO state VALUES ('coder.global.dat', 'model', 'new', 0)`)
+    writeStore(root, "coder.global.dat", JSON.stringify({ model: "old" }))
 
     await run(database.db, root)
 
-    expect(rows(database.db)).toEqual([{ name: "opencode.global.dat", key: "model", value: "new" }])
+    expect(rows(database.db)).toEqual([{ name: "coder.global.dat", key: "model", value: "new" }])
     expect(listing(root)).toEqual([])
   })
 
   test("leaves unreadable files in place", async () => {
     const root = tempRoot()
     const database = openDatabase(":memory:")
-    writeStore(root, "opencode.global.dat", "{not json")
-    writeStore(root, "opencode.workspace.x.dat", JSON.stringify({ terminal: "{}" }))
+    writeStore(root, "coder.global.dat", "{not json")
+    writeStore(root, "coder.workspace.x.dat", JSON.stringify({ terminal: "{}" }))
 
     const result = await run(database.db, root)
 
     expect(result.imported).toBe(1)
-    expect(listing(root)).toEqual(["opencode.global.dat"])
+    expect(listing(root)).toEqual(["coder.global.dat"])
   })
 
   test("applies draft retention: skips empty, stale, and excess draft files", async () => {
     const root = tempRoot()
     const database = openDatabase(":memory:")
-    writeStore(root, "opencode.draft.empty.dat", "{}")
+    writeStore(root, "coder.draft.empty.dat", "{}")
     writeStore(
       root,
-      "opencode.draft.stale.dat",
+      "coder.draft.stale.dat",
       JSON.stringify({ "draft:prompt": "old" }),
       new Date(now.getTime() - 31 * day),
     )
     Array.from({ length: 102 }).forEach((_, index) =>
       writeStore(
         root,
-        `opencode.draft.${index}.dat`,
+        `coder.draft.${index}.dat`,
         JSON.stringify({ "draft:prompt": `${index}` }),
         new Date(now.getTime() - index * 1_000),
       ),
@@ -113,12 +113,12 @@ describe("legacy store import", () => {
 
     expect(result.imported).toBe(100)
     const names = rows(database.db).map((row) => row.name)
-    expect(names).toContain("opencode.draft.0.dat")
-    expect(names).toContain("opencode.draft.99.dat")
-    expect(names).not.toContain("opencode.draft.100.dat")
-    expect(names).not.toContain("opencode.draft.101.dat")
-    expect(names).not.toContain("opencode.draft.stale.dat")
-    expect(names).not.toContain("opencode.draft.empty.dat")
+    expect(names).toContain("coder.draft.0.dat")
+    expect(names).toContain("coder.draft.99.dat")
+    expect(names).not.toContain("coder.draft.100.dat")
+    expect(names).not.toContain("coder.draft.101.dat")
+    expect(names).not.toContain("coder.draft.stale.dat")
+    expect(names).not.toContain("coder.draft.empty.dat")
     expect(listing(root)).toEqual([])
   })
 })

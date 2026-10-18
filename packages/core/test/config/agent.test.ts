@@ -143,7 +143,7 @@ permissions:
   it.effect("matches POSIX paths against home-relative permissions", () =>
     Effect.gen(function* () {
       const permissions = yield* loadHomePermissions("/home/test")
-      expect(Permission.evaluate("external_directory", "/home/test/p/opencode/src/*", permissions).effect).toBe("allow")
+      expect(Permission.evaluate("external_directory", "/home/test/p/coder/src/*", permissions).effect).toBe("allow")
       expect(Permission.evaluate("external_directory", "/home/test/cache/files/*", permissions).effect).toBe("deny")
       expect(Permission.evaluate("external_directory", "/some/~/path", permissions).effect).toBe("deny")
       expect(Permission.evaluate("external_directory", "$HOMELESS/private/*", permissions).effect).toBe("deny")
@@ -162,7 +162,7 @@ permissions:
         effect: "allow",
       })
       expect(
-        Permission.evaluate("external_directory", "C:\\Users\\test\\p\\opencode\\src\\*", permissions).effect,
+        Permission.evaluate("external_directory", "C:\\Users\\test\\p\\coder\\src\\*", permissions).effect,
       ).toBe("allow")
       expect(Permission.evaluate("external_directory", "C:\\Users\\test\\cache\\files\\*", permissions).effect).toBe(
         "deny",
@@ -191,12 +191,12 @@ permissions:
                   "*.env.*": "deny",
                   "*.env.example": "allow",
                   "*.dev.vars": "deny",
-                  "~/.local/share/opencode/mcp-auth.json": "deny",
-                  "$HOME/.local/share/opencode/mcp-auth.json": "deny",
+                  "~/.local/share/coder/mcp-auth.json": "deny",
+                  "$HOME/.local/share/coder/mcp-auth.json": "deny",
                 },
                 external_directory: {
                   "*": "ask",
-                  "~/.local/share/opencode/*": "deny",
+                  "~/.local/share/coder/*": "deny",
                 },
               },
             }),
@@ -212,7 +212,7 @@ permissions:
                   { action: "external_directory", resource: "*", effect: "allow" },
                   {
                     action: "external_directory",
-                    resource: "~/.local/share/opencode/*",
+                    resource: "~/.local/share/coder/*",
                     effect: "deny",
                   },
                   { action: "read", resource: "*.env", effect: "deny" },
@@ -229,7 +229,7 @@ permissions:
 
       const build = yield* agents.get(Agent.defaultID)
       if (!build) throw new Error("expected configured build agent")
-      const opencodeData = path.join(global.home, ".local", "share", "coder", "*")
+      const coderData = path.join(global.home, ".local", "share", "coder", "*")
       const mcpAuth = path.join(global.home, ".local", "share", "coder", "mcp-auth.json")
       expect(build.permissions).toEqual([
         ...defaultPermissions,
@@ -245,17 +245,17 @@ permissions:
         { action: "read", resource: mcpAuth, effect: "deny" },
         { action: "read", resource: mcpAuth, effect: "deny" },
         { action: "external_directory", resource: "*", effect: "ask" },
-        { action: "external_directory", resource: opencodeData, effect: "deny" },
+        { action: "external_directory", resource: coderData, effect: "deny" },
         { action: "*", resource: "*", effect: "allow" },
         { action: "external_directory", resource: "*", effect: "allow" },
-        { action: "external_directory", resource: opencodeData, effect: "deny" },
+        { action: "external_directory", resource: coderData, effect: "deny" },
         { action: "read", resource: "*.env", effect: "deny" },
       ])
       expect(Permission.evaluate("shell", "bun test", build.permissions).effect).toBe("allow")
       expect(Permission.evaluate("edit", "src/index.ts", build.permissions).effect).toBe("allow")
       expect(Permission.evaluate("webfetch", "https://example.com", build.permissions).effect).toBe("allow")
       expect(Permission.evaluate("read", ".env", build.permissions).effect).toBe("deny")
-      expect(Permission.evaluate("external_directory", opencodeData, build.permissions).effect).toBe("deny")
+      expect(Permission.evaluate("external_directory", coderData, build.permissions).effect).toBe("deny")
       expect(Permission.evaluate("external_directory", "/outside/*", build.permissions).effect).toBe("allow")
     }),
   )

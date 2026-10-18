@@ -36,30 +36,30 @@ test("embedded worktree APIs use project IDs and SDK-registered strategies", asy
       )
     },
   })
-  await using opencode = await Coder.create({
+  await using coder = await Coder.create({
     plugins: [plugin],
     config: { directory: directory.path, project: false },
     models: { fetch: false },
     fs: { filewatcher: false },
   })
-  const session = await opencode.sessions.create({ location: { directory: directory.path } })
+  const session = await coder.sessions.create({ location: { directory: directory.path } })
   const projectID = session.projectID
-  expect(await opencode.worktree.list({ projectID })).toHaveLength(1)
+  expect(await coder.worktree.list({ projectID })).toHaveLength(1)
   expect(state.activated).toBe(0)
-  const worktree = await opencode.worktree.create({
+  const worktree = await coder.worktree.create({
     projectID,
     directory: join(directory.path, "copies"),
     name: "task",
   })
   expect(state.activated).toBe(1)
-  expect(await opencode.worktree.list({ projectID })).toContainEqual({
+  expect(await coder.worktree.list({ projectID })).toContainEqual({
     directory: worktree.directory,
     strategy: "sdk-copy",
   })
   expect(state.discovered).toBe(0)
-  await opencode.worktree.refresh({ projectID })
+  await coder.worktree.refresh({ projectID })
   expect(state.discovered).toBe(1)
-  await opencode.worktree.remove({ projectID, directory: worktree.directory, force: false })
+  await coder.worktree.remove({ projectID, directory: worktree.directory, force: false })
   expect(state.removed).toBe(1)
-  expect(await opencode.worktree.list({ projectID })).toHaveLength(1)
+  expect(await coder.worktree.list({ projectID })).toHaveLength(1)
 })

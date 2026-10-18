@@ -28,7 +28,7 @@ export const WslJob = Schema.Union([
     distros: Schema.Array(Schema.String),
     startedAt: Schema.Number,
   }),
-  Schema.Struct({ kind: Schema.Literal("install-opencode"), distro: Schema.String, startedAt: Schema.Number }),
+  Schema.Struct({ kind: Schema.Literal("install-coder"), distro: Schema.String, startedAt: Schema.Number }),
 ])
 
 export type WslJob = typeof WslJob.Type
@@ -83,7 +83,7 @@ export const WslServersState = Schema.Struct({
   installed: Schema.Array(WslInstalledDistro),
   online: Schema.Array(WslOnlineDistro),
   distroProbes: Schema.Record(Schema.String, WslDistroProbe),
-  opencodeChecks: Schema.Record(Schema.String, WslCoderCheck),
+  coderChecks: Schema.Record(Schema.String, WslCoderCheck),
   pendingRestart: Schema.Boolean,
   servers: Schema.Array(WslServerItem),
   job: Schema.NullOr(WslJob),

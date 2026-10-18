@@ -7,7 +7,7 @@ import { Mcp } from "../../mcp/index.js"
 import { Permission } from "../../permission.js"
 
 export const Plugin = {
-  id: "opencode.tools.mcp-resources",
+  id: "coder.tools.mcp-resources",
   effect: Effect.fn("McpResourceTools.Plugin")(function* (ctx: Context) {
     const mcp = yield* Mcp.Service
     const permission = yield* Permission.Service
@@ -34,7 +34,7 @@ export const Plugin = {
               const servers =
                 input.server === undefined ? (yield* mcp.servers()).map((server) => server.name) : [input.server]
               yield* permission.assert({
-                action: "opencode_list_mcp_resources",
+                action: "coder_list_mcp_resources",
                 resources: servers,
                 save: servers,
                 metadata: {},
@@ -63,7 +63,7 @@ export const Plugin = {
           execute: (input, context) =>
             Effect.gen(function* () {
               yield* permission.assert({
-                action: "opencode_read_mcp_resource",
+                action: "coder_read_mcp_resource",
                 resources: [`${input.server}:${input.uri}`],
                 save: [`${input.server}:*`],
                 metadata: { server: input.server, uri: input.uri },

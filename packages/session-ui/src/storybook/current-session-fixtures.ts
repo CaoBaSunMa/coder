@@ -522,7 +522,7 @@ export const expandedShellDocument = document([
         offset: 52_300,
         args: {
           command:
-            "coder2 api get /openapi.json > /private/var/folders/j/gd69b2|16y91666jzf3p9g22asdasc0000gn/T/opencode/temp/tes",
+            "coder2 api get /openapi.json > /private/var/folders/j/gd69b2|16y91666jzf3p9g22asdasc0000gn/T/coder/temp/tes",
         },
         output:
           '{"location":{"directory":"/Users/usrnk1","project":{"id":"global","directory":"/","canonical":"/"}},"data":[{"id":"coder","name":"Coder","description":"Use this skill for any question about Coder itself, including how Coder works, using or configuring it, migrating from V1 to V2, troubleshooting it, developing plugins or integrations, using the Coder SDK, clients, server, or API, and contributing to the Coder codebase."}]}',
@@ -803,9 +803,9 @@ export const loadedResourcesDocument = document([
         id: "tool_loaded_file",
         name: "read",
         offset: 80_100,
-        args: { path: "C:/workspaces/opencode/packages/cli/AGENTS.md" },
+        args: { path: "C:/workspaces/coder/packages/cli/AGENTS.md" },
         output: "Project instructions loaded.",
-        metadata: { loaded: ["C:/workspaces/opencode/packages/cli/AGENTS.md"] },
+        metadata: { loaded: ["C:/workspaces/coder/packages/cli/AGENTS.md"] },
       }),
       completedTool({
         id: "tool_skill_rtl",

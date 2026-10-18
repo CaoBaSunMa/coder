@@ -70,7 +70,7 @@ it.live("serves turn diffs by user message with range validation", () =>
     const request = (path: string, body?: unknown) =>
       Effect.promise(async () => {
         const response = await handler(
-          new Request(`http://opencode.local${path}`, {
+          new Request(`http://coder.local${path}`, {
             method: body === undefined ? "GET" : "POST",
             headers: body === undefined ? undefined : { "content-type": "application/json" },
             body: body === undefined ? undefined : JSON.stringify(body),

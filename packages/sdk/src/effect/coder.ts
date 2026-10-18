@@ -1,4 +1,4 @@
-export * as Coder from "./opencode"
+export * as Coder from "./coder"
 
 import { Coder, type CoderClient } from "@xcoder/client/effect"
 import type { Session } from "@xcoder/core/session"
@@ -41,7 +41,7 @@ export const create: <R = never>(
 >(options: CreateOptions<R> = {}, embed: EmbedOptions = {}) {
   const host = yield* Effect.acquireRelease(EmbeddedHost.create(options, embed), (host) => Effect.promise(host.close))
   const httpClient = yield* HttpClient.HttpClient.pipe(Effect.provide(FetchHttpClient.layer))
-  const client = yield* Coder.make({ baseUrl: "http://opencode.local" }).pipe(
+  const client = yield* Coder.make({ baseUrl: "http://coder.local" }).pipe(
     Effect.provideService(
       HttpClient.HttpClient,
       // FetchHttpClient reads Fetch at request time; callers must not replace this host's in-process transport.

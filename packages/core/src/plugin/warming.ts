@@ -13,7 +13,7 @@ const defaults = {
 }
 
 export const Plugin = define({
-  id: "opencode.warming",
+  id: "coder.warming",
   effect: Effect.fn(function* (ctx) {
     const config = yield* Config.Service
     const loadSettings = Effect.fn("WarmingPlugin.loadSettings")(function* () {

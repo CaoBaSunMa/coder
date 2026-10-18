@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "ڈسٹرو انسٹال نئیں ہو سکیا: ⁨{{distro}}⁩",
   "error.installCoder": "Coder دی تنصیب ناکام ہو گئی",
   "error.alreadyAdded": "⁨{{distro}}⁩ پہلے ای شامل اے",
-  "error.coderMissing": "اس ڈسٹرو وچ opencode انسٹال نئیں اے",
-  "error.coderCannotRun": "opencode انسٹال اے پر چل نئیں سکیا",
+  "error.coderMissing": "اس ڈسٹرو وچ coder انسٹال نئیں اے",
+  "error.coderCannotRun": "coder انسٹال اے پر چل نئیں سکیا",
   "error.coderNotInstalled": "⁨{{distro}}⁩ وچ Coder انسٹال نئیں اے",
   "error.updateVersion":
     "Coder دی اپ ڈیٹ پوری ہو گئی پر ⁨{{distro}}⁩ ہلے وی ⁨{{installed}}⁩ دس رہیا اے؛ ⁨{{expected}}⁩ چاہیدا سی",

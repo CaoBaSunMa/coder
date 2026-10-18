@@ -844,9 +844,9 @@ describe("ConfigProviderPlugin.Plugin", () => {
           type: "document",
           info: decode({
             providers: {
-              opencode: {
+              coder: {
                 package: "aisdk:@ai-sdk/openai",
-                settings: { baseURL: "https://opencode.test/v1" },
+                settings: { baseURL: "https://coder.test/v1" },
                 models: {
                   "alpha-gpt-next": {
                     variants: [
@@ -893,9 +893,9 @@ describe("ConfigProviderPlugin.Plugin", () => {
           type: "document",
           info: decode({
             providers: {
-              opencode: {
+              coder: {
                 package: "aisdk:@ai-sdk/openai",
-                settings: { baseURL: "https://opencode.test/v1" },
+                settings: { baseURL: "https://coder.test/v1" },
               },
             },
           }),
@@ -904,7 +904,7 @@ describe("ConfigProviderPlugin.Plugin", () => {
           type: "document",
           info: decode({
             providers: {
-              opencode: {
+              coder: {
                 models: {
                   "alpha-gpt-next": {
                     variants: [{ id: "high", body: { reasoningEffort: "high" } }],

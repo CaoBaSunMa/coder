@@ -95,7 +95,7 @@ S3 credentials from the verified token, streams uploads, and sets the content
 type, download filename, and immutable cache headers.
 
 The publishers register `cli`, `cli-node` (when built), and `desktop` (when
-released) with distribution `opencode`. Each record is published only after all
+released) with distribution `coder`. Each record is published only after all
 of its files have uploaded successfully.
 Every `metadata.files` entry contains the direct CDN `url`, SHA-256 checksum,
 and byte size. Desktop `metadata.manifests` also use those CDN URLs and retain

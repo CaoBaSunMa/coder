@@ -354,9 +354,9 @@ describe("Config", () => {
 
   test("resolves the system configuration directory per platform", () => {
     expect(ConfigDiscovery.systemDirectory("darwin", {})).toBe(
-      AbsolutePath.make("/Library/Application Support/opencode"),
+      AbsolutePath.make("/Library/Application Support/coder"),
     )
-    expect(ConfigDiscovery.systemDirectory("linux", {})).toBe(AbsolutePath.make("/etc/opencode"))
+    expect(ConfigDiscovery.systemDirectory("linux", {})).toBe(AbsolutePath.make("/etc/coder"))
     expect(ConfigDiscovery.systemDirectory("win32", { ProgramData: "D:\\ProgramData" })).toBe(
       AbsolutePath.make(path.join("D:\\ProgramData", "coder")),
     )
@@ -750,7 +750,7 @@ describe("Config", () => {
           port: 0,
           fetch(request) {
             const url = new URL(request.url)
-            if (url.pathname === "/.well-known/opencode") {
+            if (url.pathname === "/.well-known/coder") {
               if (manifestStatus !== 200) return new Response("Unavailable", { status: manifestStatus })
               return Response.json({
                 auth: { command: ["login"], env: "TOKEN" },
@@ -1322,7 +1322,7 @@ describe("Config", () => {
     ),
   )
 
-  it.live("loads opencode JSON and JSONC files from lowest to highest priority", () =>
+  it.live("loads coder JSON and JSONC files from lowest to highest priority", () =>
     Effect.acquireDisposable(Effect.promise(() => tmpdir())).pipe(
       Effect.flatMap((tmp) =>
         Effect.gen(function* () {

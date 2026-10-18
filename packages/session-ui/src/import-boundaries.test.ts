@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
 
-const forbidden = /["']@opencode\/(?:core|sdk|server)(?:\/[^"']*)?["']/
+const forbidden = /["']@coder\/(?:core|sdk|server)(?:\/[^"']*)?["']/
 
 const oldSession = /(?:SessionV1|session-v1|legacy-message|legacy-message-values)/
 

@@ -73,7 +73,7 @@ async function compactTurn(
 }
 
 function marker(sessionId: string, value: Record<string, unknown>): SessionNotification {
-  return { sessionId, update: { sessionUpdate: "session_info_update", _meta: { "opencode/compaction": value } } }
+  return { sessionId, update: { sessionUpdate: "session_info_update", _meta: { "coder/compaction": value } } }
 }
 
 function compaction(sessionId: string, update: CompactionUpdate): SessionNotification {

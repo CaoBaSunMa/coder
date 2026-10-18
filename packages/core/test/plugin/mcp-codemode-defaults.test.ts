@@ -15,7 +15,7 @@ it.effect("applies Code Mode defaults for known MCP servers unless codemode is c
     }> = [
       {
         name: "executor remote",
-        server: { type: "remote", url: "https://executor.sh/example/mcp?source=opencode" },
+        server: { type: "remote", url: "https://executor.sh/example/mcp?source=coder" },
         codemode: false,
       },
       { name: "executor local", server: { type: "local", command: ["executor", "mcp"] }, codemode: false },

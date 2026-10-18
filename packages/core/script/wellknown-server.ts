@@ -86,7 +86,7 @@ const server = Bun.serve({
   port,
   async fetch(request) {
     const url = new URL(request.url)
-    if (url.pathname === "/.well-known/opencode") {
+    if (url.pathname === "/.well-known/coder") {
       return Response.json({
         auth: {
           command: ["bun", "-e", `await Bun.sleep(5000); process.stdout.write(${JSON.stringify(token)})`],

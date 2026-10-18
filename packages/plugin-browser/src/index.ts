@@ -4,7 +4,7 @@ import { BrowserConnection } from "./connection.js"
 import { BrowserTools } from "./tools.js"
 
 export default Plugin.define({
-  id: "opencode.browser",
+  id: "coder.browser",
   effect: (ctx) =>
     Effect.gen(function* () {
       const connection = yield* BrowserConnection.make(ctx)

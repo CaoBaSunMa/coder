@@ -7,7 +7,7 @@ An opt-in Coder plugin that registers Figma's remote MCP server and official Fig
 Install directly from Git:
 
 ```sh
-opencode plugin add 'git+https://github.com/coder-ai/coder.git#path:packages/plugins/figma'
+coder plugin add 'git+https://github.com/coder-ai/coder.git#path:packages/plugins/figma'
 ```
 
 The URL selects the Figma directory and uses the repository's default branch, so no explicit branch name is needed. Installation is Git-only.
@@ -60,7 +60,7 @@ Sync never runs automatically during installation, plugin startup, typechecking,
 ## Remove
 
 ```sh
-opencode plugin remove 'git+https://github.com/coder-ai/coder.git#path:packages/plugins/figma'
+coder plugin remove 'git+https://github.com/coder-ai/coder.git#path:packages/plugins/figma'
 ```
 
 If you installed with a different Git specification, pass that same specification to remove it. An independently configured `mcp.servers.figma` entry remains unaffected.

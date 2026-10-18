@@ -24,7 +24,7 @@ test("server.info decodes the readiness response", async () => {
           version: "current",
           pid: 123,
           urls: ["http://localhost:3000"],
-          paths: { tmp: "/tmp/opencode" },
+          paths: { tmp: "/tmp/coder" },
         }),
       ),
     ),
@@ -38,7 +38,7 @@ test("server.info decodes the readiness response", async () => {
     version: "current",
     pid: 123,
     urls: ["http://localhost:3000"],
-    paths: { tmp: "/tmp/opencode" },
+    paths: { tmp: "/tmp/coder" },
   })
 })
 

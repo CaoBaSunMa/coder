@@ -22,12 +22,12 @@ describe("acp session lifecycle over the wire", () => {
         mcpCapabilities: { http: true, sse: false },
         promptCapabilities: { embeddedContext: true, image: true },
         sessionCapabilities: { additionalDirectories: {}, close: {}, delete: {}, fork: {}, list: {}, resume: {} },
-        _meta: { "opencode/child-session-updates": true },
+        _meta: { "coder/child-session-updates": true },
       },
       agentInfo: { name: "Coder" },
     })
     expect(plain.authMethods).toEqual([
-      { id: "coder-login", name: "Login with opencode", description: "Run `opencode auth login` in the terminal" },
+      { id: "coder-login", name: "Login with coder", description: "Run `coder auth login` in the terminal" },
     ])
     expect(terminal.authMethods?.[0]?._meta).toEqual({
       "terminal-auth": { command: "coder", args: ["auth", "login"], label: "Coder Login" },
@@ -35,8 +35,8 @@ describe("acp session lifecycle over the wire", () => {
     expect(standard.authMethods).toEqual([
       {
         id: "coder-login",
-        name: "Login with opencode",
-        description: "Run `opencode auth login` in the terminal",
+        name: "Login with coder",
+        description: "Run `coder auth login` in the terminal",
         type: "terminal",
         args: ["--login"],
       },

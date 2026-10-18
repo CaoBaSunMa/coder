@@ -52,12 +52,12 @@ it.live(
         .pipe(HttpEffect.toWebHandlerWith(context))
       const request = (method: "GET" | "POST", route: string) =>
         Effect.promise((signal) => {
-          const url = new URL(route, "http://opencode.local")
+          const url = new URL(route, "http://coder.local")
           url.searchParams.set("location[directory]", tmp.path)
           return handler(
             new Request(url, {
               method,
-              headers: { authorization: `Basic ${btoa("opencode:secret")}` },
+              headers: { authorization: `Basic ${btoa("coder:secret")}` },
               signal,
             }),
           )

@@ -118,7 +118,7 @@ describe("experimental Evaluation", () => {
 
   it.effect("configures the Coder System One endpoint", () =>
     Evaluation.run({
-      model: Coder.configure({ apiKey: "coder-key", baseURL: "https://opencode.test/v1" }).experimental.evaluation(
+      model: Coder.configure({ apiKey: "coder-key", baseURL: "https://coder.test/v1" }).experimental.evaluation(
         "jev-1.13",
       ),
       state: "hello",
@@ -128,7 +128,7 @@ describe("experimental Evaluation", () => {
         Effect.sync(() => {
           expect(response.answers.greeting.probability).toBe(0.99)
           expect(response.usage?.providerMetadata).toEqual({
-            opencode: { input_tokens: 10, output_tokens: 2 },
+            coder: { input_tokens: 10, output_tokens: 2 },
           })
         }),
       ),
@@ -136,7 +136,7 @@ describe("experimental Evaluation", () => {
         EvaluationClient.layer.pipe(
           Layer.provide(
             dynamicResponse((input) => {
-              expect(input.request.url).toBe("https://opencode.test/v1/systemone")
+              expect(input.request.url).toBe("https://coder.test/v1/systemone")
               expect(input.request.headers.authorization).toBe("Bearer coder-key")
               return Effect.succeed(
                 input.respond(

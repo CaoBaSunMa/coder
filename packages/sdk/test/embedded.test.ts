@@ -44,7 +44,7 @@ for (const selection of ["explicit", "default"] as const) {
         const llm = yield* TestLLM.Test.pipe(
           Effect.provide(TestLLM.testLayer({ fallback: TestLLM.text("ready", "answer") })),
         )
-        const opencode = yield* fixture.sdk.Coder.create(
+        const coder = yield* fixture.sdk.Coder.create(
           {
             config: {
               directory: fixture.directory,
@@ -68,7 +68,7 @@ for (const selection of ["explicit", "default"] as const) {
           },
         )
 
-        const result = yield* opencode.generate.text({
+        const result = yield* coder.generate.text({
           prompt: "Say ready",
           ...(selection === "explicit"
             ? {
@@ -120,7 +120,7 @@ it.live("seeds host plugins from CreateOptions and waits for delayed model plugi
             })
           }).pipe(Effect.orDie),
       })
-      const opencode = yield* fixture.sdk.Coder.create(
+      const coder = yield* fixture.sdk.Coder.create(
         {
           config: {
             directory: fixture.directory,
@@ -137,7 +137,7 @@ it.live("seeds host plugins from CreateOptions and waits for delayed model plugi
       )
 
       const [defaultModel, generated] = yield* Effect.all(
-        [opencode.model.default({ location: location(fixture) }), opencode.generate.text({ prompt: "Say ready" })],
+        [coder.model.default({ location: location(fixture) }), coder.generate.text({ prompt: "Say ready" })],
         { concurrency: "unbounded" },
       )
 
@@ -155,7 +155,7 @@ it.live("seeds host plugins from CreateOptions and waits for delayed model plugi
 it.live("CoderWorkerd seeds plugins before cold model resolution", () =>
   withEmbedded("coder-workerd-seeded-plugin-", (fixture) =>
     Effect.gen(function* () {
-      const opencode = yield* CoderWorkerd.create({
+      const coder = yield* CoderWorkerd.create({
         storage: makeDurableObjectStorage(),
         models: { fetch: false },
         config: { model: "workerd-seeded/fictional-chat" },
@@ -184,7 +184,7 @@ it.live("CoderWorkerd seeds plugins before cold model resolution", () =>
         ],
       })
 
-      const selected = yield* opencode.model.default({
+      const selected = yield* coder.model.default({
         location: fixture.sdk.Location.Ref.make({ directory: fixture.sdk.AbsolutePath.make("/workspace") }),
       })
       expect(selected.data).toMatchObject({
@@ -200,47 +200,47 @@ it.live(
   () =>
     withEmbedded("coder-embedded-", (fixture) =>
       Effect.gen(function* () {
-        const opencode = yield* fixture.sdk.Coder.create({ events: { persist: true } })
+        const coder = yield* fixture.sdk.Coder.create({ events: { persist: true } })
         const id = sessionID(fixture)
         const model = fixture.sdk.Model.Ref.make({
           id: fixture.sdk.Model.ID.make("embedded"),
           providerID: fixture.sdk.Provider.ID.make("test"),
         })
 
-        const created = yield* opencode.sessions.create({
+        const created = yield* coder.sessions.create({
           id,
           agent: fixture.sdk.Agent.ID.make("build"),
           location: location(fixture),
         })
-        yield* opencode.sessions.switchModel({ sessionID: id, model })
-        const selected = yield* opencode.sessions.get({ sessionID: id })
-        const page = yield* opencode.sessions.list({ directory: fixture.sdk.AbsolutePath.make(fixture.directory) })
-        const active = yield* opencode.sessions.active()
-        const admitted = yield* opencode.sessions.prompt({
+        yield* coder.sessions.switchModel({ sessionID: id, model })
+        const selected = yield* coder.sessions.get({ sessionID: id })
+        const page = yield* coder.sessions.list({ directory: fixture.sdk.AbsolutePath.make(fixture.directory) })
+        const active = yield* coder.sessions.active()
+        const admitted = yield* coder.sessions.prompt({
           sessionID: id,
           text: "Do not run",
           resume: false,
         })
-        const context = yield* opencode.sessions.context({ sessionID: id })
-        const pendingAfterAdmit = yield* opencode.sessions.inbox.list({ sessionID: id })
-        yield* opencode.sessions.instructions.entry.put({ sessionID: id, key: "deploy-target", value: "production" })
-        yield* opencode.sessions.instructions.entry.put({ sessionID: id, key: "flags", value: { beta: true } })
-        const contextEntries = yield* opencode.sessions.instructions.entry.list({ sessionID: id })
-        yield* opencode.sessions.instructions.entry.remove({ sessionID: id, key: "flags" })
-        const remainingContextEntries = yield* opencode.sessions.instructions.entry.list({ sessionID: id })
-        const wake = yield* opencode.sessions.prompt({
+        const context = yield* coder.sessions.context({ sessionID: id })
+        const pendingAfterAdmit = yield* coder.sessions.inbox.list({ sessionID: id })
+        yield* coder.sessions.instructions.entry.put({ sessionID: id, key: "deploy-target", value: "production" })
+        yield* coder.sessions.instructions.entry.put({ sessionID: id, key: "flags", value: { beta: true } })
+        const contextEntries = yield* coder.sessions.instructions.entry.list({ sessionID: id })
+        yield* coder.sessions.instructions.entry.remove({ sessionID: id, key: "flags" })
+        const remainingContextEntries = yield* coder.sessions.instructions.entry.list({ sessionID: id })
+        const wake = yield* coder.sessions.prompt({
           sessionID: id,
           text: "Promote this input",
         })
-        const prompted = yield* opencode.sessions.log({ sessionID: id, follow: true }).pipe(
+        const prompted = yield* coder.sessions.log({ sessionID: id, follow: true }).pipe(
           Stream.filter((event) => event.type === "session.inbox.delivered" && event.data.inboxID === wake.id),
           Stream.runHead,
           Effect.timeout("10 seconds"),
           Effect.map(Option.getOrThrow),
         )
-        const wakeContext = yield* opencode.sessions.context({ sessionID: id })
-        const pendingAfterPromote = yield* opencode.sessions.inbox.list({ sessionID: id })
-        const event = yield* opencode.sessions.log({ sessionID: id }).pipe(
+        const wakeContext = yield* coder.sessions.context({ sessionID: id })
+        const pendingAfterPromote = yield* coder.sessions.inbox.list({ sessionID: id })
+        const event = yield* coder.sessions.log({ sessionID: id }).pipe(
           Stream.filter((item) => item.type === "session.model.selected"),
           Stream.take(1),
           Stream.runHead,
@@ -249,22 +249,22 @@ it.live(
         const modelMessage = Option.fromNullishOr(context.find((message) => message.type === "model-switched")).pipe(
           Option.getOrThrow,
         )
-        const message = yield* opencode.sessions.message.get({ sessionID: id, messageID: modelMessage.id })
-        yield* opencode.sessions.interrupt({ sessionID: id })
-        const other = yield* opencode.sessions.create({ location: location(fixture) })
+        const message = yield* coder.sessions.message.get({ sessionID: id, messageID: modelMessage.id })
+        yield* coder.sessions.interrupt({ sessionID: id })
+        const other = yield* coder.sessions.create({ location: location(fixture) })
         const missingSessionID = fixture.sdk.Session.ID.create()
         const missing = yield* Effect.all(
           [
-            opencode.sessions.log({ sessionID: missingSessionID }).pipe(Stream.runHead, Effect.flip),
-            opencode.sessions.interrupt({ sessionID: missingSessionID }).pipe(Effect.flip),
-            opencode.sessions.message.get({ sessionID: missingSessionID, messageID: modelMessage.id }).pipe(Effect.flip),
-            opencode.sessions.instructions.entry.list({ sessionID: missingSessionID }).pipe(Effect.flip),
-            opencode.sessions.inbox.list({ sessionID: missingSessionID }).pipe(Effect.flip),
+            coder.sessions.log({ sessionID: missingSessionID }).pipe(Stream.runHead, Effect.flip),
+            coder.sessions.interrupt({ sessionID: missingSessionID }).pipe(Effect.flip),
+            coder.sessions.message.get({ sessionID: missingSessionID, messageID: modelMessage.id }).pipe(Effect.flip),
+            coder.sessions.instructions.entry.list({ sessionID: missingSessionID }).pipe(Effect.flip),
+            coder.sessions.inbox.list({ sessionID: missingSessionID }).pipe(Effect.flip),
           ],
           { concurrency: "unbounded" },
         )
         const missingMessage = yield* Effect.flip(
-          opencode.sessions.message.get({
+          coder.sessions.message.get({
             sessionID: other.id,
             messageID: modelMessage.id,
           }),
@@ -306,9 +306,9 @@ it.live(
 it.live("embedded client exposes plugin-backed web search", () =>
   withEmbedded("coder-embedded-websearch-", (fixture) =>
     Effect.gen(function* () {
-      const opencode = yield* fixture.sdk.Coder.create()
+      const coder = yield* fixture.sdk.Coder.create()
       const providerID = fixture.sdk.WebSearch.ID.make("embedded-websearch")
-      yield* opencode.plugin({
+      yield* coder.plugin({
         id: `embedded-websearch-${crypto.randomUUID()}`,
         effect: (ctx) =>
           ctx.websearch.transform((editor) => {
@@ -321,7 +321,7 @@ it.live("embedded client exposes plugin-backed web search", () =>
           }),
       })
 
-      const result = yield* opencode.websearch.query({
+      const result = yield* coder.websearch.query({
         query: "coder",
         providerID,
         location: location(fixture),
@@ -329,7 +329,7 @@ it.live("embedded client exposes plugin-backed web search", () =>
 
       expect(result.data).toEqual({
         providerID,
-        results: [{ url: "https://example.com", content: "Found opencode", time: {} }],
+        results: [{ url: "https://example.com", content: "Found coder", time: {} }],
       })
     }),
   ),
@@ -340,12 +340,12 @@ it.live(
   () =>
     withEmbedded("coder-embedded-events-", (fixture) =>
       Effect.gen(function* () {
-        const opencode = yield* fixture.sdk.Coder.create()
+        const coder = yield* fixture.sdk.Coder.create()
         const id = sessionID(fixture)
         const connected = yield* Latch.make(false)
         const prompted = yield* Deferred.make<Extract<CoderEvent, { type: "session.inbox.delivered" }>>()
 
-        yield* opencode.events.subscribe().pipe(
+        yield* coder.events.subscribe().pipe(
           Stream.runForEach((event) =>
             event.type === "server.connected"
               ? connected.open
@@ -356,8 +356,8 @@ it.live(
           Effect.forkScoped,
         )
         yield* connected.await
-        yield* opencode.sessions.create({ id, location: location(fixture) })
-        yield* opencode.sessions.prompt({
+        yield* coder.sessions.create({ id, location: location(fixture) })
+        yield* coder.sessions.prompt({
           sessionID: id,
           text: "Observe this input",
         })
@@ -407,8 +407,8 @@ it.live("embedded client is available as a Layer service", () =>
   withEmbedded("coder-embedded-layer-", (fixture) => {
     const id = sessionID(fixture)
     return Effect.gen(function* () {
-      const opencode = yield* fixture.sdk.Coder.Service
-      const created = yield* opencode.sessions.create({ id, location: location(fixture) })
+      const coder = yield* fixture.sdk.Coder.Service
+      const created = yield* coder.sessions.create({ id, location: location(fixture) })
       expect(created.id).toBe(id)
     }).pipe(Effect.provide(fixture.sdk.Coder.layer()))
   }),
@@ -433,15 +433,15 @@ it.live("configures workspace providers through the SDK facade", () =>
           return Effect.void
         },
       })
-      const opencode = yield* fixture.sdk.Coder.create({ workspaceProviders: { fake: driver } })
+      const coder = yield* fixture.sdk.Coder.create({ workspaceProviders: { fake: driver } })
       const requestedID = fixture.sdk.Workspace.ID.create()
-      const workspaceID = yield* opencode.workspace.create({ id: requestedID, provider: "fake" })
+      const workspaceID = yield* coder.workspace.create({ id: requestedID, provider: "fake" })
 
       expect(workspaceID).toBe(requestedID)
-      expect(yield* opencode.workspace.create({ id: requestedID, provider: "fake" })).toBe(requestedID)
+      expect(yield* coder.workspace.create({ id: requestedID, provider: "fake" })).toBe(requestedID)
       expect(calls).toEqual([])
 
-      const workspace = yield* opencode.workspace.provision({ workspaceID })
+      const workspace = yield* coder.workspace.provision({ workspaceID })
 
       expect(workspace.provider).toBe("fake")
       expect(workspace.binding).toEqual({ externalID: workspace.id })
@@ -451,12 +451,12 @@ it.live("configures workspace providers through the SDK facade", () =>
         directory: fixture.sdk.AbsolutePath.make("/"),
         workspaceID: workspace.id,
       })
-      const session = yield* opencode.sessions.create({ location: workspaceLocation })
+      const session = yield* coder.sessions.create({ location: workspaceLocation })
       expect(session.location.workspaceID).toBe(workspace.id)
 
-      expect(yield* opencode.workspace.destroy({ workspaceID: workspace.id })).toEqual({ destroyed: true })
+      expect(yield* coder.workspace.destroy({ workspaceID: workspace.id })).toEqual({ destroyed: true })
       expect(calls.map((call) => call.operation)).toEqual(["create", "destroy"])
-      expect(yield* opencode.workspace.destroy({ workspaceID: workspace.id })).toEqual({ destroyed: false })
+      expect(yield* coder.workspace.destroy({ workspaceID: workspace.id })).toEqual({ destroyed: false })
       expect(calls.map((call) => call.operation)).toEqual(["create", "destroy"])
     }),
   ),
@@ -504,7 +504,7 @@ const workspaceModelScenario = (fixture: Fixture, policy: "eager" | "lazy") =>
     })
     const configDirectory = path.join(fixture.directory, "config")
     yield* Effect.promise(() => fs.mkdir(configDirectory))
-    const opencode = yield* fixture.sdk.Coder.create(
+    const coder = yield* fixture.sdk.Coder.create(
       {
         config: { directory: configDirectory, project: false, content: "{}" },
         workspaceProviders: { fake: driver },
@@ -513,10 +513,10 @@ const workspaceModelScenario = (fixture: Fixture, policy: "eager" | "lazy") =>
         overrides: [llmClient.replace(client), SessionRunnerModel.node.replace(models)],
       },
     )
-    const workspaceID = yield* opencode.workspace.create({ provider: "fake" })
+    const workspaceID = yield* coder.workspace.create({ provider: "fake" })
     const provisioning =
       policy === "eager"
-        ? yield* opencode.workspace.provision({ workspaceID }).pipe(Effect.forkScoped({ startImmediately: true }))
+        ? yield* coder.workspace.provision({ workspaceID }).pipe(Effect.forkScoped({ startImmediately: true }))
         : undefined
     if (provisioning) {
       yield* Deferred.await(createStarted).pipe(
@@ -524,13 +524,13 @@ const workspaceModelScenario = (fixture: Fixture, policy: "eager" | "lazy") =>
       )
     }
 
-    const session = yield* opencode.sessions.create({
+    const session = yield* coder.sessions.create({
       location: fixture.sdk.Location.Ref.make({
         directory: fixture.sdk.AbsolutePath.make(fixture.directory),
         workspaceID,
       }),
     })
-    yield* opencode.sessions.prompt({ sessionID: session.id, text: "Answer without using tools" })
+    yield* coder.sessions.prompt({ sessionID: session.id, text: "Answer without using tools" })
     yield* Deferred.await(modelStarted).pipe(
       Effect.timeoutOrElse({ duration: "8 seconds", orElse: () => Effect.die("model stream did not start") }),
     )
@@ -605,7 +605,7 @@ it.live(
         })
         const configDirectory = path.join(fixture.directory, "config")
         yield* Effect.promise(() => fs.mkdir(configDirectory))
-        const opencode = yield* fixture.sdk.Coder.create(
+        const coder = yield* fixture.sdk.Coder.create(
           {
             config: { directory: configDirectory, project: false, content: "{}" },
             workspaceProviders: { fake: driver },
@@ -617,8 +617,8 @@ it.live(
             ],
           },
         )
-        const workspaceID = yield* opencode.workspace.create({ provider: "fake" })
-        const session = yield* opencode.sessions.create({
+        const workspaceID = yield* coder.workspace.create({ provider: "fake" })
+        const session = yield* coder.sessions.create({
           location: fixture.sdk.Location.Ref.make({
             directory: fixture.sdk.AbsolutePath.make(fixture.directory),
             workspaceID,
@@ -626,7 +626,7 @@ it.live(
         })
         expect(calls).toEqual([])
 
-        yield* opencode.sessions.prompt({ sessionID: session.id, text: "Run echo" })
+        yield* coder.sessions.prompt({ sessionID: session.id, text: "Run echo" })
         // The model-selected shell tool is the first execution-plane demand: it alone
         // starts provisioning and blocks inside the tool call until the provider is ready.
         yield* Deferred.await(createStarted).pipe(
@@ -635,7 +635,7 @@ it.live(
         expect(calls).toEqual(["create"])
 
         yield* Deferred.succeed(createRelease, undefined)
-        yield* opencode.sessions.wait({ sessionID: session.id })
+        yield* coder.sessions.wait({ sessionID: session.id })
         // Provisioning settled, the workspace connected, and the turn completed. The
         // memory driver rejects the actual spawn, which surfaces to the model as an
         // ordinary tool error before the final text response.
@@ -649,8 +649,8 @@ it.live(
 it.live("preserves unknown workspace provider errors", () =>
   withEmbedded("coder-embedded-workspace-provider-", (fixture) =>
     Effect.gen(function* () {
-      const opencode = yield* fixture.sdk.Coder.create()
-      const error = yield* opencode.workspace.create({ provider: "missing" }).pipe(Effect.flip)
+      const coder = yield* fixture.sdk.Coder.create()
+      const error = yield* coder.workspace.create({ provider: "missing" }).pipe(Effect.flip)
       expect(error).toEqual(new WorkspaceDriver.ProviderNotFound({ provider: "missing" }))
     }),
   ),

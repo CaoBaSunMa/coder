@@ -24,11 +24,11 @@ export interface Sources {
   readonly agents: readonly AbsolutePath[]
 }
 
-/** Platform system configuration directory (`/Library/Application Support/opencode`, `/etc/opencode`, `%ProgramData%\opencode`). */
+/** Platform system configuration directory (`/Library/Application Support/coder`, `/etc/coder`, `%ProgramData%\coder`). */
 export function systemDirectory(platform: NodeJS.Platform = process.platform, env: NodeJS.ProcessEnv = process.env) {
-  if (platform === "darwin") return AbsolutePath.make("/Library/Application Support/opencode")
+  if (platform === "darwin") return AbsolutePath.make("/Library/Application Support/coder")
   if (platform === "win32") return AbsolutePath.make(path.join(env.ProgramData || "C:\\ProgramData", "coder"))
-  return AbsolutePath.make("/etc/opencode")
+  return AbsolutePath.make("/etc/coder")
 }
 
 /** macOS MDM managed preferences plists, most specific first; the first one present wins. */

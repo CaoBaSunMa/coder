@@ -11,9 +11,9 @@ type Stored = typeof Stored.Type
 
 const empty: Stored = { tabs: [], focusedTabID: null }
 
-/** Tab URLs and focus per `${server}\n${session}`, imported once from the desktop's own `opencode.browser.dat` rows. */
+/** Tab URLs and focus per `${server}\n${session}`, imported once from the desktop's own `coder.browser.dat` rows. */
 export function createBrowserRestoreStore(storage: Storage) {
-  const from = (key: string): MainStoreFrom => ({ state: ["opencode.browser.dat", key] })
+  const from = (key: string): MainStoreFrom => ({ state: ["coder.browser.dat", key] })
   const open = (key: string) => storage.store(`restore:${key}`, { schema: Stored, initial: empty, from: from(key) })
 
   const stores = new Map<string, ReturnType<typeof open>>()

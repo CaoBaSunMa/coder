@@ -760,10 +760,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Prvič ilustrirano v Londonu v Angliji",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, odprtokodni agent za kodiranje",
-  "settings.about.trademark": "Coder je registrirana blagovna znamka Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder je registrirana blagovna znamka Coder Project",
   "settings.about.typeset": "Vrsta v Inter in IBM Plex Mono",
   "settings.about.tagline": "AI ne more zgraditi odlične programske opreme brez vas",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Uredi projekt",
   "settings.timeline.title": "Časovnica",
   "settings.timeline.detail": "Podrobnosti o časovnici",
@@ -813,8 +813,8 @@ export const dict = {
   "server.connect.failed":
     "Povezave ni bilo mogoče vzpostaviti. Preverite naslov strežnika in geslo ter poskusite znova.",
   "server.connect.scan": "Skeniraj QR kodo",
-  "server.connect.scan.description": "Usmerite kamero na QR kodo, ki jo prikaže opencode pair.",
-  "server.connect.scan.invalid": "To ni Coder paritna koda. Skenirajte kodo, ki jo prikaže opencode pair.",
+  "server.connect.scan.description": "Usmerite kamero na QR kodo, ki jo prikaže coder pair.",
+  "server.connect.scan.invalid": "To ni Coder paritna koda. Skenirajte kodo, ki jo prikaže coder pair.",
   "server.connect.camera": "Paritvena kamera",
   "server.connect.camera.starting": "Odpiranje kamere…",
   "server.connect.mixedContent":

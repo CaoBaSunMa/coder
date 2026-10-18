@@ -6,18 +6,18 @@ import { allThemes, hasTheme, getCoderTheme, parseTheme, resolveTheme } from "..
 import { discoverThemes } from "../src/theme/discovery"
 import { configDirectories } from "../src/util/config-directories"
 import { terminalMode } from "../src/theme/system"
-import opencodeSource from "../src/theme/assets/coder.json" with { type: "json" }
+import coderSource from "../src/theme/assets/coder.json" with { type: "json" }
 import type { ThemeV1Json } from "@xcoder/theme/tui/v1"
 import { tmpdir } from "./fixture/fixture"
 
-const opencodeV1 = opencodeSource as ThemeV1Json
+const coderV1 = coderSource as ThemeV1Json
 
 test("rejects unrecognized theme structures", () => {
   expect(() => parseTheme({})).toThrow()
   expect(() => parseTheme({ version: 3 })).toThrow("Invalid theme")
 })
 
-test("registers opencode as a native V2 theme", () => {
+test("registers coder as a native V2 theme", () => {
   expect(allThemes().coder).toBe(getCoderTheme())
   expect(parseTheme(getCoderTheme()).base).toBeDefined()
 })
@@ -28,8 +28,8 @@ test("keeps the experimental coder2 theme out of the global theme list", () => {
 })
 
 test("detects V1 themes from their theme field and caches migrations", () => {
-  const unversioned = structuredClone(opencodeV1)
-  const explicit = { ...structuredClone(opencodeV1), version: 1 }
+  const unversioned = structuredClone(coderV1)
+  const explicit = { ...structuredClone(coderV1), version: 1 }
   const first = parseTheme(unversioned, "unversioned")
   const second = parseTheme(explicit, "explicit")
 
@@ -57,7 +57,7 @@ test("rejects invalid V2 themes when parsing", () => {
 })
 
 test("rejects invalid V1 themes when parsing", () => {
-  const source = structuredClone(opencodeV1)
+  const source = structuredClone(coderV1)
   source.defs = { ...source.defs, one: "two", two: "one" }
   source.theme.primary = "one"
 
@@ -65,8 +65,8 @@ test("rejects invalid V1 themes when parsing", () => {
 })
 
 test("replacement sources receive independent parse caches", () => {
-  const first = structuredClone(opencodeV1)
-  const second = structuredClone(opencodeV1)
+  const first = structuredClone(coderV1)
+  const second = structuredClone(coderV1)
   second.theme.primary = "#123456"
 
   const previous = parseTheme(first)
@@ -81,14 +81,14 @@ test("hasTheme checks theme presence", () => {
 })
 
 test("resolveTheme rejects circular color refs", () => {
-  const item = structuredClone(opencodeV1)
+  const item = structuredClone(coderV1)
   item.defs = { ...item.defs, one: "two", two: "one" }
   item.theme.primary = "one"
   expect(() => resolveTheme(item, "dark")).toThrow("Circular color reference")
 })
 
 test("resolveTheme preserves full theme numeric color and marker semantics", () => {
-  const item = structuredClone(opencodeV1)
+  const item = structuredClone(coderV1)
   item.theme.primary = 6
   delete item.theme.selectedListItemText
 

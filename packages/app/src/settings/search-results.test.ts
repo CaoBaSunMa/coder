@@ -7,7 +7,7 @@ import type { SettingsView } from "./surface"
 
 const strings: Record<string, string> = { ...dict, ...en }
 
-const project = { id: "proj_opencode", name: "Coder", worktree: "/projects/opencode", expanded: false }
+const project = { id: "proj_coder", name: "Coder", worktree: "/projects/coder", expanded: false }
 
 const servers: SettingsSearchServer[] = [
   { key: "local", name: "Local server", connected: true, projects: [project] },
@@ -83,7 +83,7 @@ describe("settings search index", () => {
     const withIcon = { ...project, icon: { color: "orange", override: "data:image/png;base64,example" } }
     const items = index({ servers: [{ ...servers[0], projects: [withIcon] }] })
     expect(rankSettings("coder", items, root)[0].projectInfo).toEqual(withIcon)
-    expect(rankSettings("opencode color", items, root)).toEqual([])
+    expect(rankSettings("coder color", items, root)).toEqual([])
   })
 })
 
@@ -99,10 +99,10 @@ describe("settings search ranking", () => {
   })
 
   test("qualifies project settings by project name and supports explicit server names", () => {
-    const matches = rankSettings("opencode name", index(), root)
+    const matches = rankSettings("coder name", index(), root)
     expect(matches.map((item) => item.view.target)).toEqual(["settings-project-name", "settings-project-name"])
-    expect(rankSettings("Build server opencode name", index(), root).map((item) => item.server)).toEqual(["remote"])
-    expect(rankSettings("opencode skills", index(), root).map((item) => item.view.subtab)).toEqual(["skills", "skills"])
+    expect(rankSettings("Build server coder name", index(), root).map((item) => item.server)).toEqual(["remote"])
+    expect(rankSettings("coder skills", index(), root).map((item) => item.view.subtab)).toEqual(["skills", "skills"])
   })
 
   test("project names alone find projects, including names that are setting labels", () => {
@@ -125,7 +125,7 @@ describe("settings search ranking", () => {
   test("does not search paths or use the Projects category to match unrelated names", () => {
     const items = index({ servers: [{ ...servers[0], projects: [{ ...project, name: "codename" }] }] })
     expect(rankSettings("project name", items, root).some((item) => item.project)).toBe(false)
-    expect(rankSettings("/projects/opencode", items, root)).toEqual([])
+    expect(rankSettings("/projects/coder", items, root)).toEqual([])
   })
 
   test("ranks equivalent matches by origin without merging different servers", () => {
@@ -137,7 +137,7 @@ describe("settings search ranking", () => {
       parent: "server",
     }
 
-    expect(rankSettings("opencode name", index(), origin).map((item) => item.server)).toEqual(["remote", "local"])
+    expect(rankSettings("coder name", index(), origin).map((item) => item.server)).toEqual(["remote", "local"])
   })
 
   test("supports synonyms and fuzzy title matches while rejecting unrelated queries", () => {

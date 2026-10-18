@@ -235,7 +235,7 @@ export function getConfig() {
         protocols: { name: "Coder Beta", schemes: ["coder"] },
         publish: {
           provider: "generic",
-          url: "https://releases.coder.example.com/update/api/beta/desktop/opencode/",
+          url: "https://releases.coder.example.com/update/api/beta/desktop/coder/",
           channel: "latest",
         },
         deb: { fpm: [metainfoFpm(appId)] },
@@ -251,7 +251,7 @@ export function getConfig() {
         protocols: { name: "Coder", schemes: ["coder"] },
         publish: {
           provider: "generic",
-          url: "https://releases.coder.example.com/update/api/latest/desktop/opencode/",
+          url: "https://releases.coder.example.com/update/api/latest/desktop/coder/",
           channel: "latest",
         },
         deb: { fpm: [metainfoFpm(appId), legacyDesktopEntryFpm] },

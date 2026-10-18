@@ -43,7 +43,7 @@ export const dict = {
   "footer.youtube": "YouTube",
   "footer.homeAria": "Главная Coder",
   "footer.status": "Все системы работают",
-  "footer.copyright": "© 2026 Anomaly Innovations Inc.",
+  "footer.copyright": "© 2026 Coder Project",
   "bridge.learnMore": "УЗНАТЬ БОЛЬШЕ",
   "modal.closeNewsletter": "Закрыть форму подписки",
   "modal.title": "Рассылка Coder",

@@ -248,7 +248,7 @@ export function buildModelCatalog(payload: unknown, pricingPayload?: unknown, la
 function readStealthModelSpecs(payload: unknown): Record<string, ModelCatalogSpecs> {
   if (!isRecord(payload)) return {}
   return Object.fromEntries(
-    // Later entries win, so the opencode listing takes precedence over coder-go.
+    // Later entries win, so the coder listing takes precedence over coder-go.
     ["coder-go", "coder"]
       .map((provider) => payload[provider])
       .flatMap((provider) => (isRecord(provider) && isRecord(provider.models) ? Object.entries(provider.models) : []))

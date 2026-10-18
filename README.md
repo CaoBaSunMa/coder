@@ -50,15 +50,9 @@
 curl -fsSL https://coder.example.com/install | bash
 
 # Package managers
-npm i -g @xcoder/cli@latest      # or bun/pnpm/yarn
-scoop install opencode             # Windows
-choco install opencode             # Windows
-brew install anomalyco/tap/opencode # macOS and Linux (recommended, always up to date)
-brew install opencode              # macOS and Linux (official brew formula, updated less)
-sudo pacman -S opencode            # Arch Linux (Stable)
-paru -S coder-bin               # Arch Linux (Latest from AUR)
-mise use -g opencode               # Any OS
-nix run nixpkgs#opencode           # or github:coder-ai/coder for latest dev branch
+npm i -g @xcoder/cli@latest     # or pnpm/yarn
+bun i -g @xcoder/cli@latest
+brew install coder-ai/tap/coder # macOS and Linux (recommended, always up to date)
 ```
 
 > [!TIP]
@@ -68,19 +62,14 @@ nix run nixpkgs#opencode           # or github:coder-ai/coder for latest dev bra
 
 Coder is also available as a desktop application. Download directly from the [releases page](https://github.com/coder-ai/coder/releases) or [coder.example.com/download](https://coder.example.com/download).
 
-| Platform              | Download                           |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `coder-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `coder-desktop-mac-x64.dmg`     |
-| Windows               | `coder-desktop-windows-x64.exe` |
-| Linux                 | `.deb`, `.rpm`, or `.AppImage`     |
-
-```bash
-# macOS (Homebrew)
-brew install --cask coder-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/coder-desktop
-```
+| Platform              | Download                                                 |
+| --------------------- | -------------------------------------------------------- |
+| macOS (Apple Silicon) | `coder-desktop-mac-arm64.dmg`                            |
+| macOS (Intel)         | `coder-desktop-mac-x64.dmg`                              |
+| Windows (x64)         | `coder-desktop-win-x64.exe`                              |
+| Windows (ARM64)       | `coder-desktop-win-arm64.exe`                            |
+| Linux (x64)           | `coder-desktop-linux-x64` + `.AppImage`, `.deb`, `.rpm`  |
+| Linux (ARM64)         | `coder-desktop-linux-arm64` + `.AppImage`, `.deb`, `.rpm` |
 
 #### Installation Directory
 
@@ -126,4 +115,4 @@ If you are working on a project that's related to Coder and is using "coder" as 
 
 ---
 
-**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
+**Join our community** [Discord](https://discord.gg/coder) | [X.com](https://x.com/coder)

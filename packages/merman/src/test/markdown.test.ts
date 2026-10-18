@@ -88,8 +88,8 @@ flowchart TD
   repo[Organization profile repo] --> build[Build]
   build --> worker[Isolated organization Worker]
   worker --> sessions[SessionDOs]
-  sessions --> opencode[Coder + native plugins]
-  opencode --> modal[Modal workspaces]
+  sessions --> coder[Coder + native plugins]
+  coder --> modal[Modal workspaces]
 \`\`\``,
     syntaxStyle,
     renderNode: createMermaidMarkdownRenderer(renderer),

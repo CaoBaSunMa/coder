@@ -752,10 +752,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Pirmą kartą iliustruotas Londone, Anglijoje",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, atvirojo kodo kodavimo agentas",
-  "settings.about.trademark": "Coder yra registruotasis Anomaly Innovations, Inc. prekės ženklas.",
+  "settings.about.trademark": "Coder yra registruotasis Coder Project prekės ženklas.",
   "settings.about.typeset": "Rinkinys „Inter“ ir „IBM Plex Mono“.",
   "settings.about.tagline": "AI negali sukurti puikios programinės įrangos be jūsų",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Redaguoti projektą",
   "settings.timeline.title": "Laiko juosta",
   "settings.timeline.detail": "Laiko juostos informacija",
@@ -803,8 +803,8 @@ export const dict = {
   "server.connect.failed":
     "Nepavyko prisijungti. Patikrinkite serverio adresą ir slaptažodį, tada bandykite dar kartą.",
   "server.connect.scan": "Nuskaitykite QR kodą",
-  "server.connect.scan.description": "Nukreipkite fotoaparatą į QR kodą, rodomą opencode pair.",
-  "server.connect.scan.invalid": "Tai nėra Coder susiejimo kodas. Nuskaitykite kodą, kurį rodo opencode pair.",
+  "server.connect.scan.description": "Nukreipkite fotoaparatą į QR kodą, rodomą coder pair.",
+  "server.connect.scan.invalid": "Tai nėra Coder susiejimo kodas. Nuskaitykite kodą, kurį rodo coder pair.",
   "server.connect.camera": "Kameros susiejimas",
   "server.connect.camera.starting": "Atidaroma kamera…",
   "server.connect.mixedContent":

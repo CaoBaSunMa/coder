@@ -1,6 +1,6 @@
 import type { ElectronAPI } from "../api-types"
 
-const deepLinkEvent = "opencode:deep-link"
+const deepLinkEvent = "coder:deep-link"
 
 export function startDeepLinks(api: ElectronAPI) {
   void api.consumeInitialDeepLinks().then(emitDeepLinks)

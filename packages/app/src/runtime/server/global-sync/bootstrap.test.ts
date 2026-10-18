@@ -11,7 +11,7 @@ import { worktreeInventoryKey } from "@/workspaces/inventory"
 
 test("bootstraps projects through the native store setter and preserves subsequent updates", async () => {
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: Object.assign(
       async (input: RequestInfo | URL, init?: RequestInit) => {
         const url = new URL(new Request(input, init).url)

@@ -214,7 +214,7 @@ describe("directoryAutocompleteMatches", () => {
 describe("directoryRecentValue", () => {
   test("abbreviates home paths", () => {
     expect(directoryRecentValue("/home/user", "/home/user")).toBe("~")
-    expect(directoryRecentValue("/home/user/projects/opencode", "/home/user")).toBe("~/projects/opencode")
+    expect(directoryRecentValue("/home/user/projects/coder", "/home/user")).toBe("~/projects/coder")
   })
 
   test("keeps paths outside home absolute", () => {

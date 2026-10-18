@@ -7,7 +7,7 @@ import { Coder, Session, SessionMessage } from "../src"
 
 const metadata = Schema.decodeUnknownSync(Schema.Struct({ account: Schema.String }))
 const hostOptions = (directory: string) => ({
-  database: { path: join(directory, "opencode.sqlite") },
+  database: { path: join(directory, "coder.sqlite") },
   config: { directory, project: false, content: "{}" },
   models: { fetch: false },
   fs: { filewatcher: false },
@@ -149,7 +149,7 @@ test.each(["configuration", "plugin setup"])(
     const configured: string[] = []
     const setups: string[] = []
     const cleanups: string[] = []
-    await using opencode = await Coder.create({
+    await using coder = await Coder.create({
       ...hostOptions(directory.path),
       instances: {
         key: (session) => metadata(session.metadata).account,
@@ -182,39 +182,39 @@ test.each(["configuration", "plugin setup"])(
         },
       },
     })
-    const healthy = await opencode.sessions.create({
+    const healthy = await coder.sessions.create({
       location: { directory: directory.path },
       metadata: { account: "healthy" },
     })
-    const retry = await opencode.sessions.create({
+    const retry = await coder.sessions.create({
       location: { directory: directory.path },
       metadata: { account: "retry" },
     })
-    const before = await opencode.sessions.prompt({ sessionID: healthy.id, text: "Before failure", resume: false })
+    const before = await coder.sessions.prompt({ sessionID: healthy.id, text: "Before failure", resume: false })
     expect(before.payload.text).toBe("healthy: Before failure")
     const input = { sessionID: retry.id, id: SessionMessage.ID.create(), text: "Retry this input", resume: false }
 
-    expect(await opencode.sessions.prompt(input).catch((error: unknown) => error)).toMatchObject({
+    expect(await coder.sessions.prompt(input).catch((error: unknown) => error)).toMatchObject({
       name: "ClientError",
       reason: "UnexpectedStatus",
     })
-    expect(await opencode.sessions.inbox.list({ sessionID: retry.id })).toEqual([])
-    expect((await opencode.message.list({ sessionID: retry.id })).data).toEqual([])
-    expect(await opencode.sessions.get({ sessionID: retry.id })).toEqual(retry)
+    expect(await coder.sessions.inbox.list({ sessionID: retry.id })).toEqual([])
+    expect((await coder.message.list({ sessionID: retry.id })).data).toEqual([])
+    expect(await coder.sessions.get({ sessionID: retry.id })).toEqual(retry)
     expect(configured).toEqual(["healthy", "retry"])
     expect(cleanups).toEqual([])
 
-    const after = await opencode.sessions.prompt({ sessionID: healthy.id, text: "After failure", resume: false })
+    const after = await coder.sessions.prompt({ sessionID: healthy.id, text: "After failure", resume: false })
     expect(after.payload.text).toBe("healthy: After failure")
-    expect(await opencode.sessions.inbox.list({ sessionID: healthy.id })).toEqual([before, after])
-    const admitted = await opencode.sessions.prompt(input)
+    expect(await coder.sessions.inbox.list({ sessionID: healthy.id })).toEqual([before, after])
+    const admitted = await coder.sessions.prompt(input)
     expect(admitted.id).toBe(input.id)
     expect(admitted.payload.text).toBe("retry: Retry this input")
-    expect(await opencode.sessions.inbox.list({ sessionID: retry.id })).toEqual([admitted])
+    expect(await coder.sessions.inbox.list({ sessionID: retry.id })).toEqual([admitted])
     expect(configured).toEqual(["healthy", "retry", "retry"])
     expect(setups).toEqual(failure === "configuration" ? ["healthy", "retry"] : ["healthy", "retry", "retry"])
     expect(cleanups).toEqual([])
-    await opencode.close()
+    await coder.close()
     expect(cleanups.toSorted()).toEqual(["healthy", "retry"])
   },
   20_000,
@@ -299,7 +299,7 @@ test("Promise instance plugin ID collisions reject admission and reconstruct on 
   const configured: string[] = []
   const setups: string[] = []
   const cleanups: string[] = []
-  await using opencode = await Coder.create({
+  await using coder = await Coder.create({
     ...hostOptions(directory.path),
     plugins: [
       {
@@ -332,29 +332,29 @@ test("Promise instance plugin ID collisions reject admission and reconstruct on 
       },
     },
   })
-  const session = await opencode.sessions.create({
+  const session = await coder.sessions.create({
     location: { directory: directory.path },
     metadata: { account: "alpha" },
   })
   const input = { sessionID: session.id, id: SessionMessage.ID.create(), text: "Retry this input", resume: false }
   expect(configured).toEqual([])
 
-  expect(await opencode.sessions.prompt(input).catch((error: unknown) => error)).toMatchObject({
+  expect(await coder.sessions.prompt(input).catch((error: unknown) => error)).toMatchObject({
     name: "ClientError",
     reason: "UnexpectedStatus",
   })
-  expect(await opencode.sessions.inbox.list({ sessionID: session.id })).toEqual([])
-  expect((await opencode.message.list({ sessionID: session.id })).data).toEqual([])
+  expect(await coder.sessions.inbox.list({ sessionID: session.id })).toEqual([])
+  expect((await coder.message.list({ sessionID: session.id })).data).toEqual([])
   expect(configured).toEqual(["alpha"])
   // The host plugin wins the ID and activates inside the instance before the colliding instance plugin
   // is reported failed; rejecting the instance tears that generation down again.
   expect(setups).toEqual(["host"])
   expect(cleanups).toEqual(["host"])
 
-  const admitted = await opencode.sessions.prompt(input)
+  const admitted = await coder.sessions.prompt(input)
   expect(admitted.id).toBe(input.id)
   expect(admitted.payload.text).toBe("alpha: Retry this input")
-  expect(await opencode.sessions.inbox.list({ sessionID: session.id })).toEqual([admitted])
+  expect(await coder.sessions.inbox.list({ sessionID: session.id })).toEqual([admitted])
   expect(configured).toEqual(["alpha", "alpha"])
   // The reconstructed instance runs a fresh generation: host plugin again, then the renamed instance plugin.
   expect(setups).toEqual(["host", "host", "alpha"])

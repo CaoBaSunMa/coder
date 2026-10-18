@@ -48,7 +48,7 @@ import {
 
 const INTEGRATION_PRIORITY: Record<string, number> = {
   "coder-go": 0,
-  opencode: 1,
+  coder: 1,
   openai: 2,
   "github-copilot": 3,
   anthropic: 4,

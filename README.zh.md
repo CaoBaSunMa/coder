@@ -50,15 +50,9 @@
 curl -fsSL https://coder.example.com/install | bash
 
 # 软件包管理器
-npm i -g @xcoder/cli@latest      # 也可使用 bun/pnpm/yarn
-scoop install opencode             # Windows
-choco install opencode             # Windows
-brew install anomalyco/tap/opencode # macOS 和 Linux（推荐，始终保持最新）
-brew install opencode              # macOS 和 Linux（官方 brew formula，更新频率较低）
-sudo pacman -S opencode            # Arch Linux (Stable)
-paru -S coder-bin               # Arch Linux (Latest from AUR)
-mise use -g opencode               # 任意系统
-nix run nixpkgs#opencode           # 或用 github:coder-ai/coder 获取最新 dev 分支
+npm i -g @xcoder/cli@latest     # 也可使用 pnpm/yarn
+bun i -g @xcoder/cli@latest
+brew install coder-ai/tap/coder # macOS 和 Linux（推荐，始终保持最新）
 ```
 
 > [!TIP]
@@ -68,19 +62,14 @@ nix run nixpkgs#opencode           # 或用 github:coder-ai/coder 获取最新 d
 
 Coder 也提供桌面版应用。可直接从 [发布页 (releases page)](https://github.com/coder-ai/coder/releases) 或 [coder.example.com/download](https://coder.example.com/download) 下载。
 
-| 平台                  | 下载文件                           |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `coder-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `coder-desktop-mac-x64.dmg`     |
-| Windows               | `coder-desktop-windows-x64.exe` |
-| Linux                 | `.deb`、`.rpm` 或 AppImage         |
-
-```bash
-# macOS (Homebrew Cask)
-brew install --cask coder-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/coder-desktop
-```
+| 平台                  | 下载文件                                                  |
+| --------------------- | --------------------------------------------------------- |
+| macOS (Apple Silicon) | `coder-desktop-mac-arm64.dmg`                             |
+| macOS (Intel)         | `coder-desktop-mac-x64.dmg`                               |
+| Windows (x64)         | `coder-desktop-win-x64.exe`                               |
+| Windows (ARM64)       | `coder-desktop-win-arm64.exe`                             |
+| Linux (x64)           | `coder-desktop-linux-x64` + `.AppImage`、`.deb`、`.rpm`   |
+| Linux (ARM64)         | `coder-desktop-linux-arm64` + `.AppImage`、`.deb`、`.rpm` |
 
 #### 安装目录
 
@@ -121,8 +110,8 @@ Coder 内置两种 Agent，可用 `Tab` 键快速切换：
 
 ### 基于 Coder 进行开发
 
-如果你在项目名中使用了 “opencode”（如 “coder-dashboard” 或 “coder-mobile”），请在 README 里注明该项目不是 Coder 团队官方开发，且不存在隶属关系。
+如果你在项目名中使用了 “coder”（如 “coder-dashboard” 或 “coder-mobile”），请在 README 里注明该项目不是 Coder 团队官方开发，且不存在隶属关系。
 
 ---
 
-**加入我们的社区** [飞书](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=52ao9352-5623-4fa0-b7dd-3407c392c1af&qr_code=true) | [X.com](https://x.com/opencode)
+**加入我们的社区** [飞书](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=52ao9352-5623-4fa0-b7dd-3407c392c1af&qr_code=true) | [X.com](https://x.com/coder)

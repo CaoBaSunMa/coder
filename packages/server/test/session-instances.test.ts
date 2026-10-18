@@ -170,7 +170,7 @@ it.live(
         Effect.promise(() =>
           handler(
             new Request(
-              `http://opencode.local${route}`,
+              `http://coder.local${route}`,
               body === undefined
                 ? undefined
                 : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) },

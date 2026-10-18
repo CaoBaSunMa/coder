@@ -24,8 +24,8 @@ export const dict = {
   "server.connect.failed":
     "Kan geen verbinding maken. Controleer het serveradres en het wachtwoord en probeer het opnieuw.",
   "server.connect.scan": "Scan de QR-code",
-  "server.connect.scan.description": "Richt uw camera op de QR-code weergegeven door opencode pair.",
-  "server.connect.scan.invalid": "Dit is geen Coder-koppelingscode. Scan de code weergegeven door opencode pair.",
+  "server.connect.scan.description": "Richt uw camera op de QR-code weergegeven door coder pair.",
+  "server.connect.scan.invalid": "Dit is geen Coder-koppelingscode. Scan de code weergegeven door coder pair.",
   "server.connect.camera": "Camera koppelen",
   "server.connect.camera.starting": "Camera openen…",
   "server.connect.mixedContent":
@@ -154,10 +154,10 @@ export const dict = {
   "settings.about.firstIllustrated": "Voor het eerst geïllustreerd in Londen, Engeland",
   "settings.about.website": "www.coder.example.com",
   "settings.about.description": "Coder, de open-source programmeeragent",
-  "settings.about.trademark": "Coder is een geregistreerd handelsmerk van Anomaly Innovations, Inc.",
+  "settings.about.trademark": "Coder is een geregistreerd handelsmerk van Coder Project",
   "settings.about.typeset": "Opgemaakt in Inter en IBM Plex Mono",
   "settings.about.tagline": "AI kan geen geweldige software bouwen zonder jou",
-  "settings.about.copyright": "© Anomaly Innovations, Inc.",
+  "settings.about.copyright": "© Coder Project",
   "project.settings.title": "Project bewerken",
   "settings.timeline.title": "Tijdlijn",
   "settings.timeline.detail": "Tijdlijndetails",

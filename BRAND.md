@@ -1,6 +1,6 @@
 # Coder 二开品牌与部署说明（BRAND.md）
 
-本仓库是 **OpenCode V2**（上游 `anomalyco/opencode`，`dev` 分支）的二次开发分支，产品定名为 **Coder**，
+本仓库是 **Coder V2**（上游 `anomalyco/opencode`，`dev` 分支）的二次开发分支，产品定名为 **Coder**，
 用于满足信创（信息技术应用创新）场景的 AI 编程助手需求。本文件记录所有已改名的标识、**必须替换的占位符**，
 以及上游同步方式。部署到真实环境前，请按第 3 节逐项替换。
 
@@ -13,7 +13,7 @@
 | npm scope | `@opencode/*` | `@xcoder/*` |
 | npm 主安装包 | `@opencode/cli` | `@xcoder/cli` |
 | 平台二进制包 | `@opencode/cli-<target>` | `@xcoder/cli-<target>` |
-| 环境变量前缀 | `OPENCODE_*`（123 个） | `CODER_*` |
+| 环境变量前缀 | `OPENCODE_*` | `CODER_*` |
 | 全局配置目录 | `~/.config/opencode` | `~/.config/coder` |
 | 数据目录 | `~/.local/share/opencode` | `~/.local/share/coder` |
 | 状态/日志目录 | `~/.local/state/opencode`、`~/.cache/opencode` | `~/.local/state/coder`、`~/.cache/coder` |
@@ -30,8 +30,9 @@
 | 桌面端制品命名 | `opencode-desktop-<os>-<arch>.<ext>` | `coder-desktop-<os>-<arch>.<ext>` |
 | Homebrew 公式 | `opencode-v2` / `opencode-beta` | `coder` / `coder-beta` |
 
-编译期常量（`packages/cli/script/build.ts` 注入）同步改名：`CODER_VERSION`、`CODER_CHANNEL`、
-`CODER_ARTIFACT`、`CODER_LIBC`、`CODER_CLI_DIST` 等。
+编译期常量（`packages/cli/script/build.ts` 注入）同步改名：上游 `OPENCODE_VERSION`、`OPENCODE_CHANNEL`、
+`OPENCODE_ARTIFACT`、`OPENCODE_LIBC`、`OPENCODE_CLI_DIST` → 本分支 `CODER_VERSION`、`CODER_CHANNEL`、
+`CODER_ARTIFACT`、`CODER_LIBC`、`CODER_CLI_DIST`。
 
 **刻意保留的上游外部依赖**（不可改名，否则无法安装）：
 
@@ -45,24 +46,30 @@
 
 - `services/www`（官网与 V2 文档站）、`packages/web`（文档内容）、`packages/console`（控制台营销站）、
   `packages/posts`、`services/changelog`、`salesforce/`、`infra/`、`nix/`、`specs/`、`perf/`、`flake.*`。
-  这些目录中仍会出现 `opencode` / `OpenCode` 字样，属预期现象。
+  这些目录中仍会出现 `coder` / `Coder` 字样，属预期现象。
 
 ## 2. 改名方式
 
-机械改名由一次性脚本 `script/rebrand-fork.ts` 完成（规则、排除目录、命名空间保护都写在脚本里），
+机械改名由一次性脚本完成（规则、排除目录、命名空间保护都写在脚本里）：
+
+- `script/rebrand-fork.ts`：第一遍，全仓基础改名（`opencode`→`coder`、`@opencode/`→`@xcoder/` 等）。
+- `script/rebrand-fork2.ts`：第二遍，补充规则与路径改名（含 `--skip`/`--only` 与 `@opencode-ai`/
+  `vite-plugin-opencode` 哨兵保护）。
+- `script/rebrand-cleanup.ts`：第三遍，清理品牌残留（幂等）。
+
 并对以下文件做了人工修整：
 
 - `install`（安装脚本）：改用 `@xcoder` scope、`~/.coder/bin`、新增内网 npm 源覆盖变量
   `CODER_NPM_REGISTRY`，移除上游的 `@opencode-ai` 旧包回落逻辑。
 - `packages/cli/script/publish-homebrew.ts`：公式名 `coder`/`coder-beta`、类名 `Coder`/`CoderBeta`。
 - `packages/cli/src/services/service-config.ts`：服务端口改为 `0xC1DE`。
-- `.github/workflows/publish.yml`：删除 V1 遗留构建/上传/下载步骤（`packages/opencode/*` 已不存在）。
-- `.github/workflows/`：删除上游内部机器人工作流（`opencode.yml`、`review.yml`、`triage.yml`、
+- `.github/workflows/publish.yml`：删除 V1 遗留构建/上传/下载步骤（`packages/coder/*` 已不存在）。
+- `.github/workflows/`：删除上游内部机器人工作流（`coder.yml`、`review.yml`、`triage.yml`、
   `duplicate-issues.yml`、`docs-*`、`pr-*`、`close-*`、`compliance-close.yml`、`notify-discord.yml`、
   `deploy-www/changelog/posts.yml`、`deploy.yml`、`models-snapshot.yml`、`publish-github-action.yml`、
   `release-github-action.yml`、`stats.yml`），保留发布/测试/基础设施类共 10 个。
 
-> 脚本为一次性工具，已执行完毕；上游合并后如出现新的 `opencode` 标识，请手工按同样规则处理，
+> 脚本为一次性工具，已执行完毕；上游合并后如出现新的 `coder` 标识，请手工按同样规则处理，
 > 不要重复整仓执行 `rebrand-fork.ts`。
 
 ## 3. 必须替换的占位符（部署前检查清单）
@@ -74,10 +81,10 @@
 | `https://coder.example.com` | 官网 / 安装脚本 `/install` / 文档 / 配置 `$schema` / 登录 | `install`、`packages/cli/src/config/schema.ts` |
 | `https://releases.coder.example.com/update/api` | 更新与发布 API（渠道、清单、发布回调） | `packages/cli/src/services/updater.ts`、`script/update-artifact.ts`、`services/update` |
 | `https://releases.coder.example.com/files/bin` | 二进制与桌面安装包文件服务 | `script/update-artifact.ts`、`packages/cli/script/publish*.ts` |
-| `https://models.coder.example.com` | 模型目录（models.dev 兼容快照） | 模型解析与快照逻辑 |
-| `https://console.coder.example.com` / `https://app.coder.example.com` | OpenCode Console 云端（登录、推理网关、Web 搜索、统计） | `packages/core`、`packages/console`（本轮未启用） |
+| `https://models.coder.example.com` | 模型目录（models.dev 兼容快照）；仓库内置快照保证离线可用，运行时可用 `CODER_MODELS_URL`（在线地址）/`CODER_MODELS_PATH`（本地文件）覆盖 | `packages/core/src/models-dev.ts`、`packages/cli/src/server-process.ts` |
+| `https://console.coder.example.com` / `https://app.coder.example.com` | Coder Console 云端（登录、推理网关、Web 搜索、统计） | `packages/core`、`packages/console`（本轮未启用） |
 | `https://dev.coder.example.com` | 开发/预览站点 | 站点与服务配置 |
-| `registry.coder.example.com/coder` | 容器镜像仓库（原 `ghcr.io/anomalyco/opencode`） | `.github/workflows/containers.yml` |
+| `registry.coder.example.com/coder` | 容器镜像仓库（上游为 `ghcr.io/<仓库所有者>/opencode`，当前 `containers.yml` 仍用 `ghcr.io/${{ github.repository_owner }}`，需替换） | `.github/workflows/containers.yml` |
 
 ### 3.2 代码托管与分发
 
@@ -121,7 +128,7 @@ git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
 合并上游时注意：
 
 1. `script/rebrand-fork.ts` 触及的文件最容易冲突；冲突解决以“保留 Coder 品牌 + 采纳上游功能”为准。
-2. 上游若新增 `OPENCODE_*` 环境变量、`opencode` 命令引用、`opencode.ai` 端点，需要按第 1 节规则补改名。
+2. 上游若新增 `CODER_*` 环境变量、`coder` 命令引用、`coder.ai` 端点，需要按第 1 节规则补改名。
 3. 上游 `dev` 是唯一基线分支；本仓库默认分支亦为 `dev`。
 
 ## 5. 已知遗留（本轮范围外）
@@ -131,3 +138,15 @@ git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
 - `.coder/` 下的仓库自用开发配置、`.github/ISSUE_TEMPLATE`、`CHANGELOG.md` 保留上游历史与措辞。
 - `github/`（GitHub Action）仍依赖上游 `@opencode-ai/sdk`，未启用。
 - `flake.nix`/`nix/`、`infra/`、`salesforce/` 未适配本分支品牌。
+- 部分 `packages/tui` 测试依赖运行环境的排序规则：`packages/tui/src/mini/footer.command.tsx` 用
+  `localeCompare` 对模型名排序，在中文（zh-CN）系统上中文名会排到英文名之前，导致
+  `test/mini/footer.responsive.test.tsx` 的 “production model menu” 用例在上游 CI（en）通过、在本机（zh-CN）
+  失败。此为环境相关、非品牌改动引入的问题。
+- Windows 上 `test/plugin-keymap.test.tsx`、`test/plugin-source.test.ts` 需要创建符号链接，未开启开发者模式/
+  无权限时以 `EPERM: symlink errno -4048` 失败，属环境限制。
+- 本仓库含 40 余个符号链接（如 `packages/app/public/*` 与
+  `packages/app/src/custom-elements.d.ts` → `packages/ui/src/custom-elements.d.ts`）。在 Windows 上若
+  `core.symlinks=false`（默认），git 会将其导出为含链接目标文本的普通文件，导致
+  `bun run check` 在 `@xcoder/app` 处报 `TS1128`。**属环境限制，非品牌改动引入**：临时把
+  `packages/ui/src/custom-elements.d.ts` 内容复制到 `packages/app/src/custom-elements.d.ts` 即可通过该包
+  类型检查（核对后请还原）。Linux / macOS / 开启 Developer Mode 的 Windows 不受影响。

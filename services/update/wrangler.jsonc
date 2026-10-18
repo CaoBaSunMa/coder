@@ -8,7 +8,7 @@
   "pipelines": [
     {
       "binding": "EVENTS",
-      // Shared lake stream from anomalyco/platform/production.
+      // Shared lake stream from the Coder platform production account.
       "stream": "251a89241c3a461c9007f6b6f345ed8b",
     },
   ],

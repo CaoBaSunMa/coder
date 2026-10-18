@@ -40,8 +40,8 @@ export default {
   "error.installDistro": "Nepodařilo se nainstalovat distribuci: {{distro}}",
   "error.installCoder": "Coder instalace se nezdařila",
   "error.alreadyAdded": "{{distro}} je již přidáno",
-  "error.coderMissing": "opencode není v této distribuci nainstalováno",
-  "error.coderCannotRun": "opencode je nainstalován, ale nelze jej spustit",
+  "error.coderMissing": "coder není v této distribuci nainstalováno",
+  "error.coderCannotRun": "coder je nainstalován, ale nelze jej spustit",
   "error.coderNotInstalled": "Coder není nainstalován v {{distro}}",
   "error.updateVersion":
     "Coder aktualizace dokončena, ale {{distro}} stále hlásí {{installed}}; očekává se {{expected}}",

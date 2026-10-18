@@ -25,7 +25,7 @@ const CONNECT_TIMEOUT = "15 seconds"
 const IDLE_TIMEOUT = "30 minutes"
 /** Consecutive exchanges lost to the socket before the Session stays on HTTP. */
 const MAX_STREAM_FAILURES = 5
-const events = Metric.counter("opencode_session_websocket_events_total", {
+const events = Metric.counter("coder_session_websocket_events_total", {
   description: "Session WebSocket lifecycle events",
   incremental: true,
 })

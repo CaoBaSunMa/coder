@@ -4,6 +4,7 @@ import { contextUsage, formatContextUsage } from "../../util/session"
 import { useTerminalDimensions } from "@opentui/solid"
 import { TextAttributes } from "@opentui/core"
 import { useInteractivity } from "../../context/interactivity"
+import { useI18n } from "../../context/i18n"
 import { stringWidth } from "../../util/string-width"
 
 const money = new Intl.NumberFormat("en-US", {
@@ -18,20 +19,21 @@ export function PromptFooter(props: {
   showDetails: boolean
 }) {
   const dimensions = useTerminalDimensions()
+  const i18n = useI18n()
   const [liveHovered, setLiveHovered] = createSignal(false)
   const subagents = createMemo(() => {
     if (!props.sessionID) return 0
     const count = props.context.data.session
       .family(props.sessionID)
       .filter((id) => id !== props.sessionID && props.context.data.session.status(id) === "running").length
-    return count ? `${count} subagent${count === 1 ? "" : "s"}` : undefined
+    return count ? i18n.t("footer.subagents", { count }) : undefined
   })
   const shells = createMemo(() => {
     if (!props.sessionID) return 0
     const count = props.context.data.shell
       .list(props.context.location)
       .filter((shell) => shell.metadata.sessionID === props.sessionID).length
-    return count ? `${count} shell${count === 1 ? "" : "s"}` : undefined
+    return count ? i18n.t("footer.shells", { count }) : undefined
   })
   const status = createMemo(() => {
     if (!props.sessionID) return []
@@ -58,7 +60,7 @@ export function PromptFooter(props: {
     return promptFooterLayout({
       width: Math.max(0, dimensions().width - 8),
       usage: status(),
-      shortcuts: command ? [`${command} commands`] : [],
+      shortcuts: command ? [`${command} ${i18n.t("footer.commands")}`] : [],
     })
   })
 
@@ -103,7 +105,9 @@ export function PromptFooter(props: {
               flexShrink={0}
             >
               {shortcut("agent.cycle")}{" "}
-              <span style={interactive() ? { fg: props.context.theme.text.muted } : {}}>agents</span>
+              <span style={interactive() ? { fg: props.context.theme.text.muted } : {}}>
+                {i18n.t("footer.agents")}
+              </span>
             </text>
           </Match>
         </Switch>
@@ -115,7 +119,9 @@ export function PromptFooter(props: {
             flexShrink={0}
           >
             {shortcut("command.palette.show")}{" "}
-            <span style={interactive() ? { fg: props.context.theme.text.muted } : {}}>commands</span>
+            <span style={interactive() ? { fg: props.context.theme.text.muted } : {}}>
+              {i18n.t("footer.commands")}
+            </span>
           </text>
         </Show>
       </Match>
@@ -123,7 +129,7 @@ export function PromptFooter(props: {
         <text fg={props.context.theme.text.base} flexShrink={0}>
           esc{" "}
           <span style={{ fg: props.context.theme.text.muted }}>
-            {dimensions().width < 44 ? "shell" : "exit shell mode"}
+            {dimensions().width < 44 ? i18n.t("footer.shell") : i18n.t("footer.exitShellMode")}
           </span>
         </text>
       </Match>
@@ -132,7 +138,7 @@ export function PromptFooter(props: {
 }
 
 export default Plugin.define({
-  id: "opencode.prompt.footer",
+  id: "coder.prompt.footer",
   setup(context) {
     context.ui.slot({
       append: "prompt.footer",

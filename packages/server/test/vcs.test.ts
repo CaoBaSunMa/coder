@@ -147,7 +147,7 @@ it.live("returns 501 when a registered VCS provider has no initializer", () =>
         ],
       },
     )
-    const url = new URL("http://opencode.local/api/vcs/init")
+    const url = new URL("http://coder.local/api/vcs/init")
     url.searchParams.set("location[directory]", tmp.path)
     url.searchParams.set("provider", "read-only")
     const response = yield* Effect.promise(() => handler(new Request(url, { method: "POST" })))
@@ -214,7 +214,7 @@ it.live(
       yield* Effect.promise(async () => {
         await $`git init -b main`.cwd(tmp.path).quiet()
         await $`git config commit.gpgsign false`.cwd(tmp.path).quiet()
-        await $`git config user.email test@opencode.test`.cwd(tmp.path).quiet()
+        await $`git config user.email test@coder.test`.cwd(tmp.path).quiet()
         await $`git config user.name Test`.cwd(tmp.path).quiet()
         await Bun.write(path.join(tmp.path, "file.txt"), "base\n")
         await $`git add .`.cwd(tmp.path).quiet()
@@ -319,7 +319,7 @@ it.live("maps a failing base provider to HTTP 503 instead of null metadata", () 
         ],
       },
     )
-    const url = new URL("http://opencode.local/api/vcs/base")
+    const url = new URL("http://coder.local/api/vcs/base")
     url.searchParams.set("location[directory]", tmp.path)
     const response = yield* Effect.promise(() => handler(new Request(url))).pipe(
       Effect.filterOrFail((response) => response.status === 503),

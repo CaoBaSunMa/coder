@@ -292,7 +292,7 @@ test("renders the complete truncated footer within the option row", async () => 
   await using tmp = await tmpdir()
   const title = "Project"
   const footer = truncateFilePath(
-    "/tmp/opencode/projects/a-very-long-project-directory/distinctive-tail.tsx",
+    "/tmp/coder/projects/a-very-long-project-directory/distinctive-tail.tsx",
     dialogSelectContentWidth(dialogWidth("medium")) - stringWidth(title),
   )
   const select = await mountSelect(tmp.path, [{ title, footer, value: "project" }])

@@ -9,7 +9,7 @@ test("config reads and update refreshes are opt-in", async () => {
   const location = { directory: "/project" }
   let model = "provider/first"
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       const url = new URL(request.url)
@@ -67,7 +67,7 @@ test("event refreshes report failures, remain retryable, and preserve explicit r
     location: { directory: "/project" },
   }
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: async () => {
       state.requests++
       if (state.offline) throw new TypeError("Failed to fetch")
@@ -124,7 +124,7 @@ test.each(["reconnecting", "disposed"] as const)("background reads respect %s ow
   const errors: unknown[] = []
   const state = { requests: 0 }
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: () => {
       state.requests++
       return pending.promise
@@ -171,7 +171,7 @@ test("a burst of mcp.status.changed events refetches the server list once it set
   const requests: string[] = []
   const location = { directory: "/project" }
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init)
       requests.push(new URL(request.url).pathname)
@@ -211,7 +211,7 @@ test("invalidations that land before a queued reload starts are absorbed by it",
   const pending: Array<PromiseWithResolvers<Response>> = []
   const location = { directory: "/project" }
   const api = Coder.make({
-    baseUrl: "http://opencode.local",
+    baseUrl: "http://coder.local",
     fetch: () => {
       const deferred = Promise.withResolvers<Response>()
       pending.push(deferred)

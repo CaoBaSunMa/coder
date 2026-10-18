@@ -6,7 +6,7 @@ const page = `<!doctype html>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
-    <title>Session sharing has been discontinued | opencode</title>
+    <title>Session sharing has been discontinued | coder</title>
     <style>
       :root {
         --text: hsl(224, 10%, 10%);
@@ -146,7 +146,7 @@ const page = `<!doctype html>
           </svg>
         </a>
         <h1>Session sharing has been discontinued</h1>
-        <p>opencode no longer hosts shared sessions. This link and its content are no longer available.</p>
+        <p>coder no longer hosts shared sessions. This link and its content are no longer available.</p>
       </header>
       <nav>
         <a href="https://coder.example.com">Home</a>

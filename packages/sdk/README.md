@@ -5,20 +5,20 @@ In-process Coder host for Promise and Effect applications. The SDK executes Serv
 ```ts
 import { Coder } from "@xcoder/sdk"
 
-await using opencode = await Coder.create()
-const session = await opencode.sessions.create({
+await using coder = await Coder.create()
+const session = await coder.sessions.create({
   location: { directory: "/workspace" },
 })
 ```
 
-Pass imported Promise plugins in `plugins`, or register one later with `await opencode.plugin(plugin)`.
+Pass imported Promise plugins in `plugins`, or register one later with `await coder.plugin(plugin)`.
 
 The Promise API uses the same values, errors, request options, and `AsyncIterable` streams as `@xcoder/client`.
 
 Embedded hosts are silent by default. Set `log` to receive structured log entries:
 
 ```ts
-await using opencode = await Coder.create({
+await using coder = await Coder.create({
   log: {
     level: "warn",
     emit: (entry) => console.error(entry.message, entry.attributes, entry.cause),
@@ -37,7 +37,7 @@ import { Coder } from "@xcoder/sdk"
 import { threads } from "./threads"
 import { slackPlugin } from "./slack-plugin"
 
-await using opencode = await Coder.create({
+await using coder = await Coder.create({
   database: { path: "./sessions.db" },
   instances: {
     key(session) {
@@ -51,11 +51,11 @@ await using opencode = await Coder.create({
   },
 })
 
-const session = await opencode.sessions.create({
+const session = await coder.sessions.create({
   location: { directory: "/workspace" },
   metadata: { threadID: "thread-42" },
 })
-await opencode.sessions.prompt({ sessionID: session.id, text: "Review the changes" })
+await coder.sessions.prompt({ sessionID: session.id, text: "Review the changes" })
 ```
 
 `threads` and `slackPlugin` are application-owned modules. `key` is synchronous and should only select identity, not initialize plugins. `configure` returns plugin definitions; their setup receives the selected instance's `ctx.location`.
@@ -69,7 +69,7 @@ await opencode.sessions.prompt({ sessionID: session.id, text: "Review the change
 
 ### Restart and Lifetime
 
-The selector is installed before automatic recovery starts. Its callbacks must be able to load application data without depending on the returned `opencode` handle or a later registration call. Functions are reconstructed, not serialized.
+The selector is installed before automatic recovery starts. Its callbacks must be able to load application data without depending on the returned `coder` handle or a later registration call. Functions are reconstructed, not serialized.
 
 Use a persistent `database.path` to recover Sessions after restart; the default database is in memory. Workerd uses its injected Durable Object storage. After restart, the next capability-dependent operation or recovery drain rebuilds the selected instance from saved Session metadata and application data.
 
@@ -84,7 +84,7 @@ import { CoderWorkerd } from "@xcoder/sdk/workerd"
 import myPlugin from "./my-plugin"
 
 export class CoderDO {
-  private readonly opencode: Promise<CoderWorkerd.Interface>
+  private readonly coder: Promise<CoderWorkerd.Interface>
 
   constructor(state: DurableObjectState) {
     this.coder = state.blockConcurrencyWhile(() =>
@@ -97,8 +97,8 @@ export class CoderDO {
   }
 
   async fetch() {
-    const opencode = await this.coder
-    return Response.json(await opencode.server.info())
+    const coder = await this.coder
+    return Response.json(await coder.server.info())
   }
 }
 ```
@@ -112,8 +112,8 @@ The Effect-native API remains available from `@xcoder/sdk/effect`:
 ```ts
 import { Coder } from "@xcoder/sdk/effect"
 
-const opencode = yield * Coder.create()
-const session = yield * opencode.sessions.get({ sessionID })
+const coder = yield * Coder.create()
+const session = yield * coder.sessions.get({ sessionID })
 ```
 
 The Effect Workerd entrypoint is `@xcoder/sdk/workerd/effect`.
@@ -127,7 +127,7 @@ import { Threads } from "./threads-effect"
 import { slackPlugin } from "./slack-plugin-effect"
 
 const threadMetadata = Schema.decodeUnknownSync(Schema.Struct({ threadID: Schema.String }))
-const opencode = Coder.layer({
+const coder = Coder.layer({
   database: { path: "./sessions.db" },
   instances: {
     key: (session) => threadMetadata(session.metadata).threadID,
