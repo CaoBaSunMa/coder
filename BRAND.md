@@ -57,6 +57,10 @@ r  M144 12H120V36H126V18H144V12Z  +  肩 M144 18H138V24H144V18Z
 > 环形/带孔字形必须用 `fill-rule="evenodd"`（Solid JSX 中写 kebab-case 的 `fill-rule=`），
 > 与仓库其它 SVG 一致；`packages/app/src/settings/about/animated-wordmark.tsx` 的逐字母
 > `<symbol>` 也遵循同一字形定义。
+> 字标还有几处**内联副本**，改字形时要一起改：`packages/core/src/oauth/page.ts` 的 `WORDMARK`
+> （OAuth 回调页，用 `--oc-icon-*` 变量着色）、`packages/function/src/share.ts`（旧分享链接停用页，
+> 用 `--logo-a/b/c`）、`packages/stats/app/src/asset/logo-ornate-{light,dark}.svg`。统计站
+> `stats-shell.tsx` 的 C 记号是 16×20 记号按 1.5 倍放进 40×40 底板（`--stats-logo-bg/fill/stroke`）。
 > 改动字标时同步检查 `packages/app/component-tests/new-session-wordmark.spec.ts` 里的
 > 弱色路径计数（现为 5）与 `.settings-about-wordmark` 的 `110×32` 尺寸（对应 144:42 比例）。
 

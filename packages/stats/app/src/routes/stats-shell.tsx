@@ -184,8 +184,8 @@ export function Header(props: { githubStars: string; links?: readonly HeaderLink
 function DataWordmark() {
   return (
     <svg data-slot="stats-wordmark" width="66" height="20" viewBox="0 0 66 20" fill="none" aria-hidden="true">
-      <path opacity="0.2" d="M12 16H4V8H12V16Z" fill="currentColor" />
-      <path d="M12 4H4V16H12V4ZM16 20H0V0H16V20Z" fill="currentColor" />
+      <path opacity="0.2" d="M8 8H16V16H8V8Z" fill="currentColor" />
+      <path d="M16 0H0V20H16V16H8V4H16V0Z" fill="currentColor" />
       <path
         d="M63.3543 16L62.5119 12.8711H58.6437L57.8013 16H55.7383L59.2454 4H61.9618L65.4689 16H63.3543ZM61.0678 7.851L60.6896 5.94269H60.4489L60.0707 7.851L59.1595 11.1347H61.9962L61.0678 7.851Z"
         fill="currentColor"
@@ -207,8 +207,8 @@ function CoderMark() {
   return (
     <svg data-slot="coder-mark" width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
       <path d="M40 40H0V0H40V40Z" fill="var(--stats-logo-bg)" />
-      <path d="M26 29H14V17H26V29Z" fill="var(--stats-logo-fill)" />
-      <path d="M26 11H14V29H26V11ZM32 35H8V5H32V35Z" fill="var(--stats-logo-stroke)" />
+      <path d="M32 17H20V29H32V17Z" fill="var(--stats-logo-fill)" />
+      <path d="M32 5H8V35H32V29H20V11H32V5Z" fill="var(--stats-logo-stroke)" />
     </svg>
   )
 }
