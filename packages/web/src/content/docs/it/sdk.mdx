@@ -1,13 +1,13 @@
 ---
 title: SDK
-description: Client JS type-safe per il server opencode.
+description: Client JS type-safe per il server coder.
 ---
 
 import config from "../../../../config.mjs"
 export const typesUrl = `${config.github}/blob/dev/packages/sdk/js/src/gen/types.gen.ts`
 
-L'SDK JS/TS di opencode fornisce un client type-safe per interagire con il server.
-Usalo per creare integrazioni e controllare opencode in modo programmatico.
+L'SDK JS/TS di coder fornisce un client type-safe per interagire con il server.
+Usalo per creare integrazioni e controllare coder in modo programmatico.
 
 [Scopri di piu](/docs/server) su come funziona il server. Per esempi, guarda i [progetti](/docs/ecosystem#projects) creati dalla comunita.
 
@@ -18,19 +18,19 @@ Usalo per creare integrazioni e controllare opencode in modo programmatico.
 Installa l'SDK da npm:
 
 ```bash
-npm install @opencode-ai/sdk
+npm install @xcoder/sdk
 ```
 
 ---
 
 ## Crea un client
 
-Crea un'istanza di opencode:
+Crea un'istanza di coder:
 
 ```javascript
-import { createOpencode } from "@opencode-ai/sdk"
+import { createCoder } from "@xcoder/sdk"
 
-const { client } = await createOpencode()
+const { client } = await createCoder()
 ```
 
 Questo avvia sia un server sia un client
@@ -49,12 +49,12 @@ Questo avvia sia un server sia un client
 
 ## Configurazione
 
-Puoi passare un oggetto di configurazione per personalizzare il comportamento. L'istanza legge comunque `opencode.json`, ma puoi sovrascrivere o aggiungere configurazione inline:
+Puoi passare un oggetto di configurazione per personalizzare il comportamento. L'istanza legge comunque `coder.json`, ma puoi sovrascrivere o aggiungere configurazione inline:
 
 ```javascript
-import { createOpencode } from "@opencode-ai/sdk"
+import { createCoder } from "@xcoder/sdk"
 
-const opencode = await createOpencode({
+const coder = await createCoder({
   hostname: "127.0.0.1",
   port: 4096,
   config: {
@@ -62,19 +62,19 @@ const opencode = await createOpencode({
   },
 })
 
-console.log(`Server running at ${opencode.server.url}`)
+console.log(`Server running at ${coder.server.url}`)
 
-opencode.server.close()
+coder.server.close()
 ```
 
 ## Solo client
 
-Se hai gia un'istanza di opencode in esecuzione, puoi creare un client per collegarti:
+Se hai gia un'istanza di coder in esecuzione, puoi creare un client per collegarti:
 
 ```javascript
-import { createOpencodeClient } from "@opencode-ai/sdk"
+import { createCoderClient } from "@xcoder/sdk"
 
-const client = createOpencodeClient({
+const client = createCoderClient({
   baseUrl: "http://localhost:4096",
 })
 ```
@@ -96,7 +96,7 @@ const client = createOpencodeClient({
 L'SDK include definizioni TypeScript per tutti i tipi API. Importale direttamente:
 
 ```typescript
-import type { Session, Message, Part } from "@opencode-ai/sdk"
+import type { Session, Message, Part } from "@xcoder/sdk"
 ```
 
 Tutti i tipi sono generati dalla specifica OpenAPI del server e disponibili nel <a href={typesUrl}>file dei tipi</a>.
@@ -373,7 +373,7 @@ await client.session.prompt({
 ```javascript
 // Search and read files
 const textResults = await client.find.text({
-  query: { pattern: "function.*opencode" },
+  query: { pattern: "function.*coder" },
 })
 
 const files = await client.find.files({

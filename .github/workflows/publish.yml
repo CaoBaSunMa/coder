@@ -58,7 +58,7 @@ jobs:
 
       - name: Install Coder
         if: inputs.bump || inputs.version
-        run: bun i -g coder-ai
+        run: bun i -g @xcoder/cli
 
       - id: version
         run: |

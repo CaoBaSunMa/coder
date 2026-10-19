@@ -15,7 +15,7 @@ export const dict = {
   "nav.home": "Inicio",
   "nav.openMenu": "Abrir menú",
   "nav.getStartedFree": "Empezar gratis",
-  "nav.logoAlt": "OpenCode",
+  "nav.logoAlt": "Coder",
 
   "nav.context.copyLogo": "Copiar logo como SVG",
   "nav.context.copyWordmark": "Copiar marca como SVG",
@@ -38,14 +38,14 @@ export const dict = {
   "email.success": "Casi listo, revisa tu bandeja de entrada y confirma tu correo",
   "email.error": "No se pudo completar la suscripción. Inténtalo de nuevo.",
 
-  "notFound.title": "No encontrado | opencode",
+  "notFound.title": "No encontrado | coder",
   "notFound.heading": "404 - Página no encontrada",
   "notFound.home": "Inicio",
   "notFound.docs": "Documentación",
   "notFound.github": "GitHub",
   "notFound.discord": "Discord",
-  "notFound.logoLightAlt": "opencode logo claro",
-  "notFound.logoDarkAlt": "opencode logo oscuro",
+  "notFound.logoLightAlt": "coder logo claro",
+  "notFound.logoDarkAlt": "coder logo oscuro",
 
   "common.cancel": "Cancelar",
   "common.contactUs": "Contáctanos",
@@ -55,9 +55,9 @@ export const dict = {
   "common.faq": "FAQ",
   "common.learnMore": "Más información",
 
-  "app.meta.description": "OpenCode - El agente de codificación de código abierto.",
+  "app.meta.description": "Coder - El agente de codificación de código abierto.",
 
-  "home.title": "OpenCode | El agente de codificación IA de código abierto",
+  "home.title": "Coder | El agente de codificación IA de código abierto",
 
   "home.banner.badge": "Nuevo",
 
@@ -67,9 +67,9 @@ export const dict = {
 
   "home.install.ariaLabel": "Opciones de instalación",
 
-  "home.what.title": "¿Qué es OpenCode?",
+  "home.what.title": "¿Qué es Coder?",
   "home.what.body":
-    "OpenCode es un agente de código abierto que te ayuda a escribir código en tu terminal, IDE o escritorio.",
+    "Coder es un agente de código abierto que te ayuda a escribir código en tu terminal, IDE o escritorio.",
   "home.what.lsp.title": "LSP habilitado",
   "home.what.lsp.body": "Carga automáticamente los LSPs correctos para el LLM",
   "home.what.multiSession.title": "Multi-sesión",
@@ -88,50 +88,50 @@ export const dict = {
 
   "home.growth.title": "El agente de codificación IA de código abierto",
   "home.growth.body":
-    "Con más de <strong>{{stars}}</strong> estrellas en GitHub, <strong>{{contributors}}</strong> colaboradores y más de <strong>{{commits}}</strong> commits, OpenCode es usado y confiado por más de <strong>{{monthlyUsers}}</strong> desarrolladores cada mes.",
+    "Con más de <strong>{{stars}}</strong> estrellas en GitHub, <strong>{{contributors}}</strong> colaboradores y más de <strong>{{commits}}</strong> commits, Coder es usado y confiado por más de <strong>{{monthlyUsers}}</strong> desarrolladores cada mes.",
   "home.growth.githubStars": "Estrellas en GitHub",
   "home.growth.contributors": "Colaboradores",
   "home.growth.monthlyDevs": "Desarrolladores Mensuales",
 
   "home.privacy.title": "Creado pensando en la privacidad",
   "home.privacy.body":
-    "OpenCode no almacena tu código ni datos de contexto, para que pueda operar en entornos sensibles a la privacidad.",
+    "Coder no almacena tu código ni datos de contexto, para que pueda operar en entornos sensibles a la privacidad.",
   "home.privacy.learnMore": "Más información sobre",
   "home.privacy.link": "privacidad",
 
-  "home.faq.q1": "¿Qué es OpenCode?",
+  "home.faq.q1": "¿Qué es Coder?",
   "home.faq.a1":
-    "OpenCode es un agente de código abierto que te ayuda a escribir y ejecutar código con cualquier modelo de IA. Está disponible como interfaz de terminal, aplicación de escritorio o extensión de IDE.",
-  "home.faq.q2": "¿Cómo uso OpenCode?",
+    "Coder es un agente de código abierto que te ayuda a escribir y ejecutar código con cualquier modelo de IA. Está disponible como interfaz de terminal, aplicación de escritorio o extensión de IDE.",
+  "home.faq.q2": "¿Cómo uso Coder?",
   "home.faq.a2.before": "La forma más fácil de empezar es leer la",
   "home.faq.a2.link": "introducción",
-  "home.faq.q3": "¿Necesito suscripciones extra de IA para usar OpenCode?",
+  "home.faq.q3": "¿Necesito suscripciones extra de IA para usar Coder?",
   "home.faq.a3.p1":
-    "No necesariamente, OpenCode viene con un conjunto de modelos gratuitos que puedes usar sin crear una cuenta.",
+    "No necesariamente, Coder viene con un conjunto de modelos gratuitos que puedes usar sin crear una cuenta.",
   "home.faq.a3.p2.beforeZen":
     "Aparte de estos, puedes usar cualquiera de los modelos de codificación populares creando una cuenta de",
   "home.faq.a3.p2.afterZen": ".",
   "home.faq.a3.p3":
-    "Aunque animamos a los usuarios a usar Zen, OpenCode también funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
+    "Aunque animamos a los usuarios a usar Zen, Coder también funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
   "home.faq.a3.p4.beforeLocal": "Incluso puedes conectar tus",
   "home.faq.a3.p4.localLink": "modelos locales",
-  "home.faq.q4": "¿Puedo usar mis suscripciones de IA existentes con OpenCode?",
+  "home.faq.q4": "¿Puedo usar mis suscripciones de IA existentes con Coder?",
   "home.faq.a4.p1":
-    "Sí, OpenCode soporta planes de suscripción de los principales proveedores. Puedes usar tus suscripciones de Claude Pro/Max, ChatGPT Plus/Pro o GitHub Copilot.",
-  "home.faq.q5": "¿Solo puedo usar OpenCode en la terminal?",
-  "home.faq.a5.beforeDesktop": "¡Ya no! OpenCode ahora está disponible como una aplicación para tu",
+    "Sí, Coder soporta planes de suscripción de los principales proveedores. Puedes usar tus suscripciones de Claude Pro/Max, ChatGPT Plus/Pro o GitHub Copilot.",
+  "home.faq.q5": "¿Solo puedo usar Coder en la terminal?",
+  "home.faq.a5.beforeDesktop": "¡Ya no! Coder ahora está disponible como una aplicación para tu",
   "home.faq.a5.desktop": "escritorio",
   "home.faq.a5.and": "y",
   "home.faq.a5.web": "web",
-  "home.faq.q6": "¿Cuánto cuesta OpenCode?",
+  "home.faq.q6": "¿Cuánto cuesta Coder?",
   "home.faq.a6":
-    "OpenCode es 100% gratuito de usar. También viene con un conjunto de modelos gratuitos. Puede haber costos adicionales si conectas cualquier otro proveedor.",
+    "Coder es 100% gratuito de usar. También viene con un conjunto de modelos gratuitos. Puede haber costos adicionales si conectas cualquier otro proveedor.",
   "home.faq.q7": "¿Qué hay sobre datos y privacidad?",
   "home.faq.a7.p1": "Tus datos e información solo se almacenan cuando usas nuestros modelos gratuitos.",
   "home.faq.a7.p2.beforeModels": "Más información sobre",
   "home.faq.a7.p2.modelsLink": "nuestros modelos",
-  "home.faq.q8": "¿Es OpenCode de código abierto?",
-  "home.faq.a8.p1": "Sí, OpenCode es totalmente de código abierto. El código fuente es público en",
+  "home.faq.q8": "¿Es Coder de código abierto?",
+  "home.faq.a8.p1": "Sí, Coder es totalmente de código abierto. El código fuente es público en",
   "home.faq.a8.p2": "bajo la",
   "home.faq.a8.mitLicense": "Licencia MIT",
   "home.faq.a8.p3":
@@ -139,24 +139,24 @@ export const dict = {
 
   "home.zenCta.title": "Accede a modelos optimizados y confiables para agentes de codificación",
   "home.zenCta.body":
-    "Zen te da acceso a un conjunto seleccionado de modelos de IA que OpenCode ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes entre proveedores, usa modelos validados que funcionan.",
+    "Zen te da acceso a un conjunto seleccionado de modelos de IA que Coder ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes entre proveedores, usa modelos validados que funcionan.",
   "home.zenCta.link": "Aprende sobre Zen",
 
   "zen.title":
-    "OpenCode Zen | Un conjunto seleccionado de modelos optimizados y confiables para agentes de codificación",
+    "Coder Zen | Un conjunto seleccionado de modelos optimizados y confiables para agentes de codificación",
   "zen.hero.title": "Modelos optimizados y confiables para agentes de codificación",
   "zen.hero.body":
-    "Zen te da acceso a un conjunto seleccionado de modelos de IA que OpenCode ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes, usa modelos validados que funcionan.",
+    "Zen te da acceso a un conjunto seleccionado de modelos de IA que Coder ha probado y evaluado específicamente para agentes de codificación. No necesitas preocuparte por el rendimiento y la calidad inconsistentes, usa modelos validados que funcionan.",
 
-  "zen.faq.q1": "¿Qué es OpenCode Zen?",
+  "zen.faq.q1": "¿Qué es Coder Zen?",
   "zen.faq.a1":
-    "Zen es un conjunto seleccionado de modelos de IA probados y evaluados para agentes de codificación, creado por el equipo detrás de OpenCode.",
+    "Zen es un conjunto seleccionado de modelos de IA probados y evaluados para agentes de codificación, creado por el equipo detrás de Coder.",
   "zen.faq.q2": "¿Qué hace a Zen más preciso?",
   "zen.faq.a2":
     "Zen solo proporciona modelos que han sido específicamente probados y evaluados para agentes de codificación. No usarías un cuchillo de mantequilla para cortar carne, no uses modelos pobres para codificar.",
   "zen.faq.q3": "¿Es Zen más barato?",
   "zen.faq.a3":
-    "Zen no tiene fines de lucro. Zen te transfiere los costos de los proveedores de modelos. Cuanto mayor sea el uso de Zen, más podrá OpenCode negociar mejores tarifas y transferírtelas.",
+    "Zen no tiene fines de lucro. Zen te transfiere los costos de los proveedores de modelos. Cuanto mayor sea el uso de Zen, más podrá Coder negociar mejores tarifas y transferírtelas.",
   "zen.faq.q4": "¿Cuánto cuesta Zen?",
   "zen.faq.a4.p1.beforePricing": "Zen",
   "zen.faq.a4.p1.pricingLink": "cobra por solicitud",
@@ -164,7 +164,7 @@ export const dict = {
   "zen.faq.a4.p2.beforeAccount": "Tu costo total depende del uso, y puedes establecer límites de gasto mensuales en tu",
   "zen.faq.a4.p2.accountLink": "cuenta",
   "zen.faq.a4.p3":
-    "Para cubrir costos, OpenCode añade solo una pequeña tarifa de procesamiento de pagos de $1.23 por cada recarga de saldo de $20.",
+    "Para cubrir costos, Coder añade solo una pequeña tarifa de procesamiento de pagos de $1.23 por cada recarga de saldo de $20.",
   "zen.faq.q5": "¿Qué hay sobre datos y privacidad?",
   "zen.faq.a5.beforeExceptions":
     "Todos los modelos Zen están alojados en EE. UU. Los proveedores siguen una política de cero retención y no usan tus datos para entrenamiento de modelos, con las",
@@ -175,7 +175,7 @@ export const dict = {
   "zen.faq.a7": "Sí, puedes deshabilitar la facturación en cualquier momento y usar tu saldo restante.",
   "zen.faq.q8": "¿Puedo usar Zen con otros agentes de codificación?",
   "zen.faq.a8":
-    "Aunque Zen funciona genial con OpenCode, puedes usar Zen con cualquier agente. Sigue las instrucciones de configuración en tu agente de codificación preferido.",
+    "Aunque Zen funciona genial con Coder, puedes usar Zen con cualquier agente. Sigue las instrucciones de configuración en tu agente de codificación preferido.",
   "zen.faq.q9": "¿Puedo obtener un reembolso?",
   "zen.faq.a9":
     "Podrías tener derecho a un reembolso si el cargo se realizó en los últimos 14 días y no has utilizado el crédito de esa compra. {{contact}} para solicitar un reembolso.",
@@ -187,12 +187,12 @@ export const dict = {
   "zen.problem.title": "¿Qué problema está resolviendo Zen?",
   "zen.problem.body":
     "Hay muchos modelos disponibles, pero solo unos pocos funcionan bien con agentes de codificación. La mayoría de los proveedores los configuran de manera diferente con resultados variables.",
-  "zen.problem.subtitle": "Estamos arreglando esto para todos, no solo para usuarios de OpenCode.",
+  "zen.problem.subtitle": "Estamos arreglando esto para todos, no solo para usuarios de Coder.",
   "zen.problem.item1": "Probando modelos seleccionados y consultando a sus equipos",
   "zen.problem.item2": "Trabajando con proveedores para asegurar que se entreguen correctamente",
   "zen.problem.item3": "Evaluando todas las combinaciones modelo-proveedor que recomendamos",
   "zen.how.title": "Cómo funciona Zen",
-  "zen.how.body": "Aunque sugerimos usar Zen con OpenCode, puedes usar Zen con cualquier agente.",
+  "zen.how.body": "Aunque sugerimos usar Zen con Coder, puedes usar Zen con cualquier agente.",
   "zen.how.step1.title": "Regístrate y añade $20 de saldo",
   "zen.how.step1.beforeLink": "sigue las",
   "zen.how.step1.link": "instrucciones de configuración",
@@ -207,7 +207,7 @@ export const dict = {
   "zen.privacy.exceptionsLink": "siguientes excepciones",
 
   "go.promo.step5": "Step 5 Preview ya está disponible en Go con 4× de uso por tiempo limitado.",
-  "go.title": "OpenCode Go | Modelos de programación de bajo coste para todos",
+  "go.title": "Coder Go | Modelos de programación de bajo coste para todos",
   "go.meta.description":
     "Go cuesta 10 $/mes, con límites de uso generosos y acceso fiable a modelos de programación líderes.",
   "go.hero.title": "Modelos de programación de bajo coste para todos",
@@ -243,13 +243,13 @@ export const dict = {
 
   "go.problem.title": "¿Qué problema resuelve Go?",
   "go.problem.body":
-    "Nos enfocamos en llevar la experiencia de OpenCode a tantas personas como sea posible. OpenCode Go es una suscripción de bajo coste de 10 $/mes. Proporciona límites generosos y acceso fiable a los modelos de código abierto más capaces.",
+    "Nos enfocamos en llevar la experiencia de Coder a tantas personas como sea posible. Coder Go es una suscripción de bajo coste de 10 $/mes. Proporciona límites generosos y acceso fiable a los modelos de código abierto más capaces.",
   "go.problem.item1": "Precios de suscripción de bajo coste",
   "go.problem.item2": "Límites generosos y acceso fiable",
   "go.problem.item3": "Creado para tantos programadores como sea posible",
   "go.problem.item4": "Una selección de modelos probados para programación agéntica",
   "go.how.title": "Cómo funciona Go",
-  "go.how.body": "Go cuesta 10 $/mes. Puedes usarlo con OpenCode o cualquier agente.",
+  "go.how.body": "Go cuesta 10 $/mes. Puedes usarlo con Coder o cualquier agente.",
   "go.how.step1.title": "Crear una cuenta",
   "go.how.step1.beforeLink": "sigue las",
   "go.how.step1.link": "instrucciones de configuración",
@@ -258,7 +258,7 @@ export const dict = {
   "go.how.step2.afterLink": "con límites generosos",
   "go.how.step3.title": "Empezar a programar",
   "go.how.step3.body": "con acceso fiable a modelos de código abierto",
-  "go.faq.q1": "¿Qué es OpenCode Go?",
+  "go.faq.q1": "¿Qué es Coder Go?",
   "go.faq.a1":
     "Go es una suscripción de bajo coste que te da acceso fiable a modelos de código abierto capaces para programación agéntica.",
   "go.faq.q2": "¿Qué modelos incluye Go?",
@@ -308,12 +308,12 @@ export const dict = {
   "go.faq.a10":
     "Podrías tener derecho a un reembolso si el cargo se realizó en los últimos 14 días y no has utilizado tu cuota de Go durante ese periodo de facturación. {{contact}} para solicitar un reembolso.",
 
-  "download.title": "OpenCode | Descargar",
-  "download.meta.description": "Descarga OpenCode para macOS, Windows y Linux",
-  "download.section.terminal": "OpenCode Terminal",
-  "download.section.desktop": "OpenCode Desktop",
-  "download.section.extensions": "Extensiones OpenCode",
-  "download.section.integrations": "Integraciones OpenCode",
+  "download.title": "Coder | Descargar",
+  "download.meta.description": "Descarga Coder para macOS, Windows y Linux",
+  "download.section.terminal": "Coder Terminal",
+  "download.section.desktop": "Coder Desktop",
+  "download.section.extensions": "Extensiones Coder",
+  "download.section.integrations": "Integraciones Coder",
   "download.action.download": "Descargar",
   "download.action.install": "Instalar",
 
@@ -325,22 +325,22 @@ export const dict = {
   "download.platform.linuxRpm": "Linux (.rpm)",
 
   "download.faq.a3.beforeLocal":
-    "No necesariamente, pero probablemente. Necesitarás una suscripción de IA si quieres conectar OpenCode a un proveedor de pago, aunque puedes trabajar con",
+    "No necesariamente, pero probablemente. Necesitarás una suscripción de IA si quieres conectar Coder a un proveedor de pago, aunque puedes trabajar con",
   "download.faq.a3.localLink": "modelos locales",
   "download.faq.a3.afterLocal.beforeZen": "gratis. Aunque animamos a los usuarios a usar",
   "download.faq.a3.afterZen":
-    ", OpenCode funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
+    ", Coder funciona con todos los proveedores populares como OpenAI, Anthropic, xAI, etc.",
 
-  "download.faq.a5.p1": "OpenCode es 100% gratuito de usar.",
+  "download.faq.a5.p1": "Coder es 100% gratuito de usar.",
   "download.faq.a5.p2.beforeZen":
-    "Cualquier costo adicional vendrá de tu suscripción a un proveedor de modelos. Aunque OpenCode funciona con cualquier proveedor de modelos, recomendamos usar",
+    "Cualquier costo adicional vendrá de tu suscripción a un proveedor de modelos. Aunque Coder funciona con cualquier proveedor de modelos, recomendamos usar",
   "download.faq.a5.p2.afterZen": ".",
 
-  "enterprise.title": "OpenCode | Soluciones empresariales para tu organización",
-  "enterprise.meta.description": "Contacta a OpenCode para soluciones empresariales",
+  "enterprise.title": "Coder | Soluciones empresariales para tu organización",
+  "enterprise.meta.description": "Contacta a Coder para soluciones empresariales",
   "enterprise.hero.title": "Tu código es tuyo",
   "enterprise.hero.body1":
-    "OpenCode opera de forma segura dentro de tu organización sin almacenar datos ni contexto, y sin restricciones de licencia ni reclamaciones de propiedad. Inicia una prueba con tu equipo, luego despliégalo en toda tu organización integrándolo con tu SSO y pasarela de IA interna.",
+    "Coder opera de forma segura dentro de tu organización sin almacenar datos ni contexto, y sin restricciones de licencia ni reclamaciones de propiedad. Inicia una prueba con tu equipo, luego despliégalo en toda tu organización integrándolo con tu SSO y pasarela de IA interna.",
   "enterprise.hero.body2": "Déjanos saber cómo podemos ayudar.",
   "enterprise.form.name.label": "Nombre completo",
   "enterprise.form.name.placeholder": "Jeff Bezos",
@@ -371,29 +371,29 @@ export const dict = {
   "enterprise.form.error.invalidInferenceSpend": "Selecciona un rango de gasto en inferencia válido.",
   "enterprise.form.error.internalServer": "Error interno del servidor.",
   "enterprise.faq.title": "FAQ",
-  "enterprise.faq.q1": "¿Qué es OpenCode Enterprise?",
+  "enterprise.faq.q1": "¿Qué es Coder Enterprise?",
   "enterprise.faq.a1":
-    "OpenCode Enterprise es para organizaciones que quieren asegurar que su código y datos nunca salgan de su infraestructura. Puede hacer esto usando una configuración centralizada que se integra con tu SSO y pasarela de IA interna.",
-  "enterprise.faq.q2": "¿Cómo empiezo con OpenCode Enterprise?",
+    "Coder Enterprise es para organizaciones que quieren asegurar que su código y datos nunca salgan de su infraestructura. Puede hacer esto usando una configuración centralizada que se integra con tu SSO y pasarela de IA interna.",
+  "enterprise.faq.q2": "¿Cómo empiezo con Coder Enterprise?",
   "enterprise.faq.a2":
-    "Simplemente empieza con una prueba interna con tu equipo. OpenCode por defecto no almacena tu código ni datos de contexto, haciendo fácil empezar. Luego contáctanos para discutir precios y opciones de implementación.",
+    "Simplemente empieza con una prueba interna con tu equipo. Coder por defecto no almacena tu código ni datos de contexto, haciendo fácil empezar. Luego contáctanos para discutir precios y opciones de implementación.",
   "enterprise.faq.q3": "¿Cómo funciona el precio para empresas?",
   "enterprise.faq.a3":
     "Ofrecemos precios empresariales por asiento. Si tienes tu propia pasarela de LLM, no cobramos por los tokens usados. Para más detalles, contáctanos para una cotización personalizada basada en las necesidades de tu organización.",
-  "enterprise.faq.q4": "¿Están mis datos seguros con OpenCode Enterprise?",
+  "enterprise.faq.q4": "¿Están mis datos seguros con Coder Enterprise?",
   "enterprise.faq.a4":
-    "Sí. OpenCode no almacena tu código ni datos de contexto. Todo el procesamiento ocurre localmente o a través de llamadas directas a la API de tu proveedor de IA. Con configuración central y integración SSO, tus datos permanecen seguros dentro de la infraestructura de tu organización.",
+    "Sí. Coder no almacena tu código ni datos de contexto. Todo el procesamiento ocurre localmente o a través de llamadas directas a la API de tu proveedor de IA. Con configuración central y integración SSO, tus datos permanecen seguros dentro de la infraestructura de tu organización.",
 
-  "brand.title": "OpenCode | Marca",
-  "brand.meta.description": "Guías de marca de OpenCode",
+  "brand.title": "Coder | Marca",
+  "brand.meta.description": "Guías de marca de Coder",
   "brand.heading": "Guías de marca",
-  "brand.subtitle": "Recursos y activos para ayudarte a trabajar con la marca OpenCode.",
+  "brand.subtitle": "Recursos y activos para ayudarte a trabajar con la marca Coder.",
   "brand.downloadAll": "Descargar todos los activos",
 
-  "changelog.title": "OpenCode | Registro de cambios",
-  "changelog.meta.description": "Notas de versión y registro de cambios de OpenCode",
+  "changelog.title": "Coder | Registro de cambios",
+  "changelog.meta.description": "Notas de versión y registro de cambios de Coder",
   "changelog.hero.title": "Registro de cambios",
-  "changelog.hero.subtitle": "Nuevas actualizaciones y mejoras para OpenCode",
+  "changelog.hero.subtitle": "Nuevas actualizaciones y mejoras para Coder",
   "changelog.empty": "No se encontraron entradas en el registro de cambios.",
   "changelog.viewJson": "Ver JSON",
 } as const satisfies Dict

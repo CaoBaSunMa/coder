@@ -3,7 +3,7 @@ import { EMAILOCTOPUS_API_KEY } from "./app"
 
 // Preview stages have no new Console or inference deployment to forward to.
 const migrationDomain =
-  $app.stage === "production" ? "opencode.ai" : $app.stage === "dev" ? "dev.opencode.ai" : undefined
+  $app.stage === "production" ? "coder.example.com" : $app.stage === "dev" ? "dev.coder.example.com" : undefined
 const consoleMigration = new sst.Linkable("ConsoleMigration", {
   properties: {
     consoleUrl: migrationDomain ? `https://${migrationDomain}/console` : "",
@@ -64,7 +64,7 @@ new sst.cloudflare.x.SolidStart("Console", {
           if (migrationDomain)
             args.bindings = $resolve(args.bindings).apply((bindings) => [
               ...(bindings ?? []),
-              { type: "service", name: "INFERENCE", service: `opencode-inference-${$app.stage}` },
+              { type: "service", name: "INFERENCE", service: `coder-inference-${$app.stage}` },
             ])
         },
       },

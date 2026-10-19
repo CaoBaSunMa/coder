@@ -1,8 +1,8 @@
 import "./index.css"
 import { Title, Meta } from "@solidjs/meta"
 //import { HttpHeader } from "@solidjs/start"
-import video from "../asset/lander/opencode-min.mp4"
-import videoPoster from "../asset/lander/opencode-poster.png"
+import video from "../asset/lander/coder-min.mp4"
+import videoPoster from "../asset/lander/coder-poster.png"
 import { IconCopy, IconCheck } from "../component/icon"
 import { A, createAsync } from "@solidjs/router"
 import { createMemo } from "solid-js"
@@ -57,7 +57,7 @@ export default function Home() {
   }
 
   return (
-    <main data-page="opencode">
+    <main data-page="coder">
       {/*<HttpHeader name="Cache-Control" value="public, max-age=1, s-maxage=3600, stale-while-revalidate=86400" />*/}
       <Title>{i18n.t("home.title")}</Title>
       <Meta name="description" content={i18n.t("app.meta.description")} />
@@ -116,7 +116,7 @@ export default function Home() {
                       <span data-slot="command-script">
                         <span>curl -fsSL </span>
                         <span data-slot="protocol">https://</span>
-                        <span data-slot="highlight">opencode.ai/v2/install</span>
+                        <span data-slot="highlight">coder.example.com/v2/install</span>
                         <span> | bash</span>
                       </span>
                       <CopyStatus />
@@ -144,7 +144,7 @@ export default function Home() {
                     <button data-copy data-slot="command" onClick={handleCopyClick}>
                       <span>
                         <span data-slot="protocol">brew install </span>
-                        <span data-slot="highlight">anomalyco/tap/opencode-v2</span>
+                        <span data-slot="highlight">coder-ai/tap/coder</span>
                       </span>
                       <CopyStatus />
                     </button>
@@ -153,7 +153,7 @@ export default function Home() {
                     <button data-copy data-slot="command" onClick={handleCopyClick}>
                       <span>
                         <span data-slot="protocol">paru -S </span>
-                        <span data-slot="highlight">opencode-beta</span>
+                        <span data-slot="highlight">coder-beta</span>
                       </span>
                       <CopyStatus />
                     </button>
@@ -162,7 +162,7 @@ export default function Home() {
                     <button data-copy data-slot="command" onClick={handleCopyClick}>
                       <span>
                         <span data-slot="protocol">yay -S </span>
-                        <span data-slot="highlight">opencode-beta</span>
+                        <span data-slot="highlight">coder-beta</span>
                       </span>
                       <CopyStatus />
                     </button>

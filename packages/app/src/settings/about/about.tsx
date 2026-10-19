@@ -5,7 +5,7 @@ import { usePlatform } from "@/runtime/platform/platform"
 import { ExternalLink } from "@/runtime/platform/external-link"
 import { showToast } from "@/shell/notifications/toast"
 import legal from "./legal.svg"
-import anomalyBrush from "./anomaly-brush.svg"
+import coderBrush from "./coder-brush.svg"
 import { AnimatedWordmark } from "./animated-wordmark"
 import { FALLBACK_OTHER_CONTRIBUTORS, loadOtherContributorCount } from "./contributors"
 
@@ -117,7 +117,7 @@ export function SettingsAbout(props: { active: boolean }) {
       <img class="settings-about-legal" src={legal} alt="" />
       <div class="settings-about-copyright">
         <p>{language.t("settings.about.copyright")}</p>
-        <img class="settings-about-anomaly-brush" src={anomalyBrush} alt="" />
+        <img class="settings-about-coder-brush" src={coderBrush} alt="" />
       </div>
     </div>
   )

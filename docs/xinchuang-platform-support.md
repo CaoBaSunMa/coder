@@ -138,7 +138,7 @@ const allTargets = [
 | `@parcel/watcher-{darwin-arm64,linux-arm64-glibc,linux-x64-glibc,win32-arm64,win32-x64}` | 文件监听 | 5 | ❌ |
 | `@lydell/node-pty-*`（darwin/linux/win32 × arm64/x64） | 桌面端终端 | 6 | ❌ |
 
-> pty 解析逻辑见 `packages/cli/script/opencode-pty.ts:21-33`（仅 darwin/linux 且仅 arm64/x64，包名后缀 `glibc→gnu`）；Node 侧资产名见 `packages/cli/src/node/target.ts:12-16`。
+> pty 解析逻辑见 `packages/cli/script/coder-pty.ts:21-33`（仅 darwin/linux 且仅 arm64/x64，包名后缀 `glibc→gnu`）；Node 侧资产名见 `packages/cli/src/node/target.ts:12-16`。
 
 **含义**：即使 JS 运行时（Node）在 loong64 可用，上述 6 类原生依赖**全部没有 loong64 预编译产物**，必须逐个从源码移植/编译。这是 P1 工作量的主体。【推断】
 

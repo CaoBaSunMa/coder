@@ -7,13 +7,13 @@ Release notes for Coder V2, newest first.
 ### Highlights
 
 - **Copy the Latest Reply**: Run `/copy` in the TUI to copy the latest assistant message or completed compaction summary instead of the full transcript. ([#56053](https://github.com/coder-ai/coder/pull/56053), [#56055](https://github.com/coder-ai/coder/pull/56055))
-- **Auth Login in Headless Environments**: `opencode auth login` no longer crashes in a container or other headless environment that cannot open a browser; use the URL already printed in the terminal to continue. ([#56082](https://github.com/coder-ai/coder/pull/56082))
+- **Auth Login in Headless Environments**: `coder auth login` no longer crashes in a container or other headless environment that cannot open a browser; use the URL already printed in the terminal to continue. ([#56082](https://github.com/coder-ai/coder/pull/56082))
 
 ### Core
 
 #### Bug fixes
 
-- Prevented `opencode auth login` from crashing when no browser opener such as `xdg-open` is available. ([#56082](https://github.com/coder-ai/coder/pull/56082))
+- Prevented `coder auth login` from crashing when no browser opener such as `xdg-open` is available. ([#56082](https://github.com/coder-ai/coder/pull/56082))
 - Gemini sessions now retry or continue after intermittent `MALFORMED_RESPONSE` finishes instead of immediately failing. ([#56232](https://github.com/coder-ai/coder/pull/56232))
 - Made snapshot capture resilient to concurrent Git object writes on Windows. ([#56190](https://github.com/coder-ai/coder/pull/56190))
 
@@ -168,7 +168,7 @@ Release notes for Coder V2, newest first.
 - **Release Highlights in the TUI**: After updating, the home screen shows the release highlights once. Run `/highlights` to reopen them, or disable automatic display with `highlights: false` in `cli.json`. ([#54969](https://github.com/coder-ai/coder/pull/54969))
 - **Native Windows ARM64 Support**: Windows ARM64 downloads, CLI installs, and desktop updates now use native ARM64 builds instead of x64 emulation. ([#54689](https://github.com/coder-ai/coder/pull/54689), [#54971](https://github.com/coder-ai/coder/pull/54971))
 - **Continuous Gemini Responses**: Long Gemini and Vertex Gemini responses split by the provider now continue automatically as one response, including recovery from a dropped stream after a continuation checkpoint. ([#55056](https://github.com/coder-ai/coder/pull/55056))
-- **Official WinGet Packages**: Install V2 with `winget install --id Anomaly.Coder -e` or `winget install --id Anomaly.Coder.Desktop -e`. Coder upgrades WinGet installations through WinGet. ([#54808](https://github.com/coder-ai/coder/pull/54808))
+- **Official WinGet Packages**: Install V2 with `winget install --id Coder.Coder -e` or `winget install --id Coder.Coder.Desktop -e`. Coder upgrades WinGet installations through WinGet. ([#54808](https://github.com/coder-ai/coder/pull/54808))
 
 ### Core
 
@@ -240,7 +240,7 @@ Release notes for Coder V2, newest first.
 ### Highlights
 
 - **Built-In Worktree Tools**: Ask Coder to use `worktree_create`, `worktree_list`, and `worktree_remove` in Code Mode. You can create isolated worktrees, move sessions into them, and remove them with normal edit approval. ([#53981](https://github.com/coder-ai/coder/pull/53981))
-- **Safer Remote Pairing**: The first `opencode pair --remote` now warns that it will expose your server and asks for confirmation. For non-interactive use, pass `opencode pair --remote --yes`. ([#54561](https://github.com/coder-ai/coder/pull/54561))
+- **Safer Remote Pairing**: The first `coder pair --remote` now warns that it will expose your server and asks for confirmation. For non-interactive use, pass `coder pair --remote --yes`. ([#54561](https://github.com/coder-ai/coder/pull/54561))
 - **Installable Web App**: Use Chrome or Edge’s **Install** button to install the Coder web app, including when it runs behind an authenticating proxy. ([#53905](https://github.com/coder-ai/coder/pull/53905))
 - **Clear Session Failures**: Desktop and TUI timelines now show execution errors that happen before or between model steps instead of ending without an explanation. ([#53826](https://github.com/coder-ai/coder/pull/53826))
 - **Automatic Project Cleanup**: Projects whose directories no longer exist are automatically hidden from the project list. Opening the directory again restores the project. ([#54354](https://github.com/coder-ai/coder/pull/54354))
@@ -249,8 +249,8 @@ Release notes for Coder V2, newest first.
 
 #### Improvements
 
-- Added the built-in Code Mode tools `opencode.worktree_create`, `opencode.worktree_list`, and `opencode.worktree_remove`. Removing a worktree requires edit approval, and `force: true` can discard modified or untracked files. ([#53981](https://github.com/coder-ai/coder/pull/53981))
-- Added confirmation before `opencode pair --remote` first enables internet access, plus `--yes`/`-y` for scripts and other non-interactive use. ([#54561](https://github.com/coder-ai/coder/pull/54561))
+- Added the built-in Code Mode tools `coder.worktree_create`, `coder.worktree_list`, and `coder.worktree_remove`. Removing a worktree requires edit approval, and `force: true` can discard modified or untracked files. ([#53981](https://github.com/coder-ai/coder/pull/53981))
+- Added confirmation before `coder pair --remote` first enables internet access, plus `--yes`/`-y` for scripts and other non-interactive use. ([#54561](https://github.com/coder-ai/coder/pull/54561))
 - Automatically archived projects when all known directories disappear. Reopening a project restores it, while surviving clones and linked worktrees keep it active. ([#54354](https://github.com/coder-ai/coder/pull/54354))
 - Raised the ChatGPT OAuth input limit for `gpt-6.1-sol` and `gpt-6.1-sol-fast` to 500,000 tokens. ([#54668](https://github.com/coder-ai/coder/pull/54668))
 - Added Vertex AI routes for Interactions and Mistral models. ([#54175](https://github.com/coder-ai/coder/pull/54175), [#54058](https://github.com/coder-ai/coder/pull/54058))
@@ -335,7 +335,7 @@ Release notes for Coder V2, newest first.
 - Prevented working-tree diffs from timing out or stalling the server in repositories with many untracked files by batching Git operations. ([#53449](https://github.com/coder-ai/coder/pull/53449))
 - Fixed large revert selections failing when their paths exceeded the operating system’s command-line limit. ([#53956](https://github.com/coder-ai/coder/pull/53956))
 - Fixed snapshot and undo handling for literal filenames containing Git pathspec characters, corrupted or locked snapshot indexes, concurrent captures, and project directories whose names begin with `..`. ([#51996](https://github.com/coder-ai/coder/pull/51996))
-- Changed `opencode service` remote-access URLs to use a persistent random subdomain rather than a predictable route. Disabling and re-enabling remote access generates a new address. ([#53962](https://github.com/coder-ai/coder/pull/53962))
+- Changed `coder service` remote-access URLs to use a persistent random subdomain rather than a predictable route. Disabling and re-enabling remote access generates a new address. ([#53962](https://github.com/coder-ai/coder/pull/53962))
 
 ### TUI
 

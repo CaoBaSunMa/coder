@@ -16,7 +16,7 @@ export async function sendEmail(input: { to: string; subject: string; body: stri
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      FromEmailAddress: `OpenCode Zen <contact@anoma.ly>`,
+      FromEmailAddress: `Coder Zen <contact@coder.example.com>`,
       Destination: {
         ToAddresses: [input.to],
       },

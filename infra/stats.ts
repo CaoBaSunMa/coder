@@ -11,8 +11,8 @@ const lakeCluster = new sst.aws.Cluster("LakeCluster", { vpc: lakeVpc })
 ////////////////
 
 const cluster = planetscale.getDatabaseOutput({
-  name: "opencode-stats",
-  organization: "anomalyco",
+  name: "coder-stats",
+  organization: "coder-ai",
 })
 
 const branch =

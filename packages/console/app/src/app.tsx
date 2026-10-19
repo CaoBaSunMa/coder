@@ -19,7 +19,7 @@ import { strip } from "~/lib/language"
 function AppMeta() {
   return (
     <>
-      <Title>opencode</Title>
+      <Title>coder</Title>
       <Favicon />
       <Font />
     </>

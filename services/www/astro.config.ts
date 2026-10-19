@@ -8,7 +8,7 @@ import rehypeTableScroll from "./src/docs/rehype-table-scroll"
 const base = "/v2/"
 
 export default defineConfig({
-  site: process.env.CLOUDFLARE_ENV === "production" ? "https://opencode.ai" : "https://dev.opencode.ai",
+  site: process.env.CLOUDFLARE_ENV === "production" ? "https://coder.example.com" : "https://dev.coder.example.com",
   base,
   output: "server",
   adapter: cloudflare({ imageService: "passthrough" }),

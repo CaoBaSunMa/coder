@@ -44,8 +44,8 @@ export async function proxyInference(request: Request) {
   if (!anonymous) forwarded.headers.set("authorization", `Bearer ${key}`)
   const ip = request.headers.get("cf-connecting-ip")
   if (ip) forwarded.headers.set("x-real-ip", ip)
-  const requestID = request.headers.get("x-opencode-request-id") ?? request.headers.get("x-opencode-request")
-  if (requestID) forwarded.headers.set("x-opencode-request-id", requestID)
+  const requestID = request.headers.get("x-coder-request-id") ?? request.headers.get("x-coder-request")
+  if (requestID) forwarded.headers.set("x-coder-request-id", requestID)
 
   const response = await (Resource.INFERENCE as { fetch: typeof fetch })
     .fetch(forwarded, { redirect: "manual" })

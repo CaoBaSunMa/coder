@@ -1,7 +1,7 @@
 export const domain = (() => {
-  if ($app.stage === "production") return "opencode.ai"
-  if ($app.stage === "dev") return "dev.opencode.ai"
-  return `${$app.stage}.dev.opencode.ai`
+  if ($app.stage === "production") return "coder.example.com"
+  if ($app.stage === "dev") return "dev.coder.example.com"
+  return `${$app.stage}.dev.coder.example.com`
 })()
 
 export const zoneID = "430ba34c138cfb5360826c4909f99be8"
@@ -11,7 +11,7 @@ export const deployAws = $app.stage === awsStage
 if ($app.stage === "production") {
   new cloudflare.DnsRecord("TrustCenter", {
     zoneId: zoneID,
-    name: "trust.opencode.ai",
+    name: "trust.coder.example.com",
     type: "CNAME",
     content: "3a69a5bb27875189.vercel-dns-016.com",
     proxied: false,
@@ -20,7 +20,7 @@ if ($app.stage === "production") {
 
   new cloudflare.DnsRecord("TrustCenterVerification", {
     zoneId: zoneID,
-    name: "opencode.ai",
+    name: "coder.example.com",
     type: "TXT",
     content: "compai-domain-verification=org_6993a99c6200a2d642bb115d",
     ttl: 60,
@@ -34,7 +34,7 @@ new cloudflare.RegionalHostname("RegionalHostname", {
 })
 
 export const shortDomain = (() => {
-  if ($app.stage === "production") return "opncd.ai"
-  if ($app.stage === "dev") return "dev.opncd.ai"
-  return `${$app.stage}.dev.opncd.ai`
+  if ($app.stage === "production") return "cdr.example.com"
+  if ($app.stage === "dev") return "dev.cdr.example.com"
+  return `${$app.stage}.dev.cdr.example.com`
 })()

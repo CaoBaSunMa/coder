@@ -89,11 +89,10 @@ r  M144 12H120V36H126V18H144V12Z  +  肩 M144 18H138V24H144V18Z
 - `patches/` 目录中的补丁（其中 `@silvia-odwyer/photon-node` 的 `__CODER_PHOTON_WASM_PATH`
   与 `packages/core`、`packages/cli` 中的定义必须保持一致，改一处要同步另一处）。
 
-**本轮未纳入改名的目录**（下游文档/营销/站点，后续里程碑整体替换，不参与编译）：
-
-- `services/www`（官网与 V2 文档站）、`packages/web`（文档内容）、`packages/console`（控制台营销站）、
-  `packages/posts`、`services/changelog`、`salesforce/`、`infra/`、`nix/`、`specs/`、`perf/`、`flake.*`。
-  这些目录中仍会出现 `coder` / `Coder` 字样，属预期现象。
+**改名范围**：除上面列出的第三方包、`LICENSE`/`COPYING`/`NOTICE` 中的版权声明、以及第 5 节列出的
+不可复现/属第三方的东西外，全仓（含官网与 V2 文档站 `services/www`、文档内容 `packages/web`、
+控制台营销站 `packages/console`、博客 `packages/posts`、`services/changelog`、`salesforce/`、
+`infra/`、`nix/`、`specs/`、`perf/`、`flake.*`）的 `opencode` → `coder` 已改完。
 
 ## 2. 改名方式
 
@@ -179,20 +178,26 @@ git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
 2. 上游若新增 `CODER_*` 环境变量、`coder` 命令引用、`coder.ai` 端点，需要按第 1 节规则补改名。
 3. 上游 `dev` 是唯一基线分支；本仓库默认分支亦为 `dev`。
 
-## 5. 已知遗留（本轮范围外）
+## 5. 已知遗留
 
-- TUI（终端界面）默认仍为英文；简体中文界面为可选能力，见 `docs/tui-i18n.md`。
-- 官网/文档站（`services/www`、`packages/web`）仍是上游内容，需下一里程碑整体替换。
-- `.coder/` 下的仓库自用开发配置、`.github/ISSUE_TEMPLATE`、`CHANGELOG.md` 保留上游历史与措辞。
-- `github/`（GitHub Action）仍依赖上游 `@opencode-ai/sdk`，未启用。
+- TUI 默认仍为英文；简体中文界面为可选能力，见 `docs/tui-i18n.md`（保留历史叙述）。
+- 站点类目录（`services/www`、`packages/web`、`packages/console`、`packages/posts`、`services/changelog`）
+  已改名；若其中**截图/社交预览图**直接沿用上游截图，可能仍显示上游 UI，属位图不可复现项。
+- `LICENSE` / `COPYING` / `NOTICE` 中的上游版权声明保留原文。
+- `bunfig.toml`、各 `package.json` 中指向 `anomalyco` 的外部依赖/补丁 URL，以及 `@opencode-ai/pty*`、
+  `@opencode-ai/sdk`、`@brendonovich/vite-plugin-opencode` 为第三方包，保留上游名称。
 - `packages/ai` 的语音/转写 HTTP 录音夹具（`test/fixtures/recordings/`）保留上游文案 `Hello from OpenCode.`：
-  这些卡带记录的是**真实音频**的识别结果与字符级时间戳，离线无法重录。机械改名会把请求体改成 `Coder`
-  而响应里的分片仍是 `OpenCode`，导致卡带自相矛盾。需在具备厂商 API Key 后用 `RECORD=true` 重新录制。
+  卡带记录的是**真实音频**的识别结果与字符级时间戳，离线无法重录；改请求体而不改响应会让卡带自相矛盾，
+  需在具备厂商 API Key 后用 `RECORD=true` 重新录制。
 - `packages/merman` 的 `DEPLOYMENT - Anomaly` 等流程图标签是渲染布局测试的合成 fixture（框宽随文字变化），
   属测试数据而非产品品牌，保留不动。
+- `github/`（GitHub Action）仍依赖上游 `@opencode-ai/sdk`，且 V2 CLI 无 `github run` 子命令，本轮未启用。
+- `patches/install-korean-ime-fix.sh` 是安装**上游社区修复**的第三方脚本（克隆 `claudianus/opencode`），
+  与我们的二进制无关，保留原文；本仓库已包含对应修复。
+- `.coder/` 下仓库自用开发配置（含 i18n 术语表）会出现 `opencode`/`Coder` 对照说明；`CHANGELOG.md` 的
+  渠道/安装命令已按本分支改名，其余历史条目保留上游措辞。
 - 桌面端内部特权协议 `oc://renderer`、`oc://extensions/...` 未改名：它是应用内部协议，用户不可见，
-  且与 `headers.ts`/`scheme.ts`/扩展资源服务耦合；用户可见的深链协议已为 `coder://`。
-- `flake.nix`/`nix/`、`infra/`、`salesforce/` 未适配本分支品牌。
+  且与 `headers.ts`/`scheme.ts`/扩展资源服务耦合；用户可见的深链已为 `coder://`。
 
 ### 5.1 Windows 环境下已知的测试失败（非品牌改动引入）
 

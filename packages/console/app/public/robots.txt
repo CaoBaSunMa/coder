@@ -5,6 +5,6 @@ Allow: /
 Disallow: /s/
 Disallow: /share/
 
-Sitemap: https://opencode.ai/sitemap.xml
-Sitemap: https://opencode.ai/v2/sitemap.xml
-Sitemap: https://opencode.ai/data/sitemap.xml
+Sitemap: https://coder.example.com/sitemap.xml
+Sitemap: https://coder.example.com/v2/sitemap.xml
+Sitemap: https://coder.example.com/data/sitemap.xml

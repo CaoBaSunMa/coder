@@ -1,8 +1,8 @@
-# OpenCode Changelog
+# Coder Changelog
 
-The changelog Worker renders the root `CHANGELOG.md` at `https://opencode.ai/changelog`.
+The changelog Worker renders the root `CHANGELOG.md` at `https://coder.example.com/changelog`.
 
-It owns two routes, `opencode.ai/changelog` and `opencode.ai/changelog/*`. Requests for
+It owns two routes, `coder.example.com/changelog` and `coder.example.com/changelog/*`. Requests for
 `/changelog.json` and localized pages such as `/de/changelog` still reach the Console.
 
 ## Content

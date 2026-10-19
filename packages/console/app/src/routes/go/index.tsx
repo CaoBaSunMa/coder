@@ -62,7 +62,7 @@ const models = [
 ] as const
 
 export default function Home() {
-  const subscribeUrl = "https://opencode.ai/console/go"
+  const subscribeUrl = "https://coder.example.com/console/go"
   const i18n = useI18n()
   const [searchParams] = useSearchParams()
   return (
@@ -343,7 +343,7 @@ export default function Home() {
                 <Faq question={i18n.t("go.faq.q10")}>
                   <For each={i18n.t("go.faq.a10").split(/(\{\{contact\}\})/g)}>
                     {(part) =>
-                      part === "{{contact}}" ? <a href="mailto:help@anoma.ly">{i18n.t("common.contactUs")}</a> : part
+                      part === "{{contact}}" ? <a href="mailto:help@coder.example.com">{i18n.t("common.contactUs")}</a> : part
                     }
                   </For>
                 </Faq>
