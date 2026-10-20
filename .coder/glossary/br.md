@@ -6,7 +6,7 @@
 
 ## Do Not Translate (Locale Additions)
 
-- `Coder` (preserve casing in prose; keep `opencode` only in commands, package names, paths, or code)
+- `Coder` (preserve casing in prose; keep `coder` only in commands, package names, paths, or code)
 - `Coder CLI`
 - `CLI`, `TUI`, `MCP`, `OAuth`
 - Locale code `br` in repo config, code, and paths (repo alias for Brazilian Portuguese)

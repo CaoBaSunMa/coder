@@ -6,7 +6,7 @@
 
 ## Do Not Translate (Locale Additions)
 
-- `Coder` (preserve casing in prose; keep `opencode` only when it is part of commands, package names, paths, or code)
+- `Coder` (preserve casing in prose; keep `coder` only when it is part of commands, package names, paths, or code)
 - `Coder Zen`
 - `Coder CLI`
 - `CLI`, `TUI`, `MCP`, `OAuth`
@@ -38,5 +38,5 @@ These are preferred terms for docs/UI prose and may evolve.
 
 ## Avoid
 
-- Avoid `opencode` in prose when referring to the product name; use `Coder`
+- Avoid `coder` in prose when referring to the product name; use `Coder`
 - Avoid mixing alternative terms for the same concept across docs when a preferred term is already established

@@ -7,7 +7,7 @@
 
 ## Do Not Translate (Locale Additions)
 
-- `Coder` (preserve casing in prose; keep `opencode` only in commands, package names, paths, or code)
+- `Coder` (preserve casing in prose; keep `coder` only in commands, package names, paths, or code)
 - `Coder CLI`
 - `CLI`, `TUI`, `MCP`, `OAuth`
 - Commands, flags, file paths, and code literals (keep exactly as written)
