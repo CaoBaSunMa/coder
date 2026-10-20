@@ -12,6 +12,9 @@ import { Persist, persisted } from "@/runtime/persistence/storage"
 import { SettingsList } from "@/settings/list"
 import { SettingsRow } from "@/settings/row"
 import { CONSOLE_GROUP_KEY, consoleModelGroup, ProviderModelSections } from "@/providers/models/provider-group"
+import { isFreeModel } from "@/providers/models/models"
+import { LocalModelsProvider } from "@/providers/models/local"
+import { SettingsLocalModels } from "@/settings/models/local"
 import { SettingsSearchEmpty } from "@/settings/search-empty"
 import { SettingsSearchField } from "@/settings/search-field"
 
@@ -40,8 +43,12 @@ export const SettingsModels: Component<{
 
   const sections = new Map<string, HTMLElement>()
 
+  // Free Coder models are replaced by the local model list below, so only paid Coder
+  // models (present with a Zen key or Console account) stay in the catalog.
+  const catalog = createMemo(() => models.list().filter((item) => !isFreeModel(item)))
+
   const list = useFilteredList<ModelItem>({
-    items: (_filter) => models.list(),
+    items: (_filter) => catalog(),
     key: (x) => `${x.provider.id}:${x.id}`,
     filterKeys: ["provider.name", "name", "id"],
     sortBy: (a, b) => a.name.localeCompare(b.name),
@@ -65,7 +72,7 @@ export const SettingsModels: Component<{
     },
   })
 
-  const managed = createMemo(() => consoleModelGroup(models.list()))
+  const managed = createMemo(() => consoleModelGroup(catalog()))
   const searching = () => list.filter().length > 0
   const expanded = (key: string) => searching() || !store.collapsed[key]
 
@@ -156,6 +163,9 @@ export const SettingsModels: Component<{
       </div>
 
       <div class="settings-tab-body settings-models">
+        <LocalModelsProvider>
+          <SettingsLocalModels />
+        </LocalModelsProvider>
         <Show
           when={!list.grouped.loading}
           fallback={
