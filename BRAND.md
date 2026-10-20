@@ -85,6 +85,10 @@ r  M144 12H120V36H126V18H144V12Z  +  肩 M144 18H138V24H144V18Z
 **刻意保留的上游外部依赖**（不可改名，否则无法安装）：
 
 - `@opencode-ai/pty` / `@opencode-ai/pty-*`：终端 PTY 预编译产物（上游发布，作为第三方依赖使用）。
+  这些包**内部的二进制文件名也是上游资产**：包实际发布 `bin/opencode-pty`，改名脚本曾误改为
+  `bin/coder-pty` 导致 Linux/macOS CLI 构建无法解析 PTY 资源（Windows 因不嵌 PTY 而不受影响）。
+  解析点见 `packages/cli/script/coder-pty.ts`。**包内部路径/文件名/二进制入口名不在改名范围**，
+  只改我们自己的品牌标识。
 - `@opencode-ai/sdk`：`github/` 目录中 GitHub Action 集成所用（上游云端服务，本轮未启用）。
 - `@opentui/*`、`@ff-labs/*`、`@pierre/*`、`@opentunnel/*` 等第三方包。
 - `patches/` 目录中的补丁（其中 `@silvia-odwyer/photon-node` 的 `__CODER_PHOTON_WASM_PATH`
@@ -230,3 +234,18 @@ git merge upstream/dev        # 或基于 upstream/dev 重建二开分支
 > `bun run test` 脚本运行（`core` 会注入隔离的 `HOME`/`XDG_*`/`CODER_TEST_HOME`）；直接 `bun test`
 > 会额外触发 `preload.test.ts` 等失败。`@xcoder/app` 类型检查可通过临时把
 > `packages/ui/src/custom-elements.d.ts` 内容复制到 `packages/app/src/custom-elements.d.ts` 通过（核对后还原）。
+
+### 5.2 改名波及第三方包内部标识导致的构建断裂（已修复）
+
+改名脚本按文本替换 `opencode` → `coder`，但**受保护第三方包内部的文件名/二进制名**不是品牌资产，
+不能随改名变动。历史上出现过一处回归：
+
+- `packages/cli/script/coder-pty.ts` 曾把 PTY 解析目标从 `bin/opencode-pty` 误改为 `bin/coder-pty`，
+  而 `@opencode-ai/pty-*` 实际发布的是 `bin/opencode-pty`，导致 **Linux / macOS CLI 构建无法解析 PTY
+  资源**（Windows 因 `resolveCoderPty()` 对 win32 返回 `undefined` 不嵌 PTY 而不受影响，故仅跨平台构建暴露）。
+  已修复为按包内实际文件名解析。
+
+**合并上游或重跑 rebrand 后的检查项**：凡解析第三方包**内部路径 / 文件名 / 二进制入口**的代码
+（如 `coder-pty.ts`、`node-assets.ts`、`packages/desktop/scripts/utils.ts`），改动后须在
+**非当前平台**目标上至少各构建一次（Linux/macOS 走 PTY 嵌入、Windows 走 `.exe` 命名），
+因为同平台构建往往掩盖这类跨平台解析断裂。
