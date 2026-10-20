@@ -3,6 +3,7 @@
 本仓库是 **Coder V2**（上游 `anomalyco/opencode`，`dev` 分支）的二次开发分支，产品定名为 **Coder**，
 用于满足信创（信息技术应用创新）场景的 AI 编程助手需求。本文件记录所有已改名的标识、**必须替换的占位符**，
 以及上游同步方式。部署到真实环境前，请按第 3 节逐项替换。
+与上游及其它同源分支（MiMoCode）的功能差异见 `COMPARISON.md`。
 
 ## 1. 命名约定
 
@@ -93,6 +94,14 @@ r  M144 12H120V36H126V18H144V12Z  +  肩 M144 18H138V24H144V18Z
 不可复现/属第三方的东西外，全仓（含官网与 V2 文档站 `services/www`、文档内容 `packages/web`、
 控制台营销站 `packages/console`、博客 `packages/posts`、`services/changelog`、`salesforce/`、
 `infra/`、`nix/`、`specs/`、`perf/`、`flake.*`）的 `opencode` → `coder` 已改完。
+
+### 1.2 许可合规（不可改名）
+
+上游为纯 MIT，无附加商标条款，因此**改名品牌本身合法**；但 MIT 唯一强制义务是保留原版权声明。
+`LICENSE` 中的 `Copyright (c) 2025 opencode` 是**版权人**而非品牌名，必须原样保留，
+自有版权只能**追加**在下一行（现为 `Copyright (c) 2025-2026 coder`）。任何 rebrand 轮次都不得改写该行。
+`package.json` 的 `repository.url` 不属许可要求，可指向自有仓库，但须是真实可访问地址
+（当前 `coder-ai/coder` 为占位，见第 3.2 节）。
 
 ## 2. 改名方式
 
