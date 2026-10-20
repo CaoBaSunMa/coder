@@ -85,7 +85,7 @@ export function nodePtyPackage(target?: string) {
   return `@lydell/node-pty-${cli.os}-${cli.cpu}`
 }
 
-export async function downloadCliToResources(version = CLI_VERSION, dest = windowsify("resources/coder-cli")) {
+export async function downloadCliToResources(version = CLI_VERSION, dest = cliResourcePath()) {
   const { $ } = await import("bun")
   const cli = getCurrentCli()
   const directory = await mkdtemp(join(tmpdir(), "coder-cli-"))
@@ -100,10 +100,17 @@ export async function downloadCliToResources(version = CLI_VERSION, dest = windo
   console.log(`Copied ${cli.package}@${version} to ${dest}`)
 }
 
-export async function copyBuiltCliToResources(root: string, dest = windowsify("resources/coder-cli")) {
+export async function copyBuiltCliToResources(root: string, dest = cliResourcePath()) {
   const cli = getCurrentCli()
   const directory = cli.package.replace("@xcoder/", "")
   await copyCliToResources(join(root, directory), dest)
+}
+
+// The bundled CLI's filename must match the *target* OS, not the build host: afterPack resolves
+// "coder-cli.exe" only on win32 targets and "coder-cli" elsewhere. Cross-packaging (e.g. Linux on a
+// Windows host) would otherwise produce a binary whose extension the packager never finds.
+export function cliResourcePath() {
+  return `resources/coder-cli${getCurrentCli().os === "win32" ? ".exe" : ""}`
 }
 
 // The package directory is an npm package: its package.json version is the string the executable
