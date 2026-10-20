@@ -6,36 +6,65 @@ import { Menu } from "@xcoder/ui/menu"
 import { TextInput } from "@xcoder/ui/text-input"
 import { useDialog } from "@xcoder/ui/context/dialog"
 import { type Component, createSignal, For, Show } from "solid-js"
+import { createStore } from "solid-js/store"
 import { useLanguage } from "@/runtime/i18n/language"
 import { useLocalModels } from "@/providers/models/local"
 import { showToast } from "@/shell/notifications/toast"
 import "@/settings/settings.css"
 
-type Draft = { id?: string; name: string; endpoint: string; path: string; err: { name?: string; endpoint?: string } }
+type Draft = { id?: string; name: string; endpoint: string; path: string }
 
-const emptyDraft = (): Draft => ({ name: "", endpoint: "", path: "", err: {} })
+const emptyDraft = (): Draft => ({ name: "", endpoint: "", path: "" })
 
 /**
  * Add/edit form for one local model. Rendered through `useDialog().show()`, which mounts it inside
  * kobalte's Dialog.Root — the Dialog primitive's inner Content reads that context, so this component
  * cannot be inlined into the settings page.
+ *
+ * The form owns its live values in a store so keystrokes stay responsive; it validates on save and
+ * hands the result to `onSave`, which persists it and closes the dialog.
  */
 const LocalModelDialog: Component<{
-  draft: Draft
-  onChange: (next: Draft) => void
-  onSave: () => void
+  initial: Draft
+  onSave: (draft: Draft) => void
 }> = (props) => {
   const language = useLanguage()
   const dialog = useDialog()
+  const [form, setForm] = createStore<Draft>({ ...props.initial })
+  const [err, setErr] = createSignal<{ name?: string; endpoint?: string }>({})
 
-  const setField = (key: "name" | "endpoint" | "path", value: string) =>
-    props.onChange({ ...props.draft, [key]: value, err: { ...props.draft.err, [key]: undefined } })
+  const setField = (key: keyof Draft, value: string) => {
+    setForm(key, value)
+
+    // Only name and endpoint have validation; clear a stale error for whichever of the two changed.
+    if (key === "name" || key === "endpoint") {
+      setErr((current) => ({ ...current, [key]: undefined }))
+    }
+  }
+
+  const save = () => {
+    const name = form.name.trim()
+    const endpoint = form.endpoint.trim()
+    const nameError = name ? undefined : language.t("settings.models.local.error.name.required")
+
+    const endpointError = endpoint && !/^https?:\/\//.test(endpoint)
+      ? language.t("settings.models.local.error.endpoint.format")
+      : undefined
+
+    if (nameError || endpointError) {
+      setErr({ name: nameError, endpoint: endpointError })
+
+      return
+    }
+
+    props.onSave({ id: form.id, name, endpoint, path: form.path.trim() })
+  }
 
   return (
     <Dialog size="normal" variant="settings">
       <DialogHeader closeLabel={language.t("common.close")}>
         <DialogTitleGroup
-          title={language.t(props.draft.id ? "settings.models.local.edit.title" : "settings.models.local.add.title")}
+          title={language.t(props.initial.id ? "settings.models.local.edit.title" : "settings.models.local.add.title")}
           description={language.t("settings.models.local.description")}
         />
       </DialogHeader>
@@ -44,14 +73,14 @@ const LocalModelDialog: Component<{
           <span class="text-12-medium text-text-weak">{language.t("settings.models.local.field.name.label")}</span>
           <TextInput
             appearance="large"
-            value={props.draft.name}
+            value={form.name}
             onInput={(event) => setField("name", event.currentTarget.value)}
             placeholder={language.t("settings.models.local.field.name.placeholder")}
-            invalid={!!props.draft.err.name}
+            invalid={!!err().name}
             autofocus
             aria-label={language.t("settings.models.local.field.name.label")}
           />
-          <Show when={props.draft.err.name}>
+          <Show when={err().name}>
             {(message) => <span class="text-11-regular text-v2-text-text-error">{message()}</span>}
           </Show>
         </label>
@@ -60,15 +89,15 @@ const LocalModelDialog: Component<{
           <span class="text-12-medium text-text-weak">{language.t("settings.models.local.field.endpoint.label")}</span>
           <TextInput
             appearance="large"
-            value={props.draft.endpoint}
+            value={form.endpoint}
             onInput={(event) => setField("endpoint", event.currentTarget.value)}
             placeholder={language.t("settings.models.local.field.endpoint.placeholder")}
-            invalid={!!props.draft.err.endpoint}
+            invalid={!!err().endpoint}
             spellcheck={false}
             autocomplete="off"
             aria-label={language.t("settings.models.local.field.endpoint.label")}
           />
-          <Show when={props.draft.err.endpoint}>
+          <Show when={err().endpoint}>
             {(message) => <span class="text-11-regular text-v2-text-text-error">{message()}</span>}
           </Show>
         </label>
@@ -77,7 +106,7 @@ const LocalModelDialog: Component<{
           <span class="text-12-medium text-text-weak">{language.t("settings.models.local.field.path.label")}</span>
           <TextInput
             appearance="large"
-            value={props.draft.path}
+            value={form.path}
             onInput={(event) => setField("path", event.currentTarget.value)}
             placeholder={language.t("settings.models.local.field.path.placeholder")}
             spellcheck={false}
@@ -90,7 +119,7 @@ const LocalModelDialog: Component<{
           <Button variant="ghost" onClick={() => dialog.close()}>
             {language.t("common.cancel")}
           </Button>
-          <Button variant="submit" onClick={props.onSave}>
+          <Button variant="submit" onClick={save}>
             {language.t("common.save")}
           </Button>
         </div>
@@ -104,58 +133,24 @@ export const SettingsLocalModels: Component = () => {
   const language = useLanguage()
   const local = useLocalModels()
   const dialog = useDialog()
-  const [draft, setDraft] = createSignal<Draft | undefined>()
   const [confirming, setConfirming] = createSignal<string | undefined>()
 
-  const validate = (current: Draft) => {
-    const name = current.name.trim()
-    const endpoint = current.endpoint.trim()
-    const nameError = name ? undefined : language.t("settings.models.local.error.name.required")
+  const openAdd = () => dialog.show(() => <LocalModelDialog initial={emptyDraft()} onSave={commit} />)
 
-    const endpointError = endpoint && !/^https?:\/\//.test(endpoint)
-      ? language.t("settings.models.local.error.endpoint.format")
-      : undefined
+  const openEdit = (model: Draft) => dialog.show(() => <LocalModelDialog initial={model} onSave={commit} />)
 
-    return { name, endpoint, path: current.path.trim(), nameError, endpointError }
-  }
+  function commit(draft: Draft) {
+    if (draft.id) local.update(draft.id, { name: draft.name, endpoint: draft.endpoint, path: draft.path })
+    else local.add({ name: draft.name, endpoint: draft.endpoint, path: draft.path })
 
-  const save = () => {
-    const current = draft()
-
-    if (!current) return
-
-    const { name, endpoint, path, nameError, endpointError } = validate(current)
-
-    if (nameError || endpointError) {
-      setDraft({ ...current, err: { name: nameError, endpoint: endpointError } })
-
-      return
-    }
-
-    if (current.id) local.update(current.id, { name, endpoint, path })
-    else local.add({ name, endpoint, path })
-
-    setDraft(undefined)
     dialog.close()
     showToast({
       variant: "success",
       icon: "circle-check",
-      title: language.t(current.id ? "settings.models.local.toast.updated" : "settings.models.local.toast.added"),
-      description: name,
+      title: language.t(draft.id ? "settings.models.local.toast.updated" : "settings.models.local.toast.added"),
+      description: draft.name,
     })
   }
-
-  // The dialog reads its own live draft, but is mounted once per open; re-showing on each keystroke
-  // would remount and lose focus, so it is shown per open and reads through signals owned here.
-  const openDialog = (next: Draft) => {
-    setDraft(next)
-    dialog.show(() => <LocalModelDialog draft={next} onChange={setDraft} onSave={save} />)
-  }
-
-  const openAdd = () => openDialog(emptyDraft())
-
-  const openEdit = (model: { id: string; name: string; endpoint: string; path: string }) =>
-    openDialog({ id: model.id, name: model.name, endpoint: model.endpoint, path: model.path, err: {} })
 
   const remove = (id: string) => {
     local.remove(id)
