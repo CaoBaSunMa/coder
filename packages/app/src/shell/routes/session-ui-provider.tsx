@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "@solidjs/router"
 import { createMemo, type ParentProps } from "solid-js"
 import { useProviders } from "@/providers/catalog/providers"
 import { LocalProvider } from "@/providers/models/selection"
+import { LocalModelsProvider } from "@/providers/models/local"
 import type { ServerConnection } from "@/runtime/server/registry"
 import { sessionHref } from "@/shell/routes/session"
 import { useData } from "@/runtime/server/current"
@@ -114,7 +115,9 @@ export function SessionUIProvider(
       onSessionHref={href}
     >
       <MarkdownProvider readImage={readImage()} openSession={openReferencedSession}>
-        <LocalProvider>{props.children}</LocalProvider>
+        <LocalProvider>
+          <LocalModelsProvider>{props.children}</LocalModelsProvider>
+        </LocalProvider>
       </MarkdownProvider>
     </DataProvider>
   )

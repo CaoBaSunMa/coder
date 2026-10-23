@@ -1511,8 +1511,21 @@
   text-align: center;
 }
 
+/* The empty state offers an action, which needs more room than the copy above it. */
+.settings-models-status:has(> button) {
+  gap: 12px;
+}
+
 .settings-models-status-filter {
   color: var(--v2-text-text-base);
+}
+
+.settings-local-models-description {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 440;
+  line-height: var(--line-height-compact);
+  color: var(--v2-text-text-muted);
 }
 
 .settings-local-models-table {

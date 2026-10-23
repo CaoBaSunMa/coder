@@ -13,7 +13,13 @@ const names = [
   "Big Pickle",
 ]
 
-function SelectModelWithoutProviders() {
+// One entry matches a catalog model by name (selectable), one matches nothing (disabled with a hint).
+const locals = [
+  { id: "local-mimo", name: "MiMo V2.5 Free", endpoint: "http://127.0.0.1:8080/v1", path: "" },
+  { id: "local-orphan", name: "my-local-7b", endpoint: "http://127.0.0.1:8081/v1", path: "" },
+]
+
+function SelectModelWithoutProviders(props: { local?: boolean }) {
   const dialog = useDialog()
 
   const models = names.map((name, index) => ({
@@ -38,7 +44,7 @@ function SelectModelWithoutProviders() {
     },
   }
 
-  const open = () => dialog.show(() => <DialogSelectModelUnpaid model={model} />)
+  const open = () => dialog.show(() => <DialogSelectModelUnpaid model={model} local={props.local ? locals : undefined} />)
 
   onMount(open)
 
@@ -56,4 +62,8 @@ export default {
 
 export const WithoutProviders = {
   render: () => <SelectModelWithoutProviders />,
+}
+
+export const LocalModels = {
+  render: () => <SelectModelWithoutProviders local />,
 }

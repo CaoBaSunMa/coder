@@ -47,8 +47,17 @@ const models = [
   },
 ]
 
-function SelectorStory(props: { plan: boolean }) {
+const locals = [
+  { id: "local-sol", name: "GPT-5.6 Sol", endpoint: "http://127.0.0.1:8080/v1", path: "" },
+  { id: "local-orphan", name: "my-local-7b", endpoint: "http://127.0.0.1:8081/v1", path: "" },
+]
+
+function SelectorStory(props: { plan: boolean; local?: boolean }) {
   const [current, setCurrent] = createSignal(models[0].id)
+  const localRows = (search: string) =>
+    locals
+      .filter((local) => local.name.toLowerCase().includes(search.toLowerCase()))
+      .map((local) => ({ local, match: models.find((model) => model.name === local.name) }))
 
   return (
     <div class="flex min-h-[280px] items-end justify-center">
@@ -61,6 +70,7 @@ function SelectorStory(props: { plan: boolean }) {
         all={() => models}
         models={(search) => models.filter((model) => model.name.toLowerCase().includes(search.toLowerCase()))}
         groups={(items) => [{ category: "openai", items }]}
+        local={props.local ? localRows : undefined}
         current={`openai:${current()}`}
         chatgptPlan={props.plan}
         select={(item) => setCurrent(item.id)}
@@ -79,3 +89,5 @@ export default {
 export const ChatGPTPlan = { render: () => <SelectorStory plan /> }
 
 export const ApiKey = { render: () => <SelectorStory plan={false} /> }
+
+export const LocalModels = { render: () => <SelectorStory plan={false} local /> }

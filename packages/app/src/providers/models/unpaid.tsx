@@ -7,19 +7,21 @@ import { useDialog } from "@xcoder/ui/context/dialog"
 import { useTheme } from "@xcoder/ui/theme"
 import { createMemo, onCleanup, onMount, type Component, For, Show } from "solid-js"
 import { useLocal, type ModelSelection } from "@/providers/models/selection"
-import { isFreeModel } from "@/providers/models/models"
+import { useMaybeLocalModels, joinLocalModels, localModelKey, type LocalModel } from "@/providers/models/local"
+import { CoderLogo } from "@/providers/coder-logo"
 import { useIntegrations } from "@/providers/catalog/integrations"
 import { decode64 } from "@/runtime/persistence/base64"
 import { useLanguage } from "@/runtime/i18n/language"
-import { ModelTooltip } from "./tooltip"
 
 type ModelState = ModelSelection
 
 const featuredProviders = ["coder-go", "coder", "openai", "anthropic", "google", "github-copilot"]
 
-const displayModelName = (name: string) => name.replace(/\s+(?:\(free\)|free)$/i, "")
-
-export const DialogSelectModelUnpaid: Component<{ model?: ModelState }> = (props) => {
+export const DialogSelectModelUnpaid: Component<{
+  model?: ModelState
+  /** Overrides the local-models context, so fixtures can supply a list without the server SDK. */
+  local?: LocalModel[]
+}> = (props) => {
   const local = useLocal()
   const model = props.model ?? local.model
   const dialog = useDialog()
@@ -38,7 +40,12 @@ export const DialogSelectModelUnpaid: Component<{ model?: ModelState }> = (props
   const providerName = (provider: { id: string; name: string }) =>
     provider.id === "coder" ? language.t("provider.connect.coder.name") : provider.name
 
-  const freeModels = createMemo(() => model.list().filter(isFreeModel))
+  const contextLocalModels = useMaybeLocalModels()
+
+  // The local registry is client-side, so each entry is joined to the catalog it can actually run.
+  const localRows = createMemo(
+    () => joinLocalModels(props.local ?? contextLocalModels?.list() ?? [], model.list()),
+  )
 
   const openProviders = (provider?: string) => {
     void import("@/providers/connect/dialog").then((x) => {
@@ -46,6 +53,12 @@ export const DialogSelectModelUnpaid: Component<{ model?: ModelState }> = (props
       controller.select(provider)
       void dialog.show(() => <x.DialogConnectProvider controller={controller} directory={directory()} />)
     })
+  }
+
+  // Pushed, not shown, so the local editor stacks over this picker instead of replacing it.
+  const editLocal = async () => {
+    const { DialogManageLocalModels } = await import("@/settings/models/local")
+    void dialog.push(() => <DialogManageLocalModels />)
   }
 
   const selectModel = (item: ReturnType<ModelState["list"]>[number]) => {
@@ -88,46 +101,52 @@ export const DialogSelectModelUnpaid: Component<{ model?: ModelState }> = (props
       </DialogHeader>
       <DialogBody class="max-h-[calc(100vh_-_68px)] min-h-0 flex-none gap-0 overflow-y-auto px-2 pb-2">
         <div ref={listEl} class="flex min-h-0 flex-col">
-          <div data-section="free-models" class="flex w-full flex-col items-start pb-3">
+          <div data-section="local-models" class="flex w-full flex-col items-start pb-3">
             <div class="flex h-8 w-full flex-none select-none flex-row items-center px-3 pb-2">
-              <div class="flex h-5 items-center text-[13px] font-[440] leading-5 tracking-[-0.04px] text-v2-text-text-muted [font-family:var(--v2-font-family-sans)] [font-variant-numeric:tabular-nums] [font-variation-settings:'slnt'_0]">
-                {language.t("dialog.model.unpaid.freeModels.title")}
-              </div>
+              <span class="flex h-5 items-center gap-1.5 text-[13px] font-[440] leading-5 tracking-[-0.04px] text-v2-text-text-muted [font-family:var(--v2-font-family-sans)] [font-variant-numeric:tabular-nums] [font-variation-settings:'slnt'_0]">
+                <CoderLogo class="size-4 shrink-0" />
+                {language.t("dialog.model.local.title")}
+              </span>
             </div>
-            <For each={freeModels()}>
-              {(item) => (
+            <For each={localRows()}>
+              {(row) => (
                 <Tooltip
                   class="w-full"
                   placement="right-start"
                   gutter={6}
                   openDelay={0}
                   contentStyle={{ "font-family": "var(--v2-font-family-sans)" }}
-                  value={
-                    <ModelTooltip
-                      model={{ ...item, name: displayModelName(item.name) }}
-                      latest={item.latest}
-                      free={isFreeModel(item)}
-                      v2
-                    />
-                  }
+                  value={row.match ? row.match.name : language.t("dialog.model.local.unavailable")}
                 >
                   <button
                     type="button"
-                    class="flex w-full scroll-my-3.5 flex-row items-center gap-1.5 rounded-md px-3 py-2 text-left text-[13px] font-[530] leading-5 tracking-[-0.04px] text-v2-text-text-base [font-family:var(--v2-font-family-sans)] [font-variation-settings:'slnt'_0] hover:bg-v2-overlay-simple-overlay-hover focus:bg-v2-overlay-simple-overlay-hover focus:outline-none"
-                    onClick={() => selectModel(item)}
+                    data-option-key={localModelKey(row)}
+                    aria-pressed={row.match ? currentKey() === modelKey(row.match) : undefined}
+                    disabled={!row.match}
+                    class="flex w-full scroll-my-3.5 flex-row items-center gap-1.5 rounded-md px-3 py-2 text-left text-[13px] font-[530] leading-5 tracking-[-0.04px] text-v2-text-text-base [font-family:var(--v2-font-family-sans)] [font-variation-settings:'slnt'_0] hover:bg-v2-overlay-simple-overlay-hover focus:bg-v2-overlay-simple-overlay-hover focus:outline-none disabled:cursor-default disabled:text-v2-text-text-muted disabled:hover:bg-transparent"
+                    onClick={() => row.match && selectModel(row.match)}
                   >
-                    <span class="min-w-0 truncate">{displayModelName(item.name)}</span>
-                    <Badge class="shrink-0">{language.t("model.tag.free")}</Badge>
-                    <Show when={item.latest}>
-                      <Badge class="shrink-0">{language.t("model.tag.latest")}</Badge>
+                    <span class="min-w-0 truncate">{row.local.name}</span>
+                    <Show when={!row.match}>
+                      <Badge class="ms-auto shrink-0">{language.t("dialog.model.local.unavailable")}</Badge>
                     </Show>
-                    <Show when={currentKey() === modelKey(item)}>
+                    <Show when={row.match && currentKey() === modelKey(row.match)}>
                       <Icon name="check" class="ml-auto size-4 shrink-0 text-v2-icon-icon-base" />
                     </Show>
                   </button>
                 </Tooltip>
               )}
             </For>
+            <Show when={contextLocalModels && localRows().length > 0}>
+              <button
+                type="button"
+                class="mt-1 flex w-full scroll-my-3.5 flex-row items-center gap-2 rounded-md px-3 py-2 text-left text-[13px] font-[530] leading-5 tracking-[-0.04px] text-v2-text-text-muted [font-family:var(--v2-font-family-sans)] [font-variant-numeric:tabular-nums] [font-variation-settings:'slnt'_0] hover:bg-v2-overlay-simple-overlay-hover focus:bg-v2-overlay-simple-overlay-hover focus:outline-none"
+                onClick={editLocal}
+              >
+                <Icon name="edit" size="small" />
+                {language.t("dialog.model.local.edit")}
+              </button>
+            </Show>
           </div>
 
           <div class="flex w-full flex-col">

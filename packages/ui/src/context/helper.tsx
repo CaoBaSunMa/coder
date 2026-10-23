@@ -38,5 +38,9 @@ export function createSimpleContext<T, Props extends Record<string, any>>(
 
       return value
     },
+    /** For consumers rendered both with and without the provider (e.g. storybook fixtures). */
+    useMaybe() {
+      return useContext(ctx)
+    },
   }
 }

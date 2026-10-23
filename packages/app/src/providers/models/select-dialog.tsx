@@ -3,6 +3,7 @@ import { Component, ComponentProps, createEffect, createMemo, For, JSX, Show, Su
 import { createStore } from "solid-js/store"
 import { createMediaQuery } from "@solid-primitives/media"
 import { useLocal, type ModelSelection } from "@/providers/models/selection"
+import { useMaybeLocalModels, joinLocalModels, localModelKey, type LocalModelItem } from "@/providers/models/local"
 import { isFreeModel } from "@/providers/models/models"
 import { useDialog } from "@xcoder/ui/context/dialog"
 import { popularProviders } from "@/providers/catalog/providers"
@@ -10,6 +11,7 @@ import { Button } from "@xcoder/ui/button"
 import { Badge } from "@xcoder/ui/badge"
 import { Dialog, DialogBody, DialogHeader, DialogTitleGroup } from "@xcoder/ui/dialog"
 import { Icon } from "@xcoder/ui/icon"
+import { IconButton } from "@xcoder/ui/icon-button"
 import { ScrollView } from "@xcoder/ui/scroll-view"
 import { Tooltip } from "@xcoder/ui/tooltip"
 import { Menu } from "@xcoder/ui/menu"
@@ -25,6 +27,7 @@ import { createMenuDismissController } from "@/shell/commands/menu-dismiss"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { matchesModelSearch } from "./search"
 import { SettingsList } from "@/settings/list"
+import { CoderLogo } from "@/providers/coder-logo"
 import {
   CONSOLE_GROUP_KEY,
   consoleModelGroup,
@@ -49,6 +52,8 @@ const modelKey = (model: ModelItem) => `${model.provider.id}:${model.id}`
 
 const manageKey = "action:manage"
 
+const editLocalKey = "action:edit-local"
+
 const sortModelGroups = (a: { category: string; items: ModelItem[] }, b: { category: string; items: ModelItem[] }) => {
   const aIndex = popularProviders.indexOf(a.category)
   const bIndex = popularProviders.indexOf(b.category)
@@ -68,6 +73,10 @@ const ModelList: Component<{
   mobile?: boolean
   open?: boolean
   provider?: string
+  /** Shows the Coder Local Models group; only the session page's mobile drawer sets it. */
+  local?: boolean
+  /** Opens the local models editor; only the session page's mobile drawer sets it. */
+  onEditLocal?: () => void
   onSelect: () => void
   model?: ModelState
 }> = (props) => {
@@ -96,6 +105,7 @@ const ModelList: Component<{
   )
   const models = createMemo(() => controller.models(store.search))
   const modelGroups = createMemo(() => controller.groups(models()))
+  const local = createMemo(() => (props.local ? controller.local(store.search) : []))
   const managed = createMemo(() => consoleModelGroup(controller.all()))
   const expanded = (provider: string) => store.search.length > 0 || !store.collapsed[provider]
   const managedIDs = createMemo(() => new Set(managed()?.providers.map((provider) => provider.id) ?? []))
@@ -108,12 +118,14 @@ const ModelList: Component<{
   let scrollRef: HTMLDivElement | undefined
 
   const setSearch = (value: string) => {
+    const localRow = props.local ? controller.local(value).find((row) => row.match) : undefined
     const first = controller.models(value).find((item) => value.length > 0 || !store.collapsed[item.provider.id])
-    setStore({ search: value, active: first ? modelKey(first) : "" })
+    const active = localRow ? localModelKey(localRow) : first ? modelKey(first) : ""
+    setStore({ search: value, active })
   }
 
   const moveActive = (delta: number) => {
-    const keys = visibleModels().map(modelKey)
+    const keys = [...local().filter((row) => row.match).map(localModelKey), ...visibleModels().map(modelKey)]
 
     if (keys.length === 0) return
     const index = keys.indexOf(store.active)
@@ -127,6 +139,15 @@ const ModelList: Component<{
   }
 
   const selectActive = () => {
+    const localRow = local().find((row) => localModelKey(row) === store.active)
+
+    // An unmatched local row is disabled; Enter keeps the list open so the hint stays visible.
+    if (localRow?.match) {
+      controller.select(localRow.match)
+
+      return
+    }
+
     const item = visibleModels().find((item) => modelKey(item) === store.active)
 
     if (item) controller.select(item)
@@ -181,6 +202,60 @@ const ModelList: Component<{
     )
   }
 
+  function LocalRows(props: { items: LocalModelItem<ModelItem>[]; onEditLocal?: () => void }) {
+    return (
+      <section class="settings-section">
+        <h3 class="settings-models-group-header justify-between">
+          <span class="settings-models-group-label">
+            <CoderLogo class="size-4 shrink-0" />
+            <bdi class="settings-models-group-title">{language.t("dialog.model.local.title")}</bdi>
+          </span>
+          <Show when={props.onEditLocal}>
+            <IconButton
+              variant="ghost-muted"
+              size="small"
+              icon={<Icon name="edit" />}
+              aria-label={language.t("dialog.model.local.edit")}
+              onClick={() => props.onEditLocal?.()}
+            />
+          </Show>
+        </h3>
+        <SettingsList variant="catalog">
+          <For each={props.items}>
+            {(row) => (
+              <button
+                type="button"
+                data-component="settings-row"
+                data-option-key={localModelKey(row)}
+                aria-pressed={row.match ? controller.current() === modelKey(row.match) : undefined}
+                disabled={!row.match}
+                class="-mx-4 w-[calc(100%+32px)] px-4 text-start first:rounded-t-lg last:rounded-b-lg hover:bg-v2-overlay-simple-overlay-hover focus-visible:bg-v2-overlay-simple-overlay-hover focus-visible:outline-none disabled:cursor-default disabled:text-v2-text-text-muted disabled:hover:bg-transparent"
+                classList={{ "bg-v2-overlay-simple-overlay-hover": store.active === localModelKey(row) }}
+                onMouseEnter={() => setStore("active", localModelKey(row))}
+                onMouseLeave={() => setStore("active", "")}
+                onClick={() => row.match && controller.select(row.match)}
+              >
+                <div data-slot="settings-row-copy">
+                  <div data-slot="settings-row-title" class="flex items-center gap-2">
+                    <span class="min-w-0 truncate">{row.local.name}</span>
+                    <Show when={!row.match}>
+                      <Badge class="ms-auto shrink-0">{language.t("dialog.model.local.unavailable")}</Badge>
+                    </Show>
+                  </div>
+                </div>
+                <div data-slot="settings-row-control" class="size-4">
+                  <Show when={row.match && controller.current() === modelKey(row.match)}>
+                    <Icon name="check" size="small" class="shrink-0 text-v2-icon-icon-base" />
+                  </Show>
+                </div>
+              </button>
+            )}
+          </For>
+        </SettingsList>
+      </section>
+    )
+  }
+
   return (
     <div class="flex min-h-0 flex-1 flex-col">
       <div data-slot="model-selector-search" class="shrink-0 pt-px pb-3" classList={{ "px-4": !props.mobile }}>
@@ -232,9 +307,12 @@ const ModelList: Component<{
           classList={{ "h-full px-4": !props.mobile, "max-h-[min(360px,40dvh)]": props.mobile }}
         >
           <Show
-            when={models().length > 0}
+            when={models().length > 0 || local().length > 0}
             fallback={<div class="settings-models-status">{language.t("dialog.model.empty")}</div>}
           >
+            <Show when={local().length > 0}>
+              <LocalRows items={local()} onEditLocal={props.onEditLocal} />
+            </Show>
             <ProviderModelSections
               groups={modelGroups()}
               managed={managed()}
@@ -287,6 +365,11 @@ export function ModelSelectorPopover(props: {
     void dialog.show(() => <DialogManageModels />)
   }
 
+  const editLocal = async () => {
+    const { DialogManageLocalModels } = await import("@/settings/models/local")
+    void dialog.show(() => <DialogManageLocalModels />)
+  }
+
   const connect = async () => {
     const { DialogConnectProvider } = await import("@/providers/connect/dialog")
     void dialog.show(() => <DialogConnectProvider directory={location().directory} />)
@@ -301,10 +384,12 @@ export function ModelSelectorPopover(props: {
           all={controller.all}
           models={controller.models}
           groups={controller.groups}
+          local={controller.local}
           current={controller.current()}
           chatgptPlan={chatgptPlan()}
           select={controller.select}
           onManage={manage}
+          onEditLocal={editLocal}
           onClose={() => props.onClose?.()}
         />
       }
@@ -317,6 +402,7 @@ export function ModelSelectorPopover(props: {
         chatgptPlan={chatgptPlan()}
         onClose={() => props.onClose?.()}
         onManage={manage}
+        onEditLocal={editLocal}
       />
     </Show>
   )
@@ -329,6 +415,7 @@ function ModelSelectorDrawer(props: {
   chatgptPlan?: boolean
   onClose: () => void
   onManage: () => void
+  onEditLocal?: () => void
   onConnect?: () => void
 }) {
   const language = useLanguage()
@@ -337,7 +424,7 @@ function ModelSelectorDrawer(props: {
     open: boolean
     loaded: boolean
     restoreTrigger: boolean
-    action?: "select" | "manage" | "connect"
+    action?: "select" | "manage" | "edit-local" | "connect"
   }>({
     open: false,
     loaded: false,
@@ -381,6 +468,12 @@ function ModelSelectorDrawer(props: {
                 return
               }
 
+              if (action === "edit-local") {
+                props.onEditLocal?.()
+
+                return
+              }
+
               if (action === "connect") {
                 props.onConnect?.()
 
@@ -399,10 +492,12 @@ function ModelSelectorDrawer(props: {
               <div class="flex min-h-0 flex-col">
                 <ModelList
                   mobile
+                  local
                   open={store.open}
                   model={props.model}
                   provider={props.provider}
                   onSelect={() => setStore({ open: false, action: "select", restoreTrigger: false })}
+                  onEditLocal={() => setStore({ open: false, action: "edit-local", restoreTrigger: false })}
                 />
               </div>
               <div data-slot="model-selector-actions" class="flex flex-col gap-2">
@@ -452,6 +547,7 @@ function createModelSelectorController(input: {
   onSelect: () => void
 }) {
   const model = input.model ?? useLocal().model
+  const localModels = useMaybeLocalModels()
 
   const allModels = createMemo(() =>
     model
@@ -470,6 +566,17 @@ function createModelSelectorController(input: {
         : allModels()
 
       return [...filtered].sort((a, b) => a.name.localeCompare(b.name))
+    },
+    /** The Coder Local Models group, joined to the catalog; rows without a catalog match stay disabled. */
+    local: (search: string) => {
+      const locals = localModels?.list() ?? []
+
+      if (locals.length === 0) return []
+
+      const query = search.trim()
+      const rows = joinLocalModels(locals, model.list())
+
+      return query ? rows.filter((row) => matchesModelSearch(query, [row.local.name, row.local.endpoint])) : rows
     },
     groups: (models: ModelItem[]) => {
       const byProvider = new Map<string, ModelItem[]>()
@@ -497,10 +604,12 @@ export function ModelSelectorPopoverView(props: {
   all: () => ModelItem[]
   models: (search: string) => ModelItem[]
   groups: (models: ModelItem[]) => { category: string; items: ModelItem[] }[]
+  local?: (search: string) => LocalModelItem<ModelItem>[]
   current: string | undefined
   chatgptPlan?: boolean
   select: (item: ModelItem) => void
   onManage: () => void
+  onEditLocal?: () => void
   onClose: () => void
 }) {
   const language = useLanguage()
@@ -511,7 +620,16 @@ export function ModelSelectorPopoverView(props: {
 
   const models = createMemo(() => props.models(store.search))
   const groups = createMemo(() => props.groups(models()))
-  const keys = () => [...groups().flatMap((group) => group.items.map(modelKey)), manageKey]
+  const local = createMemo(() => props.local?.(store.search) ?? [])
+  // The edit action lives inside the local group, so it only exists while the group does.
+  const canEditLocal = () => local().length > 0 && !!props.onEditLocal
+
+  const keys = () => [
+    ...local().filter((row) => row.match).map(localModelKey),
+    ...(canEditLocal() ? [editLocalKey] : []),
+    ...groups().flatMap((group) => group.items.map(modelKey)),
+    manageKey,
+  ]
 
   const managed = createMemo(() => consoleModelGroup(props.all()))
   const managedIDs = createMemo(() => new Set(managed()?.providers.map((provider) => provider.id)))
@@ -569,11 +687,34 @@ export function ModelSelectorPopoverView(props: {
     dismiss.afterClose(props.onManage)
   }
 
+  const editLocal = () => {
+    if (!props.onEditLocal) return
+
+    dismiss.preventTriggerRestore()
+    setOpen(false)
+    dismiss.afterClose(props.onEditLocal)
+  }
+
   const selectActive = () => {
+    const localRow = local().find((row) => localModelKey(row) === store.active)
+
+    if (localRow) {
+      // An unmatched local row is disabled; Enter leaves the menu open so the hint stays visible.
+      if (localRow.match) selectModel(localRow.match)
+
+      return
+    }
+
     const item = models().find((item) => modelKey(item) === store.active)
 
     if (item) {
       selectModel(item)
+
+      return
+    }
+
+    if (store.active === editLocalKey) {
+      editLocal()
 
       return
     }
@@ -592,8 +733,10 @@ export function ModelSelectorPopoverView(props: {
   }
 
   const setSearch = (value: string) => {
+    const localRow = props.local?.(value).find((row) => row.match)
     const first = props.models(value)[0]
-    setStore({ search: value, active: first ? modelKey(first) : manageKey })
+    const active = localRow ? localModelKey(localRow) : first ? modelKey(first) : manageKey
+    setStore({ search: value, active })
   }
 
   createEffect(() => {
@@ -683,13 +826,72 @@ export function ModelSelectorPopoverView(props: {
           <ScrollView data-slot="model-selector-scroll" class="max-h-[220px] min-h-0">
             <div class="flex flex-col p-0.5 pt-0">
               <Show
-                when={models().length > 0}
+                when={models().length > 0 || local().length > 0}
                 fallback={
                   <div class="flex h-12 items-center px-3 text-[13px] font-[440] leading-5 tracking-[-0.04px] text-v2-text-text-faint">
                     {language.t("dialog.model.empty")}
                   </div>
                 }
               >
+                <Show when={local().length > 0}>
+                  <Menu.Group>
+                    <Menu.GroupLabel class="gap-1.5 pe-3" style={{ "padding-inline-start": "10px" }}>
+                      <CoderLogo class="size-4 shrink-0" />
+                      <span class="min-w-0 truncate">{language.t("dialog.model.local.title")}</span>
+                    </Menu.GroupLabel>
+                    <For each={local()}>
+                      {(row) => (
+                        <Tooltip
+                          class="w-full"
+                          placement="right-start"
+                          gutter={6}
+                          openDelay={0}
+                          value={
+                            row.match ? (
+                              <ModelTooltip model={row.match} latest={row.match.latest} free={isFreeModel(row.match)} v2 />
+                            ) : (
+                              language.t("dialog.model.local.unavailable")
+                            )
+                          }
+                        >
+                          <Menu.Item
+                            data-option-key={localModelKey(row)}
+                            class="scroll-my-6 w-full"
+                            classList={{ "!bg-v2-overlay-simple-overlay-hover": store.active === localModelKey(row) }}
+                            disabled={!row.match}
+                            onMouseEnter={() => {
+                              setStore("active", localModelKey(row))
+                              setTimeout(() => searchRef?.focus())
+                            }}
+                            onSelect={() => row.match && selectModel(row.match)}
+                          >
+                            <span class="min-w-0 truncate leading-5">{row.local.name}</span>
+                            <Show when={!row.match}>
+                              <Badge class="ms-auto shrink-0">{language.t("dialog.model.local.unavailable")}</Badge>
+                            </Show>
+                            <Show when={row.match && props.current === modelKey(row.match)}>
+                              <Icon name="check" size="small" class="ms-auto shrink-0 text-v2-icon-icon-base" />
+                            </Show>
+                          </Menu.Item>
+                        </Tooltip>
+                      )}
+                    </For>
+                    <Show when={canEditLocal()}>
+                      <Menu.Item
+                        data-option-key={editLocalKey}
+                        classList={{ "!bg-v2-overlay-simple-overlay-hover": store.active === editLocalKey }}
+                        onMouseEnter={() => {
+                          setStore("active", editLocalKey)
+                          setTimeout(() => searchRef?.focus())
+                        }}
+                        onSelect={editLocal}
+                      >
+                        <Icon name="edit" size="small" />
+                        <span class="min-w-0 flex-1 truncate leading-5">{language.t("dialog.model.local.edit")}</span>
+                      </Menu.Item>
+                    </Show>
+                  </Menu.Group>
+                </Show>
                 <For each={groups()}>
                   {(group) => (
                     <Menu.Group>
